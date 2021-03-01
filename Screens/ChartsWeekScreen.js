@@ -110,8 +110,14 @@ style={{
 // bezier
 // />
 
+<<<<<<< HEAD
 
   return (
+=======
+export default function ChartsWeekScreen(props) {
+
+return (
+>>>>>>> 6feddcc2a970914415e7f5117725c570fa70e666
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
       <Button

@@ -6,8 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import mood from "./reducers/mood.reducer";
 
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Warning: ...']);
+// import { LogBox } from 'react-native';
+// LogBox.ignoreLogs(['Warning: ...']);
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
