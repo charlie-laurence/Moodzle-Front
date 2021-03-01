@@ -7,7 +7,7 @@ import {
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
 
-function MoodScreen({ selectMood, mood, incrementStep, step }) {
+function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
   const moodData = [
     {
       icon: "angry",
@@ -65,7 +65,7 @@ function MoodScreen({ selectMood, mood, incrementStep, step }) {
         />
         <Image style={styles.liane} source={require("../assets/liane2.png")} />
         <Text style={[styles.textMoodz, { transform: [{ rotate: "20deg" }] }]}>
-          Quelle est ton humeur du jour ?
+          Quelle est ton humeur du jour { pseudo } ?
         </Text>
         <View style={styles.moodContainer}>{icons}</View>
         <Text>Mood Screen</Text>
@@ -134,7 +134,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-  return { mood: state.mood, step: state.step };
+  return { mood: state.mood, step: state.step, pseudo : state.pseudo };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoodScreen);
