@@ -18,7 +18,8 @@ import {
 // />
 
 export default function ChartsWeekScreen(props) {
-  return (
+
+return (
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
       <Button
