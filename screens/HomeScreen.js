@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { StyleSheet, ImageBackground, Text, View } from 'react-native';
 
@@ -10,11 +12,26 @@ import { connect } from 'react-redux';
 function HomeScreen(props) {
 
 const [pseudo, setPseudo] = useState('');
-console.log(pseudo)
+console.log(pseudo);
 
-    return (
-        <ImageBackground source={require('../assets/MoodzSignUp.png')} style={styles.container}>
-        
+useEffect(() => {
+  var pseudoRegistered = async function() {
+  await AsyncStorage.getItem("pseudo", (err, value) => {
+    setPseudo(value);
+    console.log('value', value)
+  });
+}
+  pseudoRegistered()
+ }, []);
+
+ if (pseudo !== null) {
+   var homeScreenContent =
+   <View>
+     <Text>Bienvenue {pseudo} !</Text>
+     </View>
+ } else {
+   var homeScreenContent =
+   <View>
             <Input
             containerStyle = {{marginBottom: 25, width: '70%'}}
             inputStyle={{marginLeft: 10}}
@@ -27,13 +44,20 @@ console.log(pseudo)
             buttonStyle = {{backgroundColor: "#009788"}}
 
             onPress={() => { props.onSubmitPseudo(pseudo); 
+                            AsyncStorage.setItem("pseudo", pseudo);
                             props.navigation.navigate('BottomNavigator', { screen: 'Mood' });
         }}
         />
+        </View>
 
-        
+ }
 
-        </ImageBackground>
+    return ( 
+      <ImageBackground source={require('../assets/MoodzSignUp.png')} style={styles.container}>
+        <View>
+      {homeScreenContent} 
+      </View>
+      </ImageBackground>
 );
     }
     
