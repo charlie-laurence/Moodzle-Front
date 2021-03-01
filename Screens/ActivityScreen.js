@@ -43,7 +43,7 @@ function ActivityScreen({ selectMood, mood, incrementStep, step }) {
   } else {
     return (
       <View style={styles.container}>
-        <Text>Mood Screen</Text>
+        <Text>Activity Screen</Text>
       </View>
     );
   }

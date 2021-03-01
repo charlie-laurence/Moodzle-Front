@@ -81,6 +81,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0FFF9",
     alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  paragraph: {
+    fontWeight: "bold",
+    fontSize: 30,
+    textAlign: "center",
+    color: "#009788",
+    marginTop: 70,
   },
   moodContainer: {
     flex: 1,
