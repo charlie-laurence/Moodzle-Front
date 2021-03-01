@@ -1,19 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 
 export default function ActivityScreen(props) {
   return (
     <View>
+         <Text style={styles.paragraph}>ActivityScreen</Text>
         <Button
             title="VALIDER ACTIVITÉ"
             type="solid"
             buttonStyle = {{backgroundColor: "#009788"}}
 
             onPress={() => {
-                            props.navigation.navigate('BottomNavigator', { screen: 'ReactionScreen' });
+                            props.navigation.navigate('Reaction');
         }}
         />
-      <Text style={styles.paragraph}>ActivityScreen</Text>
+     
     </View>
   );
 }
@@ -29,5 +30,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     color: "#009788",
+    marginTop: 70
   },
 });

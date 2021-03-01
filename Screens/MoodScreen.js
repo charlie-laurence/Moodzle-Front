@@ -1,19 +1,25 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
+
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
+
+// import ActivityScreen from './ActivityScreen';
 
 export default function MoodScreen(props) {
   return (
     <View>
+        <Text style={styles.paragraph}>MoodScreen</Text>
         <Button
             title="VALIDER MOOD"
             type="solid"
             buttonStyle = {{backgroundColor: "#009788"}}
 
             onPress={() => {
-                            props.navigation.navigate('BottomNavigator', { screen: 'ActivityScreen' });
+                            props.navigation.navigate('Activity');
         }}
         />
-      <Text style={styles.paragraph}>MoodScreen</Text>
+      
     </View>
   );
 }
@@ -29,5 +35,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     color: "#009788",
+    marginTop: 70
   },
 });

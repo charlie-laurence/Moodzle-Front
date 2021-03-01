@@ -4,15 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function SettingsScreen(props) {
   return (
     <View>
-        <Button
-            title="WEEK"
-            type="solid"
-            buttonStyle = {{backgroundColor: "#009788"}}
-
-            onPress={() => {
-                            props.navigation.navigate('BottomNavigator', { screen: 'MoodScreen' });
-        }}
-        />
+        
       <Text style={styles.paragraph}>SettingsScreen</Text>
     </View>
   );
@@ -29,5 +21,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     color: "#009788",
+    marginTop: 70
   },
 });

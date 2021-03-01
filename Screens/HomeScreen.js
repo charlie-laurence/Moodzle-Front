@@ -23,7 +23,7 @@ export default function HomeScreen(props) {
             buttonStyle = {{backgroundColor: "#009788"}}
 
             onPress={() => {
-                            props.navigation.navigate('BottomNavigator', { screen: 'MoodScreen' });
+                            props.navigation.navigate('BottomNavigator', { screen: 'Mood' });
         }}
         />
 

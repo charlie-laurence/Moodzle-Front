@@ -1,19 +1,35 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 
 export default function ChartsYearScreen(props) {
   return (
     <View>
-        <Button
-            title="WEEK"
-            type="solid"
-            buttonStyle = {{backgroundColor: "#009788"}}
-
-            onPress={() => {
-                            props.navigation.navigate('BottomNavigator', { screen: 'MoodScreen' });
-        }}
-        />
+        
       <Text style={styles.paragraph}>ChartsYearScreen</Text>
+      <Button
+        title="WEEK"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788" }}
+        onPress={() => {
+          props.navigation.navigate("ChartsWeek");
+        }}
+      />
+      <Button
+        title="MONTH"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788" }}
+        onPress={() => {
+          props.navigation.navigate("ChartsMonth");
+        }}
+      />
+      <Button
+        title="YEAR"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788" }}
+        onPress={() => {
+          props.navigation.navigate("ChartsYear");
+        }}
+      />
     </View>
   );
 }
@@ -29,5 +45,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     color: "#009788",
+    marginTop: 70
   },
 });
