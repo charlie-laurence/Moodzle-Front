@@ -7,7 +7,7 @@ import {
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
 
-function ActivityScreen({ selectMood, mood, incrementStep, step }) {
+function MoodScreen({ selectMood, mood, incrementStep, step }) {
   const moodData = [
     {
       icon: "angry",
@@ -82,13 +82,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignItems: "center",
-  },
-  paragraph: {
-    fontWeight: "bold",
-    fontSize: 30,
-    textAlign: "center",
-    color: "#009788",
-    marginTop: 70,
+    height: Dimensions.get("window").height,
   },
   moodContainer: {
     flex: 1,
@@ -124,7 +118,6 @@ const styles = StyleSheet.create({
     fontFamily: "LondrinaSolid_400Regular",
     color: "#5B63AE",
     fontSize: 25,
-
     // marginTop: 200,
   },
 });
@@ -144,4 +137,4 @@ const mapStateToProps = (state) => {
   return { mood: state.mood, step: state.step };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActivityScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MoodScreen);
