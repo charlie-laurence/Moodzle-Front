@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { StyleSheet, Text, View, Button, Dimensions } from "react-native";
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
@@ -12,12 +12,15 @@ import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
 
 export default function ChartsWeekScreen(props) {
 
+const [dataWeek, setDataWeek] = useState([])
+
   var score1 = 1;
   var score2 = 2;
   var score3 = 3;
   var score4 = 4;
   var score5 = 5;
 
+ 
 
   var fetchData = async() => {
     //Récupération du résultat renvoyé par le backend
@@ -28,10 +31,11 @@ export default function ChartsWeekScreen(props) {
       }
     });
     
-    var datas = await rawDatas.json();
-    console.log('datas',datas)
-    
+    datas = await rawDatas.json();
+    setDataWeek(datas)
+    console.log('datas',datas.history[1].mood_score)
     }
+    console.log('datas1',dataWeek.history)
 
     fetchData()
 
@@ -60,11 +64,11 @@ export default function ChartsWeekScreen(props) {
 
 function BezierChart() {return (<LineChart
 data={{
-  labels: ["Lundi", "Mardi", "Mecredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
+  labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
   datasets: [
     {
       data: [
-       1,2,3,4,5
+        1,2,3,4,5
        
       ]
     }
@@ -77,19 +81,21 @@ height={220}
 // yAxisInterval={1} // optional, defaults to 1
 
 chartConfig={{
-  backgroundColor: "#e26a00",
-  backgroundGradientFrom: "#fb8c00",
-  backgroundGradientTo: "#ffa726",
+  backgroundGradientFrom: "#1E2923",
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: "#08130D",
+  backgroundGradientToOpacity: 0.5,
+
   decimalPlaces: 0, // optional
-  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
+  labelColor: (opacity = 1) => `#44B79D`,
   style: {
     borderRadius: 16
   },
   propsForDots: {
-    r: "6",
+    r: "3",
     strokeWidth: "2",
-    stroke: "#ffa726"
+    stroke: "#44B79D"
   }
 }}
 bezier
@@ -110,14 +116,8 @@ style={{
 // bezier
 // />
 
-<<<<<<< HEAD
 
   return (
-=======
-export default function ChartsWeekScreen(props) {
-
-return (
->>>>>>> 6feddcc2a970914415e7f5117725c570fa70e666
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
       <Button
