@@ -15,7 +15,7 @@ function ActivityScreen({ selectMood, mood, incrementStep, step }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF9",
+    backgroundColor: "#F0FFF8",
     alignItems: "center",
     justifyContent: "center",
     height: Dimensions.get("window").height,
