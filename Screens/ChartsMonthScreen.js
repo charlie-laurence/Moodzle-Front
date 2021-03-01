@@ -1,5 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import {
+  LineChart, // Bezier Line Chart // Variation Mood
+  BarChart, // podium top activités si pas image
+  PieChart, // Donut répartition mood
+  ContributionGraph, // Calendrier
+} from "react-native-chart-kit";
+
 
 export default function ChartsMonthScreen(props) {
   return (

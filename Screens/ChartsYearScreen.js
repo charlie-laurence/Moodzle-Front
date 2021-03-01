@@ -1,5 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+// Calendrier
+import {ContributionGraph} from "react-native-chart-kit";
+
+
+// Contribution graph (heatmap)
 
 export default function ChartsYearScreen(props) {
   return (
