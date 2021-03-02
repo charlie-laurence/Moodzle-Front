@@ -6,7 +6,6 @@ import {
   useFonts,
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
-import ActivityBar from '../components/ActivityBar';
 
 function MoodScreen({ selectMood, mood, incrementStep, step }) {
   const moodData = [
@@ -69,7 +68,6 @@ function MoodScreen({ selectMood, mood, incrementStep, step }) {
           Quelle est ton humeur du jour ?
         </Text>
         <View style={styles.moodContainer}>{icons}</View>
-        <ActivityBar/>
         <Text>Mood Screen</Text>
         <Text>{mood}</Text>
         <Text>{step}</Text>
