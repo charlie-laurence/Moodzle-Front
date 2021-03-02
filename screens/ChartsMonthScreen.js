@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import { connect } from "react-redux";
+
 import {
   LineChart, // Bezier Line Chart // Variation Mood
   BarChart, // podium top activités si pas image
@@ -8,18 +10,16 @@ import {
 } from "react-native-chart-kit";
 
 
-export default function ChartsMonthScreen(props) {
+function ChartsMonthScreen(props) {
   return (
     <View>
-        
-      <Text style={styles.paragraph}>ChartsMonthScreen</Text>
-
+        <Text style={styles.paragraph}>ChartsMonthScreen</Text>
       <Button
         title="WEEK"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsWeek");
+          props.changeStep(1)
         }}
       />
       <Button
@@ -27,7 +27,7 @@ export default function ChartsMonthScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsMonth");
+          props.changeStep(2)
         }}
       />
       <Button
@@ -35,9 +35,10 @@ export default function ChartsMonthScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsYear");
+          props.changeStep(3)
         }}
       />
+      
     </View>
   );
 }
@@ -56,3 +57,13 @@ const styles = StyleSheet.create({
     marginTop: 70
   },
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeStep: (newstep) => {
+      dispatch({ type: "change-step", newstep: newstep});
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ChartsMonthScreen);

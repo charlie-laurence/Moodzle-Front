@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import { connect } from "react-redux";
+
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
@@ -17,16 +19,19 @@ import {
 //   bezier
 // />
 
-export default function ChartsWeekScreen(props) {
+
+// Utiliser bouton group element
+function ChartsWeekScreen(props) {
   return (
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
+
       <Button
         title="WEEK"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsWeek");
+          props.changeStep(1)
         }}
       />
       <Button
@@ -34,7 +39,7 @@ export default function ChartsWeekScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsMonth");
+          props.changeStep(2)
         }}
       />
       <Button
@@ -42,7 +47,7 @@ export default function ChartsWeekScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsYear");
+          props.changeStep(3)
         }}
       />
       
@@ -64,3 +69,13 @@ const styles = StyleSheet.create({
     marginTop: 70
   },
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeStep: (newstep) => {
+      dispatch({ type: "change-step", newstep: newstep});
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ChartsWeekScreen);
