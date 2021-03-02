@@ -19,16 +19,19 @@ import {
 //   bezier
 // />
 
-export default function ChartsWeekScreen(props) {
+
+// Utiliser bouton group element
+function ChartsWeekScreen(props) {
   return (
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
+
       <Button
         title="WEEK"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsWeek");
+          props.changeStep(1)
         }}
       />
       <Button
@@ -36,7 +39,7 @@ export default function ChartsWeekScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsMonth");
+          props.changeStep(2)
         }}
       />
       <Button
@@ -44,7 +47,7 @@ export default function ChartsWeekScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsYear");
+          props.changeStep(3)
         }}
       />
       
@@ -69,17 +72,10 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    selectMood: (score) => {
-      dispatch({ type: "select-mood", score });
-    },
-    incrementStep: () => {
-      dispatch({ type: "next-step" });
+    changeStep: (newstep) => {
+      dispatch({ type: "change-step", newstep: newstep});
     },
   };
 };
 
-const mapStateToProps = (state) => {
-  return { mood: state.mood, step: state.step };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MoodScreen);
+export default connect(null, mapDispatchToProps)(ChartsWeekScreen);

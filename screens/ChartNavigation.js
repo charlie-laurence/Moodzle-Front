@@ -1,7 +1,7 @@
 import React from "react";
-import ChartsWeekScreen from "./screens/ChartsWeekScreen";
-import ChartsMonthScreen from "./screens/ChartsMonthScreen";
-import ChartsYearScreen from "./screens/ChartsYearScreen";
+import ChartsWeekScreen from "./ChartsWeekScreen";
+import ChartsMonthScreen from "./ChartsMonthScreen";
+import ChartsYearScreen from "./ChartsYearScreen";
 import { connect } from "react-redux";
 import { Button, View, Text, Stylesheet } from "react-native";
 
