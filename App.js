@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import mood from "./reducers/mood.reducer";
 import step from "./reducers/step.reducer";
+import activitySelection from "./reducers/activitySelect.reducer";
 import {
   useFonts,
   LondrinaSolid_400Regular,
@@ -26,7 +27,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const store = createStore(combineReducers({ mood, step }));
+const store = createStore(combineReducers({ mood, step, activitySelection }));
 
 const BottomNavigator = () => {
   return (
