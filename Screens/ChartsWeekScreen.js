@@ -57,7 +57,9 @@ setDataChart([...setterdataChart])
 
   
 
-
+    var year = getFullYear();
+    console.log('full',year)
+    console.log('length',year.length)
 
 
     
@@ -115,7 +117,7 @@ style={{
           props.navigation.navigate("ChartsYear");
         }}
       />
-      <BezierChart />
+      {/* <BezierChart /> */}
     </View>
   );
 }
