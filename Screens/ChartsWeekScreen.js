@@ -33,7 +33,7 @@ var fetchData = async() => {
     } else {
       setterdataChart.push(parseInt(dataHistory[i].mood_score))
   }}
-  console.log('i', setterdataChart)
+  // console.log('i', setterdataChart)
   setDataChart(setterdataChart)
 }
   
