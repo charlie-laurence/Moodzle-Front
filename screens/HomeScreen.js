@@ -9,46 +9,69 @@ import { Button, Input } from "react-native-elements";
 import { connect } from "react-redux";
 
 function HomeScreen(props) {
-  const [pseudo, setPseudo] = useState("");
-  // console.log('pseudo :', pseudo);
-  const [pseudoSubmited, setPseudoSubmited] = useState(false);
-  // console.log('pseudo submited :', pseudoSubmited);
-  // console.log('reduce pseudo :', props.pseudo)
 
+/* 
+- récupération de la valeur depuis l'input et mise à jour de l'état pseudo
+- initialisation d'un état pseudoSubmited à false pour gérer la différence 
+d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
+*/
+
+  const [pseudo, setPseudo] = useState("");
+  const [pseudoSubmited, setPseudoSubmited] = useState(false);
+
+  const [userExist, setUserExist] = useState(false);
+
+
+/* 
+- enregistrement du pseudo dans le local storage
+*/  
   useEffect(() => {
-      AsyncStorage.getItem('pseudo', (err, value) => {
-        if (value) {
+    AsyncStorage.getItem("pseudo", (err, value) => {
+      if (value) {
         setPseudo(value);
-        props.onSubmitPseudo(pseudo);
+        props.onSubmitPseudo(value);
         setPseudoSubmited(true);
-        
-      
       }
-      });
+    });
   }, []);
 
-var handleSubmitSignup = async () => {
-  const data = await fetch('http://172.17.1.15:3000/sign-up', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: `usernameFromFront=${pseudo}`
-  })
-}  
+/* 
+- envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD
+*/
+  var handleSubmitSignup = async () => {
+    const data = await fetch("http://172.17.1.15:3000/sign-up", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `usernameFromFront=${props.pseudo}&token=${props.token}`,
+    });
+
+  const body = await data.json()
+  console.log("result :", body.result)
+
+  
+  if(body.result === true){
+    props.addToken(body.token);
+    setUserExist(true);
+    console.log("token :", body.token)
+    console.log('username :', body.saveUser.username)
+    console.log("allinfo :", body)
+
+  }
+  };
 
 
-
-
-
-var inputUsername;
-if (!pseudoSubmited) {
-  inputUsername = <Input
-  containerStyle={{ marginBottom: 25, width: '70%' }}
-  inputStyle={{ marginLeft: 10 }}
-  placeholder="Nom d'utilisateur"
-  onChangeText={(content) => setPseudo(content)}
-  />
-  }  else {
-    inputUsername = <Text style={styles.paragraph}>Bienvenue {pseudo} !</Text>
+  var inputUsername;
+  if (!pseudoSubmited) {
+    inputUsername = (
+      <Input
+        containerStyle={{ marginBottom: 25, width: "70%" }}
+        inputStyle={{ marginLeft: 10 }}
+        placeholder="Nom d'utilisateur"
+        onChangeText={(content) => setPseudo(content)}
+      />
+    );
+  } else {
+    inputUsername = <Text style={styles.paragraph}>Bienvenue {props.pseudo} !</Text>;
   }
 
   return (
@@ -59,31 +82,30 @@ if (!pseudoSubmited) {
       {inputUsername}
 
       <Button
-          title="C'est parti !"
-          type="solid"
-          buttonStyle={{ backgroundColor: "#009788" }}
-          onPress={() => {
-            setPseudoSubmited(true);
-            props.onSubmitPseudo(pseudo);
-            AsyncStorage.setItem("pseudo", pseudo);
-            handleSubmitSignup();
-            props.navigation.navigate("BottomNavigator", { screen: "Mood" });
-          }}
-        />
+        title="C'est parti !"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788" }}
+        onPress={() => {
+          setPseudoSubmited(true);
+          props.onSubmitPseudo(pseudo);
+          AsyncStorage.setItem("pseudo", pseudo);
+          handleSubmitSignup();
+          props.navigation.navigate("BottomNavigator", { screen: "Mood" });
+        }}
+      />
 
-<Button
-          title="Déconnexion !"
-          type="solid"
-          buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
-          onPress={() => {
-            setPseudoSubmited(false);
-          }}
-        />
-
+      <Button
+        title="Déconnexion"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
+        onPress={() => {
+          AsyncStorage.setItem("pseudo", "");
+          setPseudoSubmited(false);
+        }}
+      />
     </ImageBackground>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -92,30 +114,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   paragraph: {
-    fontWeight: 'normal',
+    fontWeight: "normal",
     fontSize: 25,
-    textAlign: 'center',
-    color: 'black', 
+    textAlign: "center",
+    color: "black",
     marginBottom: 20,
-},
+  },
 });
-
-
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSubmitPseudo: function (pseudo) {
+    onSubmitPseudo: function(pseudo) {
       dispatch({ type: "savePseudo", pseudo: pseudo })
-    }
-  }
-};
+      },
+    addToken: function(token) {
+      dispatch({ type: "addToken", token: token})
+    } 
+  };
+}
 
 function mapStateToProps(state) {
-  return { pseudo : state.pseudo, token: state.token };
-};
+  return { pseudo: state.pseudo, token: state.token };
+}
 
-
-export default connect(
-  mapStateToProps, 
-  mapDispatchToProps
-  )(HomeScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

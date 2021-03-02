@@ -11,6 +11,7 @@ import mood from "./reducers/mood.reducer";
 import step from "./reducers/step.reducer";
 import pseudo from "./reducers/pseudo.reducer";
 import chartstep from "./reducers/chartstep.reducer";
+import token from "./reducers/token.reducer";
 
 import {
   useFonts,
@@ -30,7 +31,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const store = createStore(combineReducers({ mood, step, chartstep, pseudo }));
+const store = createStore(combineReducers({ mood, step, chartstep, pseudo, token }));
 
 const BottomNavigator = () => {
   return (
