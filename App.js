@@ -19,6 +19,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "./screens/HomeScreen";
 import MoodNavigation from "./screens/MoodNavigation";
+import ChartScreen from "./screens/ChartScreen";
 import ChartsWeekScreen from "./screens/ChartsWeekScreen";
 import ChartsMonthScreen from "./screens/ChartsMonthScreen";
 import ChartsYearScreen from "./screens/ChartsYearScreen";
@@ -54,7 +55,7 @@ const BottomNavigator = () => {
         },
       }}
     >
-      <Tab.Screen name="Charts" component={ChartsWeekScreen} />
+      <Tab.Screen name="Charts" component={ChartScreen} />
       <Tab.Screen name="Mood" component={MoodNavigation} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
