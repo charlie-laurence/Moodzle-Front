@@ -10,6 +10,8 @@ import { Ionicons } from "@expo/vector-icons";
 import mood from "./reducers/mood.reducer";
 import step from "./reducers/step.reducer";
 import activitySelection from "./reducers/activitySelect.reducer";
+import chartstep from "./reducers/chartstep.reducer";
+
 import {
   useFonts,
   LondrinaSolid_400Regular,
@@ -20,6 +22,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "./screens/HomeScreen";
 import MoodNavigation from "./screens/MoodNavigation";
+import ChartNavigation from "./screens/ChartNavigation";
 import ChartsWeekScreen from "./screens/ChartsWeekScreen";
 import ChartsMonthScreen from "./screens/ChartsMonthScreen";
 import ChartsYearScreen from "./screens/ChartsYearScreen";
@@ -27,7 +30,9 @@ import SettingsScreen from "./screens/SettingsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const store = createStore(combineReducers({ mood, step, activitySelection }));
+const store = createStore(
+  combineReducers({ mood, step, activitySelection, chartstep })
+);
 
 const BottomNavigator = () => {
   return (
@@ -55,7 +60,7 @@ const BottomNavigator = () => {
         },
       }}
     >
-      <Tab.Screen name="Charts" component={ChartsWeekScreen} />
+      <Tab.Screen name="Charts" component={ChartNavigation} />
       <Tab.Screen name="Mood" component={MoodNavigation} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
