@@ -5,7 +5,6 @@ import {PieChart} from "react-native-chart-kit";
 
 export default function ChartsMonthScreen(props) {
 
-  const [dataChart, setDataChart] = useState()
   const [pieData, setPieData] = useState([])
 
   const chartConfig = {
@@ -23,24 +22,22 @@ export default function ChartsMonthScreen(props) {
   var fetchData = async () => {
     var dataRaw = await fetch('http://172.17.1.144:3000/history', {
         method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        headers: {'Content-Type':'application/x-www-form-urlencoded'}
     });
 
     var data = await dataRaw.json()
     console.log(data.history)
-    setDataChart(dataChart.history)
 
-  }
+    var dataHistory = data.history
 
-  var computeData = () => {
     let score1 = 0
     let score2 = 0
     let score3 = 0
     let score4 = 0
     let score5 = 0
 
-    for (let i = 0; i < dataChart; i ++) {
-      switch (dataChart.mood_score) {
+    for (let i = 0; i < dataHistory.length; i ++) {
+      switch (dataHistory[i].mood_score) {
         case 1: 
           score1 += 1
           break;
@@ -56,11 +53,9 @@ export default function ChartsMonthScreen(props) {
         case 5: 
           score5 += 1
           break;
-        case 6: 
-          score6 += 1
-          break;
       }
     }
+
     setPieData([
       {score: 1, count: score1, color:"#CD6133"}, 
       {score: 2, count: score2, color:"#F0A07E"}, 
@@ -71,14 +66,24 @@ export default function ChartsMonthScreen(props) {
 
   useEffect(() => {
     fetchData()
-    computeData()
-    console.log(pieData)
   }, [])
 
   return (
     <View>
         
       <Text style={styles.paragraph}>ChartsMonthScreen</Text>
+
+      <PieChart
+        data={pieData}
+        width={Dimensions.get("window").width}
+        height={220}
+        chartConfig={chartConfig}
+        accessor={"count"}
+        backgroundColor={"transparent"}
+        absolute
+        hasLegend={false}  
+      />
+
 
       <Button
         title="WEEK"
@@ -105,17 +110,6 @@ export default function ChartsMonthScreen(props) {
         }}
       />
 
-      <PieChart
-        data={pieData}
-        width={Dimensions.get("window").width}
-        height={220}
-        chartConfig={chartConfig}
-        accessor={"score"}
-        backgroundColor={"transparent"}
-        paddingLeft={"15"}
-        center={[10, 50]}
-        absolute      
-      />
     </View>
   );
 }
