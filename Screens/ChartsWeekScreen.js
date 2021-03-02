@@ -10,16 +10,11 @@ import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
 
 export default function ChartsWeekScreen(props) { 
 
-  const [dataChart, setDataChart] = useState([])
+const [dataChart, setDataChart] = useState([0, 0, 0, 0, 0, 0, 0])
 
-  var score1 = 1;
-  var score2 = 2;
-  var score3 = 3;
-  var score4 = 4;
-  var score5 = 5;
- //Récupération du résultat renvoyé par le backend
+//Récupération du résultat renvoyé par le backend
 
- var fetchData = async() => {
+var fetchData = async() => {
   var rawDatas = await fetch("http://172.17.1.159:3000/history", {
   method: 'POST',
   headers: {
@@ -27,68 +22,47 @@ export default function ChartsWeekScreen(props) {
   }
 });
 
-var datas = await rawDatas.json();
-var dataHistory = datas.history
-var setterdataChart = []
-
-
-for (var i = 0 ; i < 7 ; i++) {
-
-  if (dataHistory[i]==undefined ) {
-    setterdataChart.push(0)
-
-    // dataHistory[i].mood_score = 0
-  } else {
-
-    setterdataChart.push(dataHistory[i].mood_score)
-
+  var datas = await rawDatas.json();
+  var dataHistory = datas.history
+  var setterdataChart = []
+  for (var i = 0 ; i < 7 ; i++) {
+    if (dataHistory[i] === undefined || dataHistory[i].mood_score === undefined) 
+    {
+      setterdataChart.push(0)
+      // dataHistory[i].mood_score = 0
+    } else {
+      setterdataChart.push(parseInt(dataHistory[i].mood_score))
+  }}
+  console.log('i', setterdataChart)
+  setDataChart(setterdataChart)
 }
-console.log('i', setterdataChart)
-setDataChart([...setterdataChart])
-
-}
-
-
-  }
   
-    useEffect(() => {
-    fetchData()
-    }, []);
-
-  
-
-    var year = getFullYear();
-    console.log('full',year)
-    console.log('length',year.length)
-
-
-    
+useEffect(() => {
+  fetchData()
+}, []);
+   
 function BezierChart() {
   return (
   <LineChart
-data={{
+  data={{
   labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
   datasets: [
-    { 
-      data: 
-        {dataChart}
-      
+    {
+      data: dataChart
     }
   ]
-}}
-width={Dimensions.get("window").width} 
-height={220}
-// yAxisLabel="$"
-// yAxisSuffix="k"
-yAxisInterval={1} // optional, defaults to 1
-
-chartConfig={chartConfig}
-bezier
-style={{
-  marginVertical: 8,
-  borderRadius: 16
-}}
-/>) }
+  }}
+    width={Dimensions.get("window").width} 
+    height={220}
+    // yAxisLabel="$"
+    // yAxisSuffix="k"
+    yAxisInterval={1} // optional, defaults to 1
+    chartConfig={chartConfig}
+    bezier
+    style={{
+      marginVertical: 8,
+      borderRadius: 16}}
+  />)}
 
   return (
     <View>
@@ -117,7 +91,8 @@ style={{
           props.navigation.navigate("ChartsYear");
         }}
       />
-      {/* <BezierChart /> */}
+      <BezierChart />
+
     </View>
   );
 }
