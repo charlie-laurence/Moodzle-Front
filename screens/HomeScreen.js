@@ -10,17 +10,33 @@ import { connect } from "react-redux";
 
 function HomeScreen(props) {
   const [pseudo, setPseudo] = useState("");
-  console.log('pseudo', pseudo);
+  // console.log('pseudo :', pseudo);
   const [pseudoSubmited, setPseudoSubmited] = useState(false);
+  // console.log('pseudo submited :', pseudoSubmited);
+  // console.log('reduce pseudo :', props.pseudo)
 
   useEffect(() => {
-      AsyncStorage.getItem("pseudo", (err, value) => {
+      AsyncStorage.getItem('pseudo', (err, value) => {
         if (value) {
         setPseudo(value);
+        props.onSubmitPseudo(pseudo);
         setPseudoSubmited(true);
-        }
+        
+      
+      }
       });
   }, []);
+
+var handleSubmitSignup = async () => {
+  const data = await fetch('http://172.17.1.15:3000/sign-up', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `usernameFromFront=${pseudo}`
+  })
+}  
+
+
+
 
 
 var inputUsername;
@@ -31,7 +47,7 @@ if (!pseudoSubmited) {
   placeholder="Nom d'utilisateur"
   onChangeText={(content) => setPseudo(content)}
   />
-  } else {
+  }  else {
     inputUsername = <Text style={styles.paragraph}>Bienvenue {pseudo} !</Text>
   }
 
@@ -50,7 +66,17 @@ if (!pseudoSubmited) {
             setPseudoSubmited(true);
             props.onSubmitPseudo(pseudo);
             AsyncStorage.setItem("pseudo", pseudo);
+            handleSubmitSignup();
             props.navigation.navigate("BottomNavigator", { screen: "Mood" });
+          }}
+        />
+
+<Button
+          title="Déconnexion !"
+          type="solid"
+          buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
+          onPress={() => {
+            setPseudoSubmited(false);
           }}
         />
 
@@ -74,15 +100,22 @@ const styles = StyleSheet.create({
 },
 });
 
+
+
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitPseudo: function (pseudo) {
-      dispatch({ type: "savePseudo", pseudo: pseudo });
-    },
-  };
-}
+      dispatch({ type: "savePseudo", pseudo: pseudo })
+    }
+  }
+};
+
+function mapStateToProps(state) {
+  return { pseudo : state.pseudo, token: state.token };
+};
+
 
 export default connect(
-  null, 
+  mapStateToProps, 
   mapDispatchToProps
-  )(HomeScreen);
+  )(HomeScreen)
