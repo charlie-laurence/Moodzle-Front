@@ -1,76 +1,76 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, View, Button, Dimensions } from "react-native";
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
 } from "react-native-chart-kit";
 import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
+   
 
 
-    
+export default function ChartsWeekScreen(props) { 
 
-
-export default function ChartsWeekScreen(props) {
-
-const [dataWeek, setDataWeek] = useState([])
+  const [dataChart, setDataChart] = useState([])
 
   var score1 = 1;
   var score2 = 2;
   var score3 = 3;
   var score4 = 4;
   var score5 = 5;
+ //Récupération du résultat renvoyé par le backend
 
- 
+ var fetchData = async() => {
+  var rawDatas = await fetch("http://172.17.1.159:3000/history", {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  }
+});
 
-  var fetchData = async() => {
-    //Récupération du résultat renvoyé par le backend
-    var rawDatas = await fetch("http://172.17.1.159:3000/history", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      }
-    });
-    
-    datas = await rawDatas.json();
-    setDataWeek(datas)
-    console.log('datas',datas.history[1].mood_score)
-    }
-    console.log('datas1',dataWeek.history)
+var datas = await rawDatas.json();
+var dataHistory = datas.history
+var setterdataChart = []
 
+
+for (var i = 0 ; i < 7 ; i++) {
+
+  if (dataHistory[i]==undefined ) {
+    setterdataChart.push(0)
+
+    // dataHistory[i].mood_score = 0
+  } else {
+
+    setterdataChart.push(dataHistory[i].mood_score)
+
+}
+console.log('i', setterdataChart)
+setDataChart([...setterdataChart])
+
+}
+
+
+  }
+  
+    useEffect(() => {
     fetchData()
+    }, []);
 
-    const moodData = [
-      {
-        icon: "angry",
-        color: "#CD6133",
-      },
-      {
-        icon: "sad-cry",
-        color: "#F0A07E",
-      },
-      {
-        icon: "meh",
-        color: "#F0D231",
-      },
-      {
-        icon: "grin-squint",
-        color: "#44B79D",
-      },
-      {
-        icon: "smile-beam",
-        color: "#54857F",
-      },
-    ];
+  
 
-function BezierChart() {return (<LineChart
+
+
+
+    
+function BezierChart() {
+  return (
+  <LineChart
 data={{
   labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
   datasets: [
-    {
-      data: [
-        1,2,3,4,5
-       
-      ]
+    { 
+      data: 
+        {dataChart}
+      
     }
   ]
 }}
@@ -78,44 +78,15 @@ width={Dimensions.get("window").width}
 height={220}
 // yAxisLabel="$"
 // yAxisSuffix="k"
-// yAxisInterval={1} // optional, defaults to 1
+yAxisInterval={1} // optional, defaults to 1
 
-chartConfig={{
-  backgroundGradientFrom: "#1E2923",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#08130D",
-  backgroundGradientToOpacity: 0.5,
-
-  decimalPlaces: 0, // optional
-  color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
-  labelColor: (opacity = 1) => `#44B79D`,
-  style: {
-    borderRadius: 16
-  },
-  propsForDots: {
-    r: "3",
-    strokeWidth: "2",
-    stroke: "#44B79D"
-  }
-}}
+chartConfig={chartConfig}
 bezier
 style={{
   marginVertical: 8,
   borderRadius: 16
 }}
 />) }
-
-
-// Bezier Line Chart
-//   <LineChart
-//    data={data}
-//    width={screenWidth}
-//    height={256}
-//    verticalLabelRotation={30}
-//    chartConfig={chartConfig}
-// bezier
-// />
-
 
   return (
     <View>
@@ -163,3 +134,22 @@ const styles = StyleSheet.create({
     marginTop: 70
   },
 });
+
+const chartConfig = {
+  backgroundGradientFrom: "#ffffff",
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: "#ffffff",
+  backgroundGradientToOpacity: 0,
+
+  decimalPlaces: 0, // optional
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  labelColor: (opacity = 1) => `#44B79D`,
+  style: {
+    borderRadius: 16
+  },
+  propsForDots: {
+    r: "2",
+    strokeWidth: "4",
+    stroke: "#44B79D"
+  }
+}

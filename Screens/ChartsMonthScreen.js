@@ -12,15 +12,14 @@ export default function ChartsMonthScreen(props) {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
+    backgroundGradientToOpacity: 0,
     strokeWidth: 2,
     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     barPercentage: 0.5,
   };
   
-
-  var fetchData = async () => {
+ var fetchData = async () => {
     var dataRaw = await fetch('http://172.17.1.144:3000/history', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
