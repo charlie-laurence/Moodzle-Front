@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 export default function HomeScreen(props) {
     return (
         <ImageBackground source={require('../assets/moodz.png')} style={styles.container}>
-        
             <Input
             containerStyle = {{marginBottom: 25, width: '70%'}}
             inputStyle={{marginLeft: 10}}
