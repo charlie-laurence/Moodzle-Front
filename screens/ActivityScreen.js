@@ -6,7 +6,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { categories } from "../statics/category";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ModalNewActivity } from "./Component/ModalNewActivity";
-import { set } from "react-native-reanimated";
 
 function ActivityScreen({
   incrementStep,
@@ -25,6 +24,7 @@ function ActivityScreen({
       try {
         const list = await AsyncStorage.getItem("moodzle-activities");
         if (list !== null) {
+          console.log(list);
           setActivityList(JSON.parse(list));
         } else {
           const jsonInitialList = JSON.stringify([
@@ -44,6 +44,10 @@ function ActivityScreen({
     getActivityList();
   }, []);
 
+  const updateLocalList = (local) => {
+    setActivityList([...activityList, local]);
+  };
+
   const handleActivityPress = (activity) => {
     activitySelection.filter((item) => item.name === activity.name).length === 0
       ? selectActivity(activity)
@@ -51,7 +55,7 @@ function ActivityScreen({
   };
 
   const handleSkipOrValidatePress = () => {
-    //envoi en base de données: fetch vers Back
+    //envoi en base de données: fetch vers Back (mood + activités)
     incrementStep();
   };
 
@@ -71,16 +75,23 @@ function ActivityScreen({
         key={activity.name}
         title={activity.name}
         buttonStyle={{
-          backgroundColor: categories[activity.category].color,
+          backgroundColor:
+            activitySelection.filter((item) => item.name === activity.name)
+              .length > 0
+              ? categories[activity.category].color
+              : "#57706D",
           marginBottom: 15,
         }}
         onPress={() => handleActivityPress(activity)}
-        selected={false}
+        selected={
+          activitySelection.filter((item) => item.name === activity.name)
+            .length > 0
+            ? true
+            : false
+        }
       />
     ));
   }
-
-  const listToDisplay = activitySelection.map((activity) => activity.name);
 
   return (
     <View style={styles.container}>
@@ -98,7 +109,6 @@ function ActivityScreen({
           onPress={() => handleSkipPress()}
         /> */}
       </View>
-      <Text>{listToDisplay.join(",")}</Text>
       <View style={styles.activityWrapper}>
         <View style={styles.activityContainer}>{activitiesBtn}</View>
       </View>
@@ -123,7 +133,11 @@ function ActivityScreen({
           />
         </View>
       </View>
-      <ModalNewActivity visible={modalVisible} toggleOverlay={toggleOverlay} />
+      <ModalNewActivity
+        visible={modalVisible}
+        toggleOverlay={toggleOverlay}
+        updateLocalList={updateLocalList}
+      />
     </View>
   );
 }
