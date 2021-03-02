@@ -27,6 +27,8 @@ import ChartsMonthScreen from "./screens/ChartsMonthScreen";
 import ChartsYearScreen from "./screens/ChartsYearScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
+// Comment add
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const store = createStore(combineReducers({ mood, step, chartstep }));
