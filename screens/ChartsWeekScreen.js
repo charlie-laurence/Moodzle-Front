@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import { connect } from "react-redux";
+
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
@@ -64,3 +66,20 @@ const styles = StyleSheet.create({
     marginTop: 70
   },
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectMood: (score) => {
+      dispatch({ type: "select-mood", score });
+    },
+    incrementStep: () => {
+      dispatch({ type: "next-step" });
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
+  return { mood: state.mood, step: state.step };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MoodScreen);
