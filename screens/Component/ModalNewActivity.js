@@ -3,8 +3,15 @@ import { StyleSheet, Dimensions } from "react-native";
 import { Button, Input, Overlay } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { _IP_OLIV } from "../../statics/ip";
+import { connect } from "react-redux";
 
-const ModalNewActivity = ({ visible, toggleOverlay, updateLocalList }) => {
+const ModalNewActivity = ({
+  visible,
+  toggleOverlay,
+  updateLocalList,
+  selectActivity,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState("sport");
   const [newActivity, setNewActivity] = useState("");
 
@@ -14,12 +21,14 @@ const ModalNewActivity = ({ visible, toggleOverlay, updateLocalList }) => {
         name: newActivity,
         category: selectedCategory,
       };
-      //envoi en BDD de la nouvelle activité (nom, categorie)
-      // await fetch("http://ip:3000/add-activity", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(newActivityToBeAdded),
-      // });
+      // envoi en BDD de la nouvelle activité (nom, categorie)
+      const rawResult = await fetch(`http://${_IP_OLIV}:3000/add-activity`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newActivityToBeAdded),
+      });
+      const result = await rawResult.json();
+      console.log(result);
       //envoi en local storage --> besoin d'une écoute sur le localstorage ou etat tampon pour mettre à jour la liste affichée
 
       let localList = await AsyncStorage.getItem("moodzle-activities");
@@ -35,6 +44,7 @@ const ModalNewActivity = ({ visible, toggleOverlay, updateLocalList }) => {
           ));
       }
       updateLocalList(newActivityToBeAdded);
+      selectActivity(newActivityToBeAdded);
       setNewActivity("");
       toggleOverlay();
     } catch (err) {
@@ -90,4 +100,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ModalNewActivity };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectActivity: (activity) => {
+      dispatch({ type: "select", activity });
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ModalNewActivity);
