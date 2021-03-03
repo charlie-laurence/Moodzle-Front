@@ -11,6 +11,9 @@ import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
 export default function ChartsWeekScreen(props) { 
 
 const [dataChart, setDataChart] = useState([0, 0, 0, 0, 0, 0, 0])
+const [startDate, setStartDate] = useState('2020-05-20')
+const [pieData, setPieData] = useState([])
+
 
 //Récupération du résultat renvoyé par le backend
 
@@ -19,7 +22,8 @@ var fetchData = async() => {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  }
+  },
+  body : `startdate=${startDate}&type=week`
 });
 
   var datas = await rawDatas.json();
@@ -35,15 +39,95 @@ var fetchData = async() => {
   }}
   // console.log('i', setterdataChart)
   setDataChart(setterdataChart)
+
+
+ // Traitement des données pour le Pie Chart
+ pieDataGenerator(dataHistory)
+//  lineGenerator(dataHistory)
+
 }
   
 useEffect(() => {
   fetchData()
 }, []);
+
+
+  
+/* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
+var pieDataGenerator = (dataset) => {
+ // Initialisation des scores à 0
+ let score1 = 0
+ let score2 = 0
+ let score3 = 0
+ let score4 = 0
+ let score5 = 0
+
+ // Incrémenter les scores de 1 à chaque fois qu'une note des données correspondent 
+ for (let i = 0; i < dataset.length; i ++) {
+   switch (dataset[i].mood_score) {
+     case 1: 
+       score1 += 1;
+       break;
+     case 2: 
+       score2 += 1;
+       break;
+     case 3: 
+       score3 += 1;
+       break;
+     case 4: 
+       score4 += 1;
+       break;
+     case 5: 
+       score5 += 1;
+       break;
+   }
+ }
+
+ // Stocker les résultats dans un états qui seront exploiter par le PieChart
+ setPieData([
+   {name: 'angry',score: 1, count: score1, color:"#CD6133", legendFontColor: "#CD6133", legendFontSize: 15}, 
+   {name: 'sad', score: 2, count: score2, color:"#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15}, 
+   {name: 'meh', score: 3, count: score3, color:"#F0D231", legendFontColor: "#F0D231", legendFontSize: 15}, 
+   {name: 'happy', score: 4, count: score4, color:"#44B79D", legendFontColor: "#44B79D", legendFontSize: 15}, 
+   {name: 'super', score: 5, count: score5, color:"#54857F", legendFontColor: "#54857F", legendFontSize: 15}]
+   );
+ }
+
+
+
+function PieChart() {
+  return (
+    <PieChart
+        data={pieData}
+        width={Dimensions.get("window").width}
+        height={220}
+        chartConfig={{
+          backgroundGradientFrom: "#1E2923",
+          backgroundGradientFromOpacity: 0,
+          backgroundGradientTo: "#08130D",
+          backgroundGradientToOpacity: 0,
+          strokeWidth: 2,
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          barPercentage: 0.5,
+        }}
+        accessor={"count"}
+        backgroundColor={"transparent"}
+        center={[10, 0]}
+        absolute
+        hasLegend={true}  
+      />
+  )
+}
+
+
+
+
    
 function BezierChart() {
   return (
-  <LineChart
+
+<LineChart
   data={{
   labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
   datasets: [
@@ -56,7 +140,7 @@ function BezierChart() {
     height={220}
     // yAxisLabel="$"
     // yAxisSuffix="k"
-    yAxisInterval={1} // optional, defaults to 1
+    yAxisInterval={7} // optional, defaults to 1
     chartConfig={chartConfig}
     bezier
     style={{
@@ -91,6 +175,7 @@ function BezierChart() {
           props.navigation.navigate("ChartsYear");
         }}
       />
+      {/* <PieChart /> */}
       <BezierChart />
 
     </View>

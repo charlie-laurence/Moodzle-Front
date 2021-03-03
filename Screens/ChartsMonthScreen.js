@@ -18,7 +18,7 @@ export default function ChartsMonthScreen(props) {
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
-    var dataRaw = await fetch('http://172.17.1.144:3000/history', {
+    var dataRaw = await fetch('http://172.17.1.159:3000/history', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: `startdate=${startDate}&type=month`
@@ -144,7 +144,7 @@ export default function ChartsMonthScreen(props) {
           height={220}
           // yAxisLabel="$"
           // yAxisSuffix="k"
-          yAxisInterval={1} // optional, defaults to 1
+          yAxisInterval={31} // optional, defaults to 1
           chartConfig={chartConfig}
           bezier
           style={{
