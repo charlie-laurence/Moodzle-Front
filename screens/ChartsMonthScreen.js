@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { StyleSheet, Text, View, Button, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Button, Dimensions, ScrollView } from "react-native";
 import {PieChart, LineChart} from "react-native-chart-kit";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { connect } from "react-redux";
@@ -19,7 +19,7 @@ function ChartsMonthScreen(props) {
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
-    var dataRaw = await fetch('http://172.17.1.159:3000/history', {
+    var dataRaw = await fetch('http://172.17.1.144:3000/history', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: `startdate=${startDate}&type=month`
@@ -79,7 +79,7 @@ function ChartsMonthScreen(props) {
     let lineDataArray = []
 
     for (let i = 0; i < dataset.length; i++) {
-      lineLabelsArray.push(i + 1)
+      (i % 5) === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push('') //Modulo 5 pour récupérer tous les 5 jours
       lineDataArray.push(parseInt(dataset[i].mood_score))
     }
     setLineLabel(lineLabelsArray)
@@ -88,7 +88,7 @@ function ChartsMonthScreen(props) {
 
 
   return (
-    <View>
+    <ScrollView>
       <Text style={styles.paragraph}>ChartsMonthScreen</Text>
       <Button
         title="WEEK"
@@ -153,7 +153,7 @@ function ChartsMonthScreen(props) {
             borderRadius: 16}}
       />
 
-    </View>
+    </ScrollView>
   );
 }
 

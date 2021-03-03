@@ -19,7 +19,7 @@ const [pieData, setPieData] = useState([])
 //Récupération du résultat renvoyé par le backend
 
 var fetchData = async() => {
-  var rawDatas = await fetch("http://172.17.1.159:3000/history", {
+  var rawDatas = await fetch("http://172.17.1.144:3000/history", {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -121,34 +121,6 @@ function PieChart() {
   )
 }
 
-
-
-
-   
-function BezierChart() {
-  return (
-
-<LineChart
-  data={{
-  labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-  datasets: [
-    {
-      data: dataChart
-    }
-  ]
-  }}
-    width={Dimensions.get("window").width} 
-    height={220}
-    // yAxisLabel="$"
-    // yAxisSuffix="k"
-    yAxisInterval={7} // optional, defaults to 1
-    chartConfig={chartConfig}
-    bezier
-    style={{
-      marginVertical: 8,
-      borderRadius: 16}}
-  />)}
-
   return (
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
@@ -178,8 +150,25 @@ function BezierChart() {
         }}
       />
       {/* <PieChart /> */}
-      <BezierChart />
-
+      <LineChart
+        data={{
+        labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+        datasets: [
+          {
+            data: dataChart
+          }
+        ]
+        }}
+          width={Dimensions.get("window").width} 
+          height={220}
+          // yAxisLabel="$"
+          // yAxisSuffix="k"
+          yAxisInterval={31} // optional, defaults to 1
+          chartConfig={chartConfig}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16}}/>
     </View>
   );
 }

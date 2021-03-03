@@ -1,6 +1,6 @@
 import React from "react";
-import { LogBox } from "react-native";
-LogBox.ignoreLogs(["Warning: ..."]);
+// import { LogBox } from "react-native";
+// LogBox.ignoreLogs(["Warning: ..."]);
 
 import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";

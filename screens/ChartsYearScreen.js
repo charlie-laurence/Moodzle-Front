@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import { StyleSheet, Text, View, Button, ScrollView} from "react-native";
+import { connect } from "react-redux";
 
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
