@@ -6,8 +6,9 @@ import {
   useFonts,
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function MoodScreen({ selectMood, incrementStep }) {
+function MoodScreen({ selectMood, incrementStep, mood }) {
   const moodData = [
     {
       icon: "angry",
@@ -48,6 +49,7 @@ function MoodScreen({ selectMood, incrementStep }) {
   const handleMoodPress = (score) => {
     selectMood(score);
     incrementStep();
+    // AsyncStorage.clear();
   };
 
   if (!fontsLoaded) {

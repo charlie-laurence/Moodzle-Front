@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { categories } from "../statics/category";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ModalNewActivity } from "./Component/ModalNewActivity";
+import ModalNewActivity from "./Component/ModalNewActivity";
 import ActivityBar from "./Component/ActivityBar";
 
 function ActivityScreen({
@@ -14,6 +14,7 @@ function ActivityScreen({
   selectActivity,
   deselectActivity,
   activitySelection,
+  mood,
 }) {
   const [activityList, setActivityList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,7 +26,6 @@ function ActivityScreen({
       try {
         const list = await AsyncStorage.getItem("moodzle-activities");
         if (list !== null) {
-          console.log(list);
           setActivityList(JSON.parse(list));
         } else {
           const jsonInitialList = JSON.stringify([
@@ -55,8 +55,15 @@ function ActivityScreen({
       : deselectActivity(activity);
   };
 
-  const handleSkipOrValidatePress = () => {
-    //envoi en base de données: fetch vers Back (mood + activités)
+  const handleSkipOrValidatePress = async () => {
+    // envoi en BDD du mood de la journée (mood + activités)
+    const rawResult = await fetch(`http://${_IP_OLIV}:3000/save-mood`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mood, selectActivity }),
+    });
+    const result = await rawResult.json();
+    console.log(result);
     incrementStep();
   };
 
@@ -103,17 +110,9 @@ function ActivityScreen({
           titleStyle={{ color: "#5B63AE" }}
           onPress={() => decrementStep()}
         />
-        {/* <Button
-          buttonStyle={{ backgroundColor: "#fff" }}
-          title={"Ignorer"}
-          titleStyle={{ color: "#5B63AE" }}
-          onPress={() => handleSkipPress()}
-        /> */}
       </View>
       <View style={styles.searchBar}>
-        <ActivityBar
-      updateLocalList={updateLocalList}
-      />
+        <ActivityBar updateLocalList={updateLocalList} />
       </View>
       <View style={styles.activityWrapper}>
         <View style={styles.activityContainer}>{activitiesBtn}</View>
@@ -227,6 +226,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     activitySelection: state.activitySelection,
+    mood: state.mood,
   };
 };
 
