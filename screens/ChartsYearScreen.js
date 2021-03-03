@@ -1,139 +1,270 @@
-import React, {useEffect, useState} from "react";
-import { StyleSheet, Text, View, Button, ScrollView} from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import { connect } from "react-redux";
 
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { FontAwesome } from '@expo/vector-icons';
 
-
 function ChartsYearScreen(props) {
 
-  const [calendarChart, setCalendarChart] = useState([])
   const [startDate, setStartDate] = useState('2020-05-20')
-const [janvier, setJanvier] = useState([])
+  const [janDisplay, setJanDisplay] = useState([])
+  const [febDisplay, setFebDisplay] = useState([])
+  const [marDisplay, setMarDisplay] = useState([])
+  const [aprDisplay, setAprDisplay] = useState([])
+  const [mayDisplay, setMayDisplay] = useState([])
+  const [junDisplay, setJunDisplay] = useState([])
+  const [julDisplay, setJulDisplay] = useState([])
+  const [augDisplay, setAugDisplay] = useState([])
+  const [sepDisplay, setSepDisplay] = useState([])
+  const [octDisplay, setOctDisplay] = useState([])
+  const [novDisplay, setNovDisplay] = useState([])
+  const [decDisplay, setDecDisplay] = useState([])
 
 
-//Récupération du résultat renvoyé par le backend
+  useEffect(() => {
+    // Récupère l'année de la date actuelle
+    var yearDate = new Date(startDate);
 
-var fetchData = async() => {
-  var rawDatas = await fetch("http://172.17.1.159:3000/history", {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  },
-  body : `startdate=${startDate}&type=year`
+    // Variable boolean qui va être True si l'année est bissextile
+    var checkLeap = isLeapYear(yearDate.getFullYear())
+    // initiateArray génère des tables avec des icones grises et prend pour un argument un true/false pour vérifier s'il s'agit d'une année bissextile
+    initiateArray(checkLeap)
 
-});
-
-var datas = await rawDatas.json();
-var dataHistory = datas.history
-
-console.log('score', dataHistory[0].mood_score)  
-
-var setterCalendarChart = []
-for (var i = 0 ; i < 365 ; i++) {
-  if (dataHistory[i] === undefined || dataHistory[i].mood_score === undefined) 
-  {
-    setterCalendarChart.push(0)
-    // dataHistory[i].mood_score = 0
-  } else {
-    setterCalendarChart.push(parseInt(dataHistory[i].mood_score))
-}}
-
-
-// Création
-var janvier = [];
-for (var i = 0 ; i < 31 ; i++) {
-  janvier.push(setterCalendarChart[i])
-}
-setJanvier(janvier)
-
- }
-
-
- function Janvier() {
-  for (var i = 0 ; i < janvier.length ; i++) {
-   return (
-<FontAwesome name="circle" size={13} color="black" />
-   )}
-
- }
- console.log('janvier', janvier)
-
-
-    useEffect(() => {
+    // Récupère les données de la BDD + génère les tables pour l'affichage du calendrier
     fetchData()
-    }, []);
 
-    // Définir l'année et connaitre le nombre de jour (année bissextile ou non)
-    var today = new Date();
-    var current_year = today.getFullYear()
-  
-    
+  }, []);
 
-    function days_of_a_year(year) 
-    {      
-      return isLeapYear(year) ? 366 : 365;
+  var headTable = [' ', 'j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'];
+
+  /*  initiateArray : initialise des 12 Tables (une par mois) avec un cercle gris par jour 
+      Prend en variable un Boolean qui est True si l'année en cours est bissextile*/
+  const initiateArray = (bissextile) => {
+    // Créer des tables vides
+    var jan = []
+    var feb = []
+    var mar = []
+    var apr = []
+    var may = []
+    var jun = []
+    var jul = []
+    var aug = []
+    var sep = []
+    var oct = []
+    var nov = []
+    var dec = []
+
+    // Boucle for sur les 12 mois de l'année
+    for (let i = 0; i < 12; i++)
+      /* 
+        Condition sur l'index qui correspond au mois (l'index 0 correspond au mois de Janvier)
+        Ajoute une icone FontAwesome pour chaque jour du mois   
+        Enregistre le résultat dans les variables d'états correspondantes 
+      */
+      switch (i) {
+        case 0:
+          for (let j = 0; j < 31; j++) {
+            jan.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setJanDisplay(jan)
+          break;
+        case 1:
+          // Vérifier si années bissextile (28j si oui, 29j sinon)
+          var febDay = 29
+          bissextile ? febDay = 28 : febDay = 29;
+          for (let j = 0; j < febDay; j++) {
+            feb.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setFebDisplay(feb)
+          break;
+        case 2:
+          for (let j = 0; j < 31; j++) {
+            mar.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setMarDisplay(mar)
+          break;
+        case 3:
+          for (let j = 0; j < 30; j++) {
+            apr.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setAprDisplay(apr)
+          break;
+        case 4:
+          for (let j = 0; j < 31; j++) {
+            may.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setMayDisplay(may)
+          break;
+        case 5:
+          for (let j = 0; j < 30; j++) {
+            jun.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setJunDisplay(jun)
+          break;
+        case 6:
+          for (let j = 0; j < 31; j++) {
+            jul.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setJulDisplay(jul)
+          break;
+        case 7:
+          for (let j = 0; j < 31; j++) {
+            aug.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setAugDisplay(aug)
+          break;
+        case 8:
+          for (let j = 0; j < 30; j++) {
+            sep.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setSepDisplay(sep)
+          break;
+        case 9:
+          for (let j = 0; j < 31; j++) {
+            oct.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setOctDisplay(oct)
+          break;
+        case 10:
+          for (let j = 0; j < 30; j++) {
+            nov.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setNovDisplay(nov)
+          break;
+        case 11:
+          for (let j = 0; j < 31; j++) {
+            dec.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+          };
+          setDecDisplay(dec)
+          break;
+      }
+  }
+
+  // Fonction qui vérifie si une année est bissextille
+  function isLeapYear(year) {
+    return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
+  }
+
+
+  //Récupération du résultat renvoyé par le backend
+  var fetchData = async () => {
+    var rawData = await fetch("http://172.17.1.144:3000/history", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      body: `startdate=${startDate}&type=year`
+    });
+
+    var data = await rawData.json();
+    var dataHistory = data.history // Variable qui contient les données de l'historique
+
+    // Copie des variables d'états qui contiennent des Tables de points gris
+    var janCopy = janDisplay
+    var febCopy = febDisplay
+    var marCopy = marDisplay
+    var aprCopy = aprDisplay
+    var mayCopy = mayDisplay
+    var junCopy = junDisplay
+    var julCopy = julDisplay
+    var augCopy = augDisplay
+    var sepCopy = sepDisplay
+    var octCopy = octDisplay
+    var novCopy = novDisplay
+    var decCopy = decDisplay
+
+    // Boucle sur l'historique pour remplacer points gris points de couleurs (qui varient en fonction du mood_score)
+    for (var i = 0; i < dataHistory.length; i++) {
+      var convertDate = new Date(dataHistory[i].date) // Reconverti la date de l'historique 
+      var month = parseInt(convertDate.getMonth()) // Récupère le mois
+      var day = parseInt(convertDate.getDate()) // Récupère le jour
+      var moodScore = parseInt(dataHistory[i].mood_score) // Récupère le mood score
+
+      /* Condition sur le mois (getMonth initialise janvier à 0)
+        Modifie la Table correspondante au mois et la remplace par une icone colorée
+        moodScoreCircle retourne une icône fontAwesome avec une couleur différente
+      */
+      switch (month) {
+        case 0:
+          janCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 1:
+          febCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 2:
+          marCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 3:
+          aprCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 4:
+          mayCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 5:
+          junCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 6:
+          julCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 7:
+          augCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 8:
+          sepCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 9:
+          octCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 10:
+          novCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+        case 11:
+          decCopy[day - 1] = moodScoreCircle(moodScore)
+          break;
+      }
     }
-        function isLeapYear(year) {
-         return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
+
+    // Modifie les variables d'états avec les cercles colorés pour actualiser l'affichage
+    setJanDisplay([...janCopy])
+    setFebDisplay([...febCopy])
+    setMarDisplay([...marCopy])
+    setAprDisplay([...aprCopy])
+    setMayDisplay([...mayCopy])
+    setJunDisplay([...junCopy])
+    setJulDisplay([...julCopy])
+    setAugDisplay([...augCopy])
+    setSepDisplay([...sepCopy])
+    setOctDisplay([...octCopy])
+    setNovDisplay([...novCopy])
+    setDecDisplay([...decCopy])
+  }
+
+  // Fonction qui prend en variable le score et qui retourne un cercle avec la couleur associée à la note
+  const moodScoreCircle = (score) => {
+    switch (score) {
+      case 1:
+        return <FontAwesome color="#CD6133" name="circle" size={5} />
+      case 2:
+        return <FontAwesome color="#F0A07E" name="circle" size={5} />
+      case 3:
+        return <FontAwesome color="#F0D231" name="circle" size={5} />
+      case 4:
+        return <FontAwesome color="#44B79D" name="circle" size={5} />
+      case 5:
+        return <FontAwesome color="#fdf9f2" name="circle" size={5} />
     }
-       
-console.log(days_of_a_year(current_year))
+  }
 
-
-var headTable = [' ','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'] ;
-
-
-// for (var day = 0 ; day < 5 ; day++) {
-//   console.log(calendarChart[day])
-// }
-
-var circleTable = [];
-for (var i = 0 ; i < janvier.length ; i++) {
-
-// Détermine la couleur de la pastille en fonction de la mood
-  var color = "black" // "#fdf9f2"
-  // if(1){
-  //   circleStyle.color = "#CD6133"
-  // } else if (2) {
-  //   circleStyle.color = "#F0A07E"
-  // }else if (3) {
-  //   circleStyle.color = "#F0D231""
-  // }else if (4) {
-  //   circleStyle.color = "#44B79D"
-  // }else if (4) {
-  //   circleStyle.color = "#54857F"
-  // } else {
-  //   circleStyle.color = "#fdf9f2"
-  //  }
-
-  // Push dans le tableau les pastilles en fonction du mood
-  circleTable.push(<FontAwesome color={color} name="circle" size={13}/>)
-}
-
-
-var dataTable = [
-    circleTable,
-    ['c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
+  // dataTable qui contient les variables d'états pour chaque mois (1 mois = 1 colonne)
+  var dataTable = [
+    janDisplay, febDisplay, marDisplay, aprDisplay, mayDisplay, junDisplay, julDisplay, augDisplay, sepDisplay, octDisplay, novDisplay, decDisplay
   ]
-  var tableTitle = ['1', '2', '3', '4', '5','6', '7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
+  var tableTitle = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
 
-
- 
   return (
     <ScrollView>
-       
+
 
       <Text style={styles.paragraph}>ChartsYearScreen</Text>
 
@@ -162,26 +293,26 @@ var dataTable = [
         }}
       />
 
-<Table>
-        <Row data={headTable}  height={('auto')}  style={styles.HeadStyle} textStyle={{textAlign:'center', justifyContent:'flex-start'}}/>
+      <Table>
+        <Row data={headTable} height={('auto')} style={styles.HeadStyle} textStyle={{ textAlign: 'center', justifyContent: 'flex-start' }} />
       </Table>
 
 
-    <Table
-    //  borderStyle={{borderWidth: 0.2, borderColor: '#44B79D'}}
-     >
-   
+      <Table
+      //  borderStyle={{borderWidth: 0.2, borderColor: '#44B79D'}}
+      >
 
-<View style={{flexDirection: 'row'}}>
-      <TableWrapper style={{flexDirection: 'row'}}>
-        <Col data={tableTitle}  width={20} height={14} textStyle={{textAlign:'center'}}/> 
-      </TableWrapper>
 
-      <TableWrapper style={{flex: 1}}>
-        <Cols data={dataTable} style= {{flex: 1}} height={14} textStyle={{textAlign:'center'}}/>
-      </TableWrapper>
-      </View>
-    </Table>
+        <View style={{ flexDirection: 'row' }}>
+          <TableWrapper style={{ flexDirection: 'row' }}>
+            <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
+          </TableWrapper>
+
+          <TableWrapper style={{ flex: 1 }}>
+            <Cols data={dataTable} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center' }} />
+          </TableWrapper>
+        </View>
+      </Table>
     </ScrollView>
   );
 }
@@ -199,40 +330,41 @@ const styles = StyleSheet.create({
     color: "#009788",
     marginTop: 70
   },
-  HeadStyle: { 
+  HeadStyle: {
     height: 50,
     alignContent: "space-between",
     backgroundColor: '#ffffff'
   },
-  TableText: { 
+  TableText: {
     margin: 1,
     alignContent: "center",
     textAlign: "center",
     color: '#44B79D'
   },
-  TableStyle :{
-flex : 1,
-margin: 6,
-height: 100,
+  TableStyle: {
+    flex: 1,
+    margin: 6,
+    height: 100,
   },
-  DaylyTable: { 
+  DaylyTable: {
     margin: 1,
     alignContent: "center",
     textAlign: "center",
-    justifyContent : 'flex-start',
-    flexDirection:'column',
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
 
   },
-  singleHead: { 
-    width: 20, height: 20, 
-    backgroundColor: '#c8e1ff' },
+  singleHead: {
+    width: 20, height: 20,
+    backgroundColor: '#c8e1ff'
+  },
 
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
-      dispatch({ type: "change-step", newstep: newstep});
+      dispatch({ type: "change-step", newstep: newstep });
     },
   };
 };
