@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { StyleSheet, Text, View, Button, Dimensions } from "react-native";
+import { StyleSheet, Text, ScrollView, Button, Dimensions } from "react-native";
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
@@ -15,10 +15,17 @@ const [startDate, setStartDate] = useState('2020-05-20')
 const [pieData, setPieData] = useState([])
 
 
+/* Hook d'effet à l'ouverture de la page pour charger les données*/
+useEffect(() => {
+  fetchData()
+}, []);
+
+
+
 //Récupération du résultat renvoyé par le backend
 
 var fetchData = async() => {
-  var rawDatas = await fetch("http://172.17.1.144:3000/history", {
+  var rawDatas = await fetch("http://172.17.1.159:3000/history", {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -32,7 +39,7 @@ var fetchData = async() => {
   for (var i = 0 ; i < 7 ; i++) {
     if (dataHistory[i] === undefined || dataHistory[i].mood_score === undefined) 
     {
-      setterdataChart.push(0)
+      setterdataChart.push(1)
       // dataHistory[i].mood_score = 0
     } else {
       setterdataChart.push(parseInt(dataHistory[i].mood_score))
@@ -46,10 +53,7 @@ var fetchData = async() => {
 //  lineGenerator(dataHistory)
 
 }
-  
-useEffect(() => {
-  fetchData()
-}, []);
+
 
 
   
@@ -95,33 +99,10 @@ var pieDataGenerator = (dataset) => {
 
 
 
-function PieChart() {
-  return (
-    <PieChart
-        data={pieData}
-        width={Dimensions.get("window").width}
-        height={220}
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientFromOpacity: 0,
-          backgroundGradientTo: "#08130D",
-          backgroundGradientToOpacity: 0,
-          strokeWidth: 2,
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          barPercentage: 0.5,
-        }}
-        accessor={"count"}
-        backgroundColor={"transparent"}
-        center={[10, 0]}
-        absolute
-        hasLegend={true}  
-      />
-  )
-}
 
   return (
-    <View>
+    <ScrollView >
+
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
         <Button
         title="WEEK"
@@ -147,7 +128,32 @@ function PieChart() {
           props.changeStep(3)
         }}
       />
-      {/* <PieChart /> */}
+       
+       
+       <PieChart
+        data={pieData}
+        width={Dimensions.get("window").width}
+        height={220}
+        chartConfig={{
+          backgroundGradientFrom: "#1E2923",
+          backgroundGradientFromOpacity: 0,
+          backgroundGradientTo: "#08130D",
+          backgroundGradientToOpacity: 0,
+          strokeWidth: 2,
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          barPercentage: 0.5,
+        }}
+        accessor={"count"}
+        backgroundColor={"transparent"}
+        center={[10, 0]}
+        // absolute
+        hasLegend={false}  
+        alignItems={'center'}
+
+
+      />
+       
       <LineChart
         data={{
         labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
@@ -161,13 +167,15 @@ function PieChart() {
           height={220}
           // yAxisLabel="$"
           // yAxisSuffix="k"
-          yAxisInterval={31} // optional, defaults to 1
+          yAxisInterval={7} // optional, defaults to 1
           chartConfig={chartConfig}
           bezier
           style={{
             marginVertical: 8,
-            borderRadius: 16}}/>
-    </View>
+            borderRadius: 16}}
+            
+            />
+    </ScrollView>
   );
 }
 
