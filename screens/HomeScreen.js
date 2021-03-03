@@ -37,7 +37,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 - envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD
 */
   var handleSubmitSignup = async () => {
-    const data = await fetch("http://172.17.1.15:3000/sign-up", {
+    const data = await fetch("http://172.17.1.144:3000/sign-up", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `usernameFromFront=${props.pseudo}&token=${props.token}`,
@@ -46,17 +46,14 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
   const body = await data.json()
   console.log("result :", body.result)
 
-  
   if(body.result === true){
     props.addToken(body.token);
     setUserExist(true);
     console.log("token :", body.token)
     console.log('username :', body.saveUser.username)
     console.log("allinfo :", body)
-
   }
   };
-
 
   var isUserRegistered;
   if (userExist === false) {
@@ -69,6 +66,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         onChangeText={(content) => {
           setPseudo(content);
           AsyncStorage.setItem("pseudo", content);
+          props.onSubmitPseudo(content)
         }}
       />
       <Button
@@ -82,15 +80,16 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           props.navigation.navigate("BottomNavigator", { screen: "Mood" });
         }}
       />
-      {/* <Button
+      <Button
         title="Change user"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
         onPress={() => {
           AsyncStorage.setItem("pseudo", "");
+          props.onSubmitPseudo("");
           setUserExist(false);
         }}
-      /> */}
+      />
       </View>
     );
   } else if(userExist === true){
@@ -105,15 +104,16 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           props.navigation.navigate("BottomNavigator", { screen: "Mood" });
         }}
       />
-      {/* <Button
+      <Button
         title="Change user"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
         onPress={() => {
           AsyncStorage.setItem("pseudo", "");
           setUserExist(false);
+          props.onSubmitPseudo("");
         }}
-      /> */}
+      />
       </View>
     );
   }
