@@ -27,6 +27,7 @@ import ChartsWeekScreen from "./screens/ChartsWeekScreen";
 import ChartsMonthScreen from "./screens/ChartsMonthScreen";
 import ChartsYearScreen from "./screens/ChartsYearScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import ReactionScreen from "./screens/ReactionScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -78,6 +79,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Mood" component={MoodNavigation} />
+          <Stack.Screen name="Reaction" component={ReactionScreen} />
           <Stack.Screen name="ChartsWeek" component={ChartsWeekScreen} />
           <Stack.Screen name="ChartsMonth" component={ChartsMonthScreen} />
           <Stack.Screen name="ChartsYear" component={ChartsYearScreen} />

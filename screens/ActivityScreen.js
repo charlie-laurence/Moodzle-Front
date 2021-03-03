@@ -13,6 +13,7 @@ function ActivityScreen({
   selectActivity,
   deselectActivity,
   activitySelection,
+  mood,
 }) {
   const [activityList, setActivityList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,7 +25,6 @@ function ActivityScreen({
       try {
         const list = await AsyncStorage.getItem("moodzle-activities");
         if (list !== null) {
-          console.log(list);
           setActivityList(JSON.parse(list));
         } else {
           const jsonInitialList = JSON.stringify([
@@ -215,6 +215,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     activitySelection: state.activitySelection,
+    mood: state.mood,
   };
 };
 

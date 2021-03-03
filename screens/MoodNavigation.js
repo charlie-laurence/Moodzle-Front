@@ -1,10 +1,11 @@
 import React from "react";
 import ActivityScreen from "./ActivityScreen";
 import MoodScreen from "./MoodScreen";
-import ReactionScreen from "./ReactionScreen";
+// import ReactionScreen from "./ReactionScreen";
 import HistoryScreen from "./HistoryScreen";
 import { connect } from "react-redux";
-import { Button, View, Text, Stylesheet } from "react-native";
+import { View } from "react-native";
+import ReactionScreen from "./ReactionScreen";
 
 function MoodNavigation({ step }) {
   switch (step) {
@@ -32,12 +33,12 @@ function MoodNavigation({ step }) {
           <HistoryScreen />
         </View>
       );
-    default:
-      return (
-        <View>
-          <Text>Loading...</Text>
-        </View>
-      );
+    // default:
+    //   return (
+    //     <View>
+    //       <Text>Loading...</Text>
+    //     </View>
+    //   );
   }
 }
 

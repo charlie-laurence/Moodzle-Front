@@ -7,7 +7,7 @@ import {
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
 
-function MoodScreen({ selectMood, incrementStep }) {
+function MoodScreen({ selectMood, incrementStep, mood }) {
   const moodData = [
     {
       icon: "angry",
