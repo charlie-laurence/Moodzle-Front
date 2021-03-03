@@ -37,7 +37,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 - envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD
 */
   var handleSubmitSignup = async () => {
-    const data = await fetch("http://172.17.1.144:3000/sign-up", {
+    const data = await fetch("http://172.17.1.15:3000/sign-up", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `usernameFromFront=${props.pseudo}&token=${props.token}`,
