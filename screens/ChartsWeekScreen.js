@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, View, Button, Dimensions } from "react-native";
-import { connect } from "react-redux";
-
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
 } from "react-native-chart-kit";
+import { connect } from "react-redux";
 import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
-
+   
 
 function ChartsWeekScreen(props) { 
 
@@ -124,8 +123,7 @@ function PieChart() {
   return (
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
-
-      <Button
+        <Button
         title="WEEK"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
@@ -206,6 +204,7 @@ const chartConfig = {
     stroke: "#44B79D"
   }
 }
+
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
@@ -214,4 +213,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ChartsWeekScreen);
+export default connect(null, mapDispatchToProps)(ChartsMonthScreen);
