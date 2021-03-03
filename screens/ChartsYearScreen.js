@@ -7,6 +7,12 @@ import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-ta
 function ChartsYearScreen(props) {
 
 
+{/* <ion-icon name="ellipse"></ion-icon> 
+ou
+<i class="fas fa-circle"></i>
+*/}
+
+
 //Récupération du résultat renvoyé par le backend
 
 var fetchData = async() => {
@@ -15,6 +21,7 @@ var fetchData = async() => {
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   }
+ 
 });
 
 var datas = await rawDatas.json();
@@ -44,7 +51,7 @@ var setterdataChart = []
 console.log(days_of_a_year(current_year))
 
 
-var headTable = ['','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'] ;
+var headTable = [' ','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'] ;
 
 
 var dataTable = [
@@ -100,7 +107,7 @@ var dataTable = [
 
  
 <Table>
-        <Row data={headTable} height={('auto')}  style={styles.HeadStyle} textStyle={{textAlign:'center'}}/>
+        <Row data={headTable}  height={('auto')}  style={styles.HeadStyle} textStyle={{textAlign:'center', justifyContent:'flex-start'}}/>
       </Table>
 
 
