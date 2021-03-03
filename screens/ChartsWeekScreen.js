@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, View, Button, Dimensions } from "react-native";
+import { connect } from "react-redux";
+
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
 } from "react-native-chart-kit";
 import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
-   
 
 
-export default function ChartsWeekScreen(props) { 
+function ChartsWeekScreen(props) { 
 
 const [dataChart, setDataChart] = useState([0, 0, 0, 0, 0, 0, 0])
 
@@ -67,12 +68,13 @@ function BezierChart() {
   return (
     <View>
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
+
       <Button
         title="WEEK"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsWeek");
+          props.changeStep(1)
         }}
       />
       <Button
@@ -80,7 +82,7 @@ function BezierChart() {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsMonth");
+          props.changeStep(2)
         }}
       />
       <Button
@@ -88,7 +90,7 @@ function BezierChart() {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsYear");
+          props.changeStep(3)
         }}
       />
       <BezierChart />
@@ -130,3 +132,12 @@ const chartConfig = {
     stroke: "#44B79D"
   }
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeStep: (newstep) => {
+      dispatch({ type: "change-step", newstep: newstep});
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ChartsWeekScreen);

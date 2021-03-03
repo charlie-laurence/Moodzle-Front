@@ -2,9 +2,10 @@ import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, View, Button, Dimensions } from "react-native";
 import {PieChart, LineChart} from "react-native-chart-kit";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { connect } from "react-redux";
 
 
-export default function ChartsMonthScreen(props) {
+function ChartsMonthScreen(props) {
 
   const [pieData, setPieData] = useState([])
   const [startDate, setStartDate] = useState('2020-05-20')
@@ -94,7 +95,7 @@ export default function ChartsMonthScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsWeek");
+          props.changeStep(1)
         }}
       />
       <Button
@@ -102,7 +103,7 @@ export default function ChartsMonthScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsMonth");
+          props.changeStep(2)
         }}
       />
       <Button
@@ -110,7 +111,7 @@ export default function ChartsMonthScreen(props) {
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsYear");
+          props.changeStep(3)
         }}
       />
 
@@ -144,7 +145,7 @@ export default function ChartsMonthScreen(props) {
           height={220}
           // yAxisLabel="$"
           // yAxisSuffix="k"
-          yAxisInterval={1} // optional, defaults to 1
+          yAxisInterval={31} // optional, defaults to 1
           chartConfig={chartConfig}
           bezier
           style={{
@@ -276,3 +277,12 @@ const styles = StyleSheet.create({
 //   markingType={'period'}
    
 // />
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeStep: (newstep) => {
+      dispatch({ type: "change-step", newstep: newstep});
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ChartsMonthScreen);

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Button, ScrollView} from "react-native";
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
 
-export default function ChartsYearScreen(props) {
+function ChartsYearScreen(props) {
 
 
 //Récupération du résultat renvoyé par le backend
@@ -71,14 +71,13 @@ var dataTable = [
 
   return (
     <View>
-        
-      <Text style={styles.paragraph}>ChartsYearScreen</Text>
+        <Text style={styles.paragraph}>ChartsYearScreen</Text>
       <Button
         title="WEEK"
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsWeek");
+          props.changeStep(1)
         }}
       />
       <Button
@@ -86,7 +85,7 @@ var dataTable = [
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsMonth");
+          props.changeStep(2)
         }}
       />
       <Button
@@ -94,7 +93,7 @@ var dataTable = [
         type="solid"
         buttonStyle={{ backgroundColor: "#009788" }}
         onPress={() => {
-          props.navigation.navigate("ChartsYear");
+          props.changeStep(3)
         }}
       />
 <ScrollView>
@@ -167,3 +166,13 @@ height: 100,
     backgroundColor: '#c8e1ff' },
 
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeStep: (newstep) => {
+      dispatch({ type: "change-step", newstep: newstep});
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ChartsYearScreen);
