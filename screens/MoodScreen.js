@@ -7,7 +7,7 @@ import {
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
 
-function MoodScreen({ selectMood, mood, incrementStep, step }) {
+function MoodScreen({ selectMood, incrementStep }) {
   const moodData = [
     {
       icon: "angry",
@@ -68,9 +68,6 @@ function MoodScreen({ selectMood, mood, incrementStep, step }) {
           Quelle est ton humeur du jour ?
         </Text>
         <View style={styles.moodContainer}>{icons}</View>
-        <Text>Mood Screen</Text>
-        <Text>{mood}</Text>
-        <Text>{step}</Text>
       </View>
     );
   }
