@@ -7,6 +7,7 @@ import { categories } from "../statics/category";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalNewActivity from "./Component/ModalNewActivity";
 import ActivityBar from "./Component/ActivityBar";
+import {_IP_CAPSULE} from "../statics/ip";
 
 function ActivityScreen({
   incrementStep,
@@ -15,6 +16,7 @@ function ActivityScreen({
   deselectActivity,
   activitySelection,
   mood,
+  //token
 }) {
   const [activityList, setActivityList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -54,13 +56,12 @@ function ActivityScreen({
       ? selectActivity(activity)
       : deselectActivity(activity);
   };
-
   const handleSkipOrValidatePress = async () => {
     // envoi en BDD du mood de la journée (mood + activités)
-    const rawResult = await fetch(`http://${_IP_OLIV}:3000/save-mood`, {
+    const rawResult = await fetch(`http://${_IP_CAPSULE}:3000/save-mood`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mood, selectActivity }),
+      body: JSON.stringify({mood, activitySelection}), //token }),
     });
     const result = await rawResult.json();
     console.log(result);
@@ -227,6 +228,7 @@ const mapStateToProps = (state) => {
   return {
     activitySelection: state.activitySelection,
     mood: state.mood,
+    //token: state.token
   };
 };
 
