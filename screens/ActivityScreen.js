@@ -181,10 +181,10 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   searchBar: {
-    flex: 1,
-    justifyContent: "flex-start",
+    flex: 0.5,
+    justifyContent: "center",
+    alignItems: "center",
     width: Dimensions.get("window").width,
-    paddingBottom: 50,
   },
   newActivityContainer: {
     flex: 1,
