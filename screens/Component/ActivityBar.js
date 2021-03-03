@@ -42,7 +42,7 @@ export default function ActivityBar({updateLocalList}) {
         )
     });
 
-    //
+    // Mécanique pour ajouter l'activité sélectionnée dans la searchbar à la liste des activités :
     const handleActivityPress = async (existingActivity) => {
     try {
       const newActivityToBeAdded = {
@@ -63,6 +63,7 @@ export default function ActivityBar({updateLocalList}) {
           ));
       }
       updateLocalList(newActivityToBeAdded);
+      setSearchActivity('');
     } catch (err) {console.log(err)}
 };
 
