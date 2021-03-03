@@ -76,7 +76,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Mood" component={MoodNavigation} />
+          <Stack.Screen name="Mood" component={MoodNavigation} /> 
           <Stack.Screen name="ChartsWeek" component={ChartsWeekScreen} />
           <Stack.Screen name="ChartsMonth" component={ChartsMonthScreen} />
           <Stack.Screen name="ChartsYear" component={ChartsYearScreen} />

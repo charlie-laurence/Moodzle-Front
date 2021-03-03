@@ -17,8 +17,6 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 */
 
   const [pseudo, setPseudo] = useState("");
-  const [pseudoSubmited, setPseudoSubmited] = useState(false);
-
   const [userExist, setUserExist] = useState(false);
 
 
@@ -30,10 +28,10 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
       if (value) {
         setPseudo(value);
         props.onSubmitPseudo(value);
-        setPseudoSubmited(true);
+        setUserExist(true);
       }
     });
-  }, []);
+  }, [userExist]);
 
 /* 
 - envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD
@@ -60,18 +58,64 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
   };
 
 
-  var inputUsername;
-  if (!pseudoSubmited) {
-    inputUsername = (
+  var isUserRegistered;
+  if (userExist === false) {
+    isUserRegistered = (
+      <View>
       <Input
-        containerStyle={{ marginBottom: 25, width: "70%" }}
+        containerStyle={{ marginBottom: 25, width: 200 }}
         inputStyle={{ marginLeft: 10 }}
         placeholder="Nom d'utilisateur"
-        onChangeText={(content) => setPseudo(content)}
+        onChangeText={(content) => {
+          setPseudo(content);
+          AsyncStorage.setItem("pseudo", content);
+        }}
       />
+      <Button
+        title="C'est parti !"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788" }}
+        onPress={() => {
+          props.onSubmitPseudo(pseudo);
+          AsyncStorage.setItem("pseudo", pseudo);
+          handleSubmitSignup();
+          props.navigation.navigate("BottomNavigator", { screen: "Mood" });
+        }}
+      />
+      {/* <Button
+        title="Change user"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
+        onPress={() => {
+          AsyncStorage.setItem("pseudo", "");
+          setUserExist(false);
+        }}
+      /> */}
+      </View>
     );
-  } else {
-    inputUsername = <Text style={styles.paragraph}>Bienvenue {props.pseudo} !</Text>;
+  } else if(userExist === true){
+    isUserRegistered = (
+      <View>
+      <Text style={styles.paragraph}>Bienvenue {props.pseudo}</Text>
+      <Button
+        title="Let's Go !"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788" }}
+        onPress={() => {
+          props.navigation.navigate("BottomNavigator", { screen: "Mood" });
+        }}
+      />
+      {/* <Button
+        title="Change user"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
+        onPress={() => {
+          AsyncStorage.setItem("pseudo", "");
+          setUserExist(false);
+        }}
+      /> */}
+      </View>
+    );
   }
 
   return (
@@ -79,30 +123,8 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
       source={require("../assets/MoodzSignUp.png")}
       style={styles.container}
     >
-      {inputUsername}
-
-      <Button
-        title="C'est parti !"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          setPseudoSubmited(true);
-          props.onSubmitPseudo(pseudo);
-          AsyncStorage.setItem("pseudo", pseudo);
-          handleSubmitSignup();
-          props.navigation.navigate("BottomNavigator", { screen: "Mood" });
-        }}
-      />
-
-      <Button
-        title="Déconnexion"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
-        onPress={() => {
-          AsyncStorage.setItem("pseudo", "");
-          setPseudoSubmited(false);
-        }}
-      />
+      {isUserRegistered}
+  
     </ImageBackground>
   );
 }

@@ -134,7 +134,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-  return { mood: state.mood, step: state.step, pseudo : state.pseudo };
+  return { mood: state.mood, step: state.step, pseudo : state.pseudo, token: state.token };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoodScreen);
