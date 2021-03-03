@@ -12,7 +12,6 @@ export default function ChartsYearScreen(props) {
 const [janvier, setJanvier] = useState([])
 
 
-
 //Récupération du résultat renvoyé par le backend
 
 var fetchData = async() => {
@@ -61,17 +60,6 @@ setJanvier(janvier)
  console.log('janvier', janvier)
 
 
-
- // Condition de couleur du style du point
-// for (var i = 0 ; i < janvier.length ; i++) {
-
-// if (janvier[i] === 0 ) {
-//   circleStyle.color = '#pink'
-// } else {
-//   likeStyle.color = '#ff0000'
-// }
-
-// }
     useEffect(() => {
     fetchData()
     }, []);
@@ -103,12 +91,23 @@ var headTable = [' ','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd']
 var circleTable = [];
 for (var i = 0 ; i < janvier.length ; i++) {
 
+// Détermine la couleur de la pastille en fonction de la mood
   var color = "black" // "#fdf9f2"
-  // if(){
-  //   circleStyle.color = 
-  // } else if () {
-  //   circleStyle.color = 
-  // }
+  // if(1){
+  //   circleStyle.color = "#CD6133"
+  // } else if (2) {
+  //   circleStyle.color = "#F0A07E"
+  // }else if (3) {
+  //   circleStyle.color = "#F0D231""
+  // }else if (4) {
+  //   circleStyle.color = "#44B79D"
+  // }else if (4) {
+  //   circleStyle.color = "#54857F"
+  // } else {
+  //   circleStyle.color = "#fdf9f2"
+  //  }
+
+  // Push dans le tableau les pastilles en fonction du mood
   circleTable.push(<FontAwesome color={color} name="circle" size={13}/>)
 }
 
@@ -131,12 +130,6 @@ var dataTable = [
 
 
  
-
-
-
-  
-
-
   return (
     <ScrollView>
        
