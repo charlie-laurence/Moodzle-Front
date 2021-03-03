@@ -71,6 +71,45 @@ export default function ChartsMonthScreen(props) {
       );
   }
 
+  const moodData = [
+    {
+      icon: "angry",
+      color: "#CD6133",
+    },
+    {
+      icon: "sad-cry",
+      color: "#F0A07E",
+    },
+    {
+      icon: "meh",
+      color: "#F0D231",
+    },
+    {
+      icon: "grin-squint",
+      color: "#44B79D",
+    },
+    {
+      icon: "smile-beam",
+      color: "#54857F",
+    },
+  ];
+  let [fontsLoaded] = useFonts({
+    LondrinaSolid_400Regular,
+  });
+
+  const icons = moodData.map((mood, index) => (
+    <FontAwesome5
+      key={mood.icon}
+      name={mood.icon}
+      size={50}
+      color={mood.color}
+      score={index + 1}
+      onPress={() => handleMoodPress(index + 1)}
+    />
+  ));
+
+
+
   /* Fonction qui récupère les données pour la courbe */
   var lineGenerator = (dataset) => {
     let lineLabelsArray = []
