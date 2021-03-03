@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { StyleSheet, Text, View, Button, Dimensions, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Button, Dimensions, ScrollView, Image } from "react-native";
 import {PieChart, LineChart} from "react-native-chart-kit";
 import { connect } from "react-redux";
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
@@ -25,7 +25,7 @@ function ChartsMonthScreen(props) {
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
-    var dataRaw = await fetch('http://172.17.1.144:3000/history', {
+    var dataRaw = await fetch('http://172.17.1.159:3000/history', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: `startdate=${startDate}&type=month`
@@ -69,7 +69,7 @@ function ChartsMonthScreen(props) {
       }
       markedSetDate[dateConvertToString] = {selected: true, color: markColor}
     }
-    console.log(markedSetDate)
+    // console.log(markedSetDate)
     setCalendarData(markedSetDate)
 
      }
@@ -113,6 +113,7 @@ function ChartsMonthScreen(props) {
       {name: 'super', score: 5, count: score5, color:"#54857F", legendFontColor: "#54857F", legendFontSize: 15}]
       );
   }
+
 
   /* Fonction qui récupère les données pour la courbe */
   var lineGenerator = (dataset) => {
@@ -164,6 +165,10 @@ function ChartsMonthScreen(props) {
         onPress={() => {
           props.changeStep(3)
         }}
+      />
+
+<Image
+        source={require('../assets/podium_moodz.jpg')}
       />
 
 <Calendar

@@ -28,7 +28,6 @@ var fetchData = async() => {
 var datas = await rawDatas.json();
 var dataHistory = datas.history
 
-console.log('score', dataHistory[0].mood_score)  
 
 var setterCalendarChart = []
 for (var i = 0 ; i < 365 ; i++) {
@@ -58,7 +57,6 @@ setJanvier(janvier)
    )}
 
  }
- console.log('janvier', janvier)
 
 
     useEffect(() => {
@@ -79,15 +77,10 @@ setJanvier(janvier)
          return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
     }
        
-console.log(days_of_a_year(current_year))
 
 
 var headTable = [' ','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'] ;
 
-
-// for (var day = 0 ; day < 5 ; day++) {
-//   console.log(calendarChart[day])
-// }
 
 var circleTable = [];
 for (var i = 0 ; i < janvier.length ; i++) {
