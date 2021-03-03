@@ -6,6 +6,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { categories } from "../statics/category";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ModalNewActivity } from "./Component/ModalNewActivity";
+import ActivityBar from "./Component/ActivityBar";
 
 function ActivityScreen({
   incrementStep,
@@ -109,6 +110,11 @@ function ActivityScreen({
           onPress={() => handleSkipPress()}
         /> */}
       </View>
+      <View style={styles.searchBar}>
+        <ActivityBar
+      updateLocalList={updateLocalList}
+      />
+      </View>
       <View style={styles.activityWrapper}>
         <View style={styles.activityContainer}>{activitiesBtn}</View>
       </View>
@@ -169,6 +175,12 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   lower: {
+    flex: 1,
+    justifyContent: "flex-start",
+    width: Dimensions.get("window").width,
+    paddingBottom: 50,
+  },
+  searchBar: {
     flex: 1,
     justifyContent: "flex-start",
     width: Dimensions.get("window").width,

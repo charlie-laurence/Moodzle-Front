@@ -1,5 +1,4 @@
 import React from 'react';
-import ActivityBar from '../components/ActivityBar';
 
 import { StyleSheet, ImageBackground, Text, View } from 'react-native';
 import {Button, Input} from 'react-native-elements'
@@ -25,7 +24,6 @@ export default function HomeScreen(props) {
                             props.navigation.navigate('BottomNavigator', { screen: 'Mood' });
         }}
         />
-        <ActivityBar/>
         </ImageBackground>
 );
     }

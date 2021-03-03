@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import {View, TextInput, ScrollView, Text} from "react-native";
 import {ListItem} from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-export default function ActivityBar() {
+export default function ActivityBar({updateLocalList}) {
     const [searchActivity , setSearchActivity] = useState(null);
     const [activityFromBack , setActivityFromBack] = useState([]);
 
@@ -30,16 +30,42 @@ export default function ActivityBar() {
     //Afficher le résultat filtré sous forme de liste:
     let filteredListItem = filteredActivities.map((activity, i) =>{
         return (
-            <ScrollView>
-                <ListItem 
-                key={i}
-                onPress={() => handleActivityPress()}
-                >
-                    <Text>{activity.name}</Text>
-                </ListItem>
-            </ScrollView>
+            <ListItem 
+            key={i}
+            bottomDivider
+            onPress={() => handleActivityPress(activity)}
+            >
+                <ListItem.Content>
+                    <ListItem.Title>{activity.name}</ListItem.Title>
+                </ListItem.Content>
+            </ListItem>
         )
     });
+
+    //
+    const handleActivityPress = async (existingActivity) => {
+    try {
+      const newActivityToBeAdded = {
+        name: existingActivity.name,
+        category: existingActivity.category,
+      };
+
+      let localList = await AsyncStorage.getItem("moodzle-activities");
+      localList = JSON.parse(localList);
+      if (localList.length > 0) {
+        const filteredLocal = localList.filter(
+          (activity) => activity.name === existingActivity.name
+        );
+        filteredLocal.length === 0 &&
+          (await AsyncStorage.setItem(
+            "moodzle-activities",
+            JSON.stringify([...localList, newActivityToBeAdded])
+          ));
+      }
+      updateLocalList(newActivityToBeAdded);
+    } catch (err) {console.log(err)}
+};
+
 
     return ( 
         <View>
@@ -48,7 +74,9 @@ export default function ActivityBar() {
                 onChangeText={(value) => setSearchActivity(value)}
                 value={searchActivity}
             />
-            {filteredListItem}
+            <ScrollView>
+                {filteredListItem}
+            </ScrollView>
         </View>
     )
 }
