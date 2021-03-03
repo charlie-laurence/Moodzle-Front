@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
 import { StyleSheet, Text, View, Button, Dimensions, ScrollView } from "react-native";
 import {PieChart, LineChart} from "react-native-chart-kit";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { connect } from "react-redux";
+import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 
 
 function ChartsMonthScreen(props) {
@@ -11,11 +11,17 @@ function ChartsMonthScreen(props) {
   const [startDate, setStartDate] = useState('2020-05-20')
   const [lineLabel, setLineLabel] = useState([''])
   const [lineData, setLineData] = useState([0])
+  const [firstDay, setFirstDay] = useState()
+  const [lastDay, setLastDay] = useState()
+  const [calendarData, setCalendarData] = useState({})
+
 
   /* Hook d'effet à l'ouverture de la page pour charger les données*/
   useEffect(() => {
     fetchData()
-  }, [])
+
+    // Enregistrer les dates de départ et de fin pour le Calendrier
+}, [])
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
@@ -31,6 +37,41 @@ function ChartsMonthScreen(props) {
     // Traitement des données pour le Pie Chart
     pieDataGenerator(dataHistory)
     lineGenerator(dataHistory)
+
+    // Traitement des données pour le Calendrier
+    var startDateFormat = new Date(startDate)
+    var firstSetDay = new Date(startDateFormat.getFullYear(), startDateFormat.getMonth(), 1);
+    var lastSetDay = new Date(startDateFormat.getFullYear(), startDateFormat.getMonth() + 1, 0);
+    setFirstDay(firstSetDay)
+    setLastDay(lastSetDay)
+    
+    var markedSetDate = {}
+
+    for (let i = 0; i < dataHistory.length; i++) {
+      var markColor = ''
+      var dateConvertToString = new Date(dataHistory[i].date).toLocaleDateString('en-CA')
+      switch (dataHistory[i].mood_score) {
+        case 1: 
+          markColor = "#CD6133";
+          break;
+        case 2: 
+          markColor = "#F0A07E";
+          break;
+        case 3: 
+          markColor = "#F0D231";
+          break;
+        case 4: 
+          markColor = "#44B79D";
+          break;
+        case 5: 
+          markColor = "#54857F";
+          break;
+      }
+      markedSetDate[dateConvertToString] = {selected: true, color: markColor}
+    }
+    console.log(markedSetDate)
+    setCalendarData(markedSetDate)
+
      }
 
   /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
@@ -79,12 +120,22 @@ function ChartsMonthScreen(props) {
     let lineDataArray = []
 
     for (let i = 0; i < dataset.length; i++) {
-      (i % 5) === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push('') //Modulo 5 pour récupérer tous les 5 jours
+      (i % 5) === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push('') //Modulo 5 pour avoir des labels tous les 5 jours
       lineDataArray.push(parseInt(dataset[i].mood_score))
     }
     setLineLabel(lineLabelsArray)
     setLineData(lineDataArray)
   }
+
+  // Calendrier
+  LocaleConfig.locales['fr'] = {
+    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+    today: 'Aujourd\'hui'
+  };
+  LocaleConfig.defaultLocale = 'fr';
 
 
   return (
@@ -114,6 +165,61 @@ function ChartsMonthScreen(props) {
           props.changeStep(3)
         }}
       />
+
+<Calendar
+  style={{
+    height: 220
+  }}
+  theme={{
+    calendarBackground: '#11ffee00'
+  }}
+  // Initially visible month. Default = Date()
+  current={startDate}
+  // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+  minDate={firstDay}
+  // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
+  maxDate={lastDay}
+  // Handler which gets executed on day press. Default = undefined
+  onDayPress={(day) => {console.log('selected day', day)}}
+  // Handler which gets executed on day long press. Default = undefined
+  onDayLongPress={(day) => {console.log('selected day', day)}}
+  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+  monthFormat={'yyyy MM'}
+  // Handler which gets executed when visible month changes in calendar. Default = undefined
+  onMonthChange={(month) => {console.log('month changed', month)}}
+  // Hide month navigation arrows. Default = false
+  hideArrows={true}
+  // Replace default arrows with custom ones (direction can be 'left' or 'right')
+  renderArrow={(direction) => (<Arrow/>)}
+  // Do not show days of other months in month page. Default = false
+  hideExtraDays={true}
+  // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+  // day from another month that is visible in calendar page. Default = false
+  disableMonthChange={true}
+  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+  firstDay={1}
+  // Hide day names. Default = false
+  hideDayNames={true}
+  // Show week numbers to the left. Default = false
+  showWeekNumbers={true}
+  // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+  onPressArrowLeft={subtractMonth => subtractMonth()}
+  // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+  onPressArrowRight={addMonth => addMonth()}
+  // Disable left arrow. Default = false
+  disableArrowLeft={true}
+  // Disable right arrow. Default = false
+  disableArrowRight={true}
+  // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
+  disableAllTouchEventsForDisabledDays={true}
+  // Replace default month and year title with custom one. the function receive a date as parameter.
+  renderHeader={(date) => {/*Return JSX*/}}
+  // Enable the option to swipe between months. Default = false
+  markedDates={calendarData}
+  // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+  markingType={'period'}
+
+/>
 
       <PieChart
         data={pieData}
@@ -172,17 +278,6 @@ const styles = StyleSheet.create({
   },
 });
 
-  // Variable pour configurer le Pie Chart
-  // const pieChartConfig = {
-  //   backgroundGradientFrom: "#1E2923",
-  //   backgroundGradientFromOpacity: 0,
-  //   backgroundGradientTo: "#08130D",
-  //   backgroundGradientToOpacity: 0,
-  //   strokeWidth: 2,
-  //   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-  //   labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-  //   barPercentage: 0.5,
-  // };
   const chartConfig = {
     backgroundGradientFrom: "#ffffff",
     backgroundGradientFromOpacity: 0,
@@ -202,81 +297,6 @@ const styles = StyleSheet.create({
     }
   }
   
-
-
-
-
-
-// // Calendrier
-// import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
-
-
-// LocaleConfig.locales['fr'] = {
-//   monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-//   monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-//   dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-//   dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
-//   today: 'Aujourd\'hui'
-// };
-// LocaleConfig.defaultLocale = 'fr';
-
-// <CalendarList
-//   // Initially visible month. Default = Date()
-//   current={'2012-03-01'}
-//   // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-//   minDate={'2012-05-10'}
-//   // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-//   maxDate={'2012-05-30'}
-//   // Handler which gets executed on day press. Default = undefined
-//   onDayPress={(day) => {console.log('selected day', day)}}
-//   // Handler which gets executed on day long press. Default = undefined
-//   onDayLongPress={(day) => {console.log('selected day', day)}}
-//   // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-//   monthFormat={'yyyy MM'}
-//   // Handler which gets executed when visible month changes in calendar. Default = undefined
-//   onMonthChange={(month) => {console.log('month changed', month)}}
-//   // Hide month navigation arrows. Default = false
-//   hideArrows={true}
-//   // Replace default arrows with custom ones (direction can be 'left' or 'right')
-//   renderArrow={(direction) => (<Arrow/>)}
-//   // Do not show days of other months in month page. Default = false
-//   hideExtraDays={true}
-//   // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-//   // day from another month that is visible in calendar page. Default = false
-//   disableMonthChange={true}
-//   // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-//   firstDay={1}
-//   // Hide day names. Default = false
-//   hideDayNames={true}
-//   // Show week numbers to the left. Default = false
-//   showWeekNumbers={true}
-//   // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-//   onPressArrowLeft={subtractMonth => subtractMonth()}
-//   // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-//   onPressArrowRight={addMonth => addMonth()}
-//   // Disable left arrow. Default = false
-//   disableArrowLeft={true}
-//   // Disable right arrow. Default = false
-//   disableArrowRight={true}
-//   // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-//   disableAllTouchEventsForDisabledDays={true}
-//   // Replace default month and year title with custom one. the function receive a date as parameter.
-//   renderHeader={(date) => {/*Return JSX*/}}
-//   // Enable the option to swipe between months. Default = false
-//   enableSwipeMonths={true}
-
-//    // Collection of dates that have to be colored in a special way. Default = {}
-//    markedDates={{
-//     '2012-05-20': {textColor: 'green'},
-//     '2012-05-22': {startingDay: true, color: 'green'},
-//     '2012-05-23': {selected: true, endingDay: true, color: 'green', textColor: 'gray'},
-//     '2012-05-04': {disabled: true, startingDay: true, color: 'green', endingDay: true}
-//   }}
-//     // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-
-//   markingType={'period'}
-   
-// />
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
