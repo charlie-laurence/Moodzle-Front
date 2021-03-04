@@ -6,6 +6,7 @@ import {
   useFonts,
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
   const moodData = [
@@ -48,6 +49,7 @@ function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
   const handleMoodPress = (score) => {
     selectMood(score);
     incrementStep();
+    // AsyncStorage.clear();
   };
 
   if (!fontsLoaded) {
@@ -68,9 +70,6 @@ function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
           Quelle est ton humeur du jour { pseudo } ?
         </Text>
         <View style={styles.moodContainer}>{icons}</View>
-        <Text>Mood Screen</Text>
-        <Text>{mood}</Text>
-        <Text>{step}</Text>
       </View>
     );
   }

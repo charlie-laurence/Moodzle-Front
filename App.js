@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import mood from "./reducers/mood.reducer";
 import step from "./reducers/step.reducer";
+import activitySelection from "./reducers/activitySelect.reducer";
 import pseudo from "./reducers/pseudo.reducer";
 import chartstep from "./reducers/chartstep.reducer";
 import token from "./reducers/token.reducer";
@@ -28,12 +29,15 @@ import ChartsWeekScreen from "./screens/ChartsWeekScreen";
 import ChartsMonthScreen from "./screens/ChartsMonthScreen";
 import ChartsYearScreen from "./screens/ChartsYearScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import ReactionScreen from "./screens/ReactionScreen";
 
 // Comment add
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const store = createStore(combineReducers({ mood, step, chartstep, pseudo, token }));
+const store = createStore(
+  combineReducers({ mood, step, activitySelection, chartstep, pseudo, token })
+);
 
 const BottomNavigator = () => {
   return (
