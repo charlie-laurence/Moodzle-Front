@@ -8,7 +8,7 @@ import {
 } from "@expo-google-fonts/londrina-solid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function MoodScreen({ selectMood, incrementStep, mood }) {
+function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
   const moodData = [
     {
       icon: "angry",
@@ -67,7 +67,7 @@ function MoodScreen({ selectMood, incrementStep, mood }) {
         />
         <Image style={styles.liane} source={require("../assets/liane2.png")} />
         <Text style={[styles.textMoodz, { transform: [{ rotate: "20deg" }] }]}>
-          Quelle est ton humeur du jour ?
+          Quelle est ton humeur du jour { pseudo } ?
         </Text>
         <View style={styles.moodContainer}>{icons}</View>
       </View>
@@ -133,7 +133,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-  return { mood: state.mood, step: state.step };
+  return { mood: state.mood, step: state.step, pseudo : state.pseudo, token: state.token };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoodScreen);
