@@ -220,7 +220,6 @@ function ChartsYearScreen(props) {
     <ScrollView>
 
 
-      <Text style={styles.paragraph}>ChartsYearScreen</Text>
 
       <SwitchSelector
           options= {[
@@ -233,19 +232,19 @@ function ChartsYearScreen(props) {
           borderColor="#009788"
           hasPadding
           initial={2}
-          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 40,marginRight:17 }}
           onPress={value => props.changeStep(value)}
         />
 
       <Card borderRadius={30}>
         <Table>
-          <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00' }}>
+          <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00'}}>
             <TableWrapper style={{ flexDirection: 'row' }}>
-              <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
+              <Col data={tableTitle} width={20} height={15} textStyle={{ textAlign: 'center' }} />
             </TableWrapper>
 
             <TableWrapper style={{ flex: 1, backgroundColor: '#11ffee00' }}>
-              <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center' }} />
+              <Cols data={dataDisplay} style={{ flex: 1 }} height={15} textStyle={{ textAlign: 'center' }} />
             </TableWrapper>
           </View>
         </Table>

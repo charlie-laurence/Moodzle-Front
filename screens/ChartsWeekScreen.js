@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { StyleSheet, Text, ScrollView, Button, Dimensions } from "react-native";
+import { StyleSheet, Text, ScrollView, View, Dimensions } from "react-native";
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
@@ -7,6 +7,7 @@ import {
 import { connect } from "react-redux";
 import SwitchSelector from "react-native-switch-selector";
 import { Card, ListItem, Icon, Row } from 'react-native-elements'
+import { FontAwesome5 } from "@expo/vector-icons";
 
 
 
@@ -81,17 +82,17 @@ var pieDataGenerator = (dataset) => {
 
  // Stocker les résultats dans un états qui seront exploiter par le PieChart
  setPieData([
-   {name: 'angry',score: 1, count: score1, color:"#CD6133", legendFontColor: "#CD6133", legendFontSize: 15}, 
-   {name: 'sad', score: 2, count: score2, color:"#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15}, 
-   {name: 'meh', score: 3, count: score3, color:"#F0D231", legendFontColor: "#F0D231", legendFontSize: 15}, 
-   {name: 'happy', score: 4, count: score4, color:"#44B79D", legendFontColor: "#44B79D", legendFontSize: 15}, 
-   {name: 'super', score: 5, count: score5, color:"#54857F", legendFontColor: "#54857F", legendFontSize: 15}]
-   );
+  { name: 'angry', score: 1, count: score1, color: "#CD6133", legendFontColor: "#CD6133", legendFontSize: 15 },
+  { name: 'sad-cry', score: 2, count: score2, color: "#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15 },
+  { name: 'meh', score: 3, count: score3, color: "#F0D231", legendFontColor: "#F0D231", legendFontSize: 15 },
+  { name: 'grin-squint', score: 4, count: score4, color: "#44B79D", legendFontColor: "#44B79D", legendFontSize: 15 },
+  { name: 'smile-beam', score: 5, count: score5, color: "#54857F", legendFontColor: "#54857F", legendFontSize: 15 }]
+);
  }
+
 
   return (
     <ScrollView >
-        <Text style={styles.paragraph}>ChartsWeekScreen</Text>
 
         <SwitchSelector
           options= {[
@@ -104,7 +105,7 @@ var pieDataGenerator = (dataset) => {
           borderColor="#009788"
           hasPadding
           initial={0}
-          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 40,marginRight:17 }}
           onPress={value => props.changeStep(value)}
         />
 
@@ -113,7 +114,8 @@ var pieDataGenerator = (dataset) => {
        <Card borderRadius={50}>
   <Card.Title>Répartition globale des humeurs de la semaine</Card.Title>
   <Card.Divider/>
-
+  <View style={{ flexDirection: "row", paddingBottom:0,
+      marginBottom:0, flex:1 }}>
        <PieChart
         data={pieData}
         width={Dimensions.get("window").width}
@@ -137,6 +139,15 @@ var pieDataGenerator = (dataset) => {
 
 
       />
+      <View style={{marginTop: 35 ,marginLeft: -130, width: 100}} >
+
+{/* <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[0].name} size={25} color={pieData[0].color} /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name={pieData[1].name} size={25} color={pieData[0].color} /></Text> */}
+{/* <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[2].name} size={25} color={pieData[2].color} /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name={pieData[3].name} size={25} color={pieData[3].color} /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name={pieData[4].name} size={25} color={pieData[4].color} /></Text> */} 
+       </View>
+</View>
       </Card>
        
       <Card borderRadius={50} flex={0} >

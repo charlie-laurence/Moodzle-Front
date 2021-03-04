@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Card, ListItem, Icon, Row } from 'react-native-elements'
 import SwitchSelector from "react-native-switch-selector";
+import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5 } from "@expo/vector-icons";
 
 
 function ChartsMonthScreen(props) {
@@ -16,6 +18,7 @@ function ChartsMonthScreen(props) {
   const [firstDay, setFirstDay] = useState()
   const [lastDay, setLastDay] = useState()
   const [calendarData, setCalendarData] = useState({})
+  const [topActivities, setTopActivities] = useState([])
 
 
   /* Hook d'effet à l'ouverture de la page pour charger les données*/
@@ -35,6 +38,41 @@ function ChartsMonthScreen(props) {
 
     var data = await dataRaw.json()
     var dataHistory = data.history
+
+
+ // Top activités
+
+ // Récupération du tableau d'activités
+ var allMonthActivities  = []
+ var eachMonthActivity = []
+
+ for (var i = 0 ; i < dataHistory.length;i++){
+allMonthActivities.push(dataHistory[i].activity)
+ }
+
+// Aller récupérer les activités de chaque jour (certains ayant plusieurs activités)
+for (var j = 0 ; j < allMonthActivities.length;j++){
+  for (var i = 0; i < allMonthActivities[j].length; i++) {
+  eachMonthActivity.push(allMonthActivities[j][i].name)
+}}
+
+// Traitement pour connaitre les 3 activités les + sélectionnées
+
+
+var map = eachMonthActivity.reduce(function(p, c) {
+  p[c] = (p[c] || 0) + 1;
+  return p;
+}, {});
+
+var top5Activities = Object.keys(map).sort(function(a, b) {
+  return map[b] - map[a];
+});
+
+setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
+
+
+
+
 
     // Traitement des données pour le Pie Chart
     pieDataGenerator(dataHistory)
@@ -71,7 +109,6 @@ function ChartsMonthScreen(props) {
       }
       markedSetDate[dateConvertToString] = { selected: true, color: markColor }
     }
-    // console.log(markedSetDate)
     setCalendarData(markedSetDate)
 
   }
@@ -109,10 +146,10 @@ function ChartsMonthScreen(props) {
     // Stocker les résultats dans un états qui seront exploiter par le PieChart
     setPieData([
       { name: 'angry', score: 1, count: score1, color: "#CD6133", legendFontColor: "#CD6133", legendFontSize: 15 },
-      { name: 'sad', score: 2, count: score2, color: "#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15 },
+      { name: 'sad-cry', score: 2, count: score2, color: "#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15 },
       { name: 'meh', score: 3, count: score3, color: "#F0D231", legendFontColor: "#F0D231", legendFontSize: 15 },
-      { name: 'happy', score: 4, count: score4, color: "#44B79D", legendFontColor: "#44B79D", legendFontSize: 15 },
-      { name: 'super', score: 5, count: score5, color: "#54857F", legendFontColor: "#54857F", legendFontSize: 15 }]
+      { name: 'grin-squint', score: 4, count: score4, color: "#44B79D", legendFontColor: "#44B79D", legendFontSize: 15 },
+      { name: 'smile-beam', score: 5, count: score5, color: "#54857F", legendFontColor: "#54857F", legendFontSize: 15 }]
     );
   }
 
@@ -141,9 +178,11 @@ function ChartsMonthScreen(props) {
   LocaleConfig.defaultLocale = 'fr';
 
 
+
+ 
+
   return (
     <ScrollView paddingBottom={100}>
-      <Text style={styles.paragraph}>ChartsMonthScreen</Text>
 
       
       <SwitchSelector
@@ -157,29 +196,36 @@ function ChartsMonthScreen(props) {
           borderColor="#009788"
           hasPadding
           initial={1}
-          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 40,marginRight:17 }}
           onPress={value => props.changeStep(value)}
       />
 
-      <Card borderRadius={50}>
+      <Card borderRadius={50} containerStyle={{height: 300}} >
         <Card.Title>Top des activités du mois</Card.Title>
         <Card.Divider />
 
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", paddingBottom:0,
+      marginBottom:0, flex:1 }}>
           <Image
-        source={require('../assets/podium_moodz.png')} style={{width: '60%',
-          height: '200%',
-          resizeMode: 'stretch', paddingRight: 0, marginLeft: 0}}
+        source={require('../assets/podium_moodz.png')} style={{width: 220,
+          height: 200,
+          resizeMode: 'stretch', 
+          paddingRight: 0, 
+          marginLeft: 0}}
       />
-       <Text>coucou2</Text>
-       <Text>coucou1</Text>
-       <Text>coucou3</Text>
-
-       <Image
+    
+      <View style={{marginLeft: -20, width: 100}} >
+       <Text><FontAwesome name="circle" size={10} color="#5B63AE" iconStyle={{marginRight:10}} />{topActivities[0]}</Text>
+       <Text><FontAwesome name="circle" size={10} color="#44B79D" style={{ alignSelf: 'center', marginRight:50}}/>{topActivities[1]}</Text>
+       <Text><FontAwesome name="circle" size={10} color="#df8f4a" style={{ alignSelf: 'center', marginRight:50}}/>{topActivities[2]}</Text>
+       </View>
+       {/* <Card.Image
         source={require('../assets/moodz.png')} style={{width: '50%',
-          height: '50%',
-          resizeMode: 'stretch'}}
-      />
+          height: '35%',
+          resizeMode: 'stretch',
+        paddingBottom:0,
+      marginBottom:0}}
+      /> */}
     </View>
 </Card>
 
@@ -258,7 +304,8 @@ function ChartsMonthScreen(props) {
 <Card borderRadius={50}>
   <Card.Title>Répartition globale des humeurs du mois</Card.Title>
   <Card.Divider/>
-
+  <View style={{ flexDirection: "row", paddingBottom:0,
+      marginBottom:0, flex:1 }}>
       <PieChart
         data={pieData}
         width={Dimensions.get("window").width}
@@ -277,10 +324,19 @@ function ChartsMonthScreen(props) {
         backgroundColor={"transparent"}
         center={[10, 0]}
         absolute
-        hasLegend={true}  
+        hasLegend={false}  
+        alignItems={'center'}
+
       />
+<View style={{marginTop: 35 ,marginLeft: -130, width: 100}} >
 
-
+<Text style={{marginBottom:8}}><FontAwesome5 name='angry' size={25} color="#CD6133" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='sad-cry' size={25} color="#F0A07E" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='meh' size={25} color="#F0D231" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='grin-squint' size={25} color="#44B79D" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='smile-beam' size={25} color="#54857F" /></Text>
+       </View>
+</View>
   </Card>
 
   <Card borderRadius={50} >
