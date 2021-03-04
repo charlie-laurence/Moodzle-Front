@@ -5,7 +5,7 @@ import {
   PieChart, // répartition mood (demi donut)
 } from "react-native-chart-kit";
 import { connect } from "react-redux";
-import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
+import { Card } from 'react-native-elements'
    
 
 function ChartsWeekScreen(props) { 
@@ -53,8 +53,6 @@ var fetchData = async() => {
 //  lineGenerator(dataHistory)
 
 }
-
-
 
   
 /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
@@ -127,7 +125,9 @@ var pieDataGenerator = (dataset) => {
         }}
       />
        
-       <Text>Répartition globale des humeurs de la semaine</Text>
+       <Card borderRadius={50}>
+  <Card.Title>Répartition globale des humeurs de la semaine</Card.Title>
+  <Card.Divider/>
 
        <PieChart
         data={pieData}
@@ -152,9 +152,12 @@ var pieDataGenerator = (dataset) => {
 
 
       />
+      </Card>
        
-       <Text>Variation des humeurs de la semaine</Text>
+      <Card borderRadius={50} flex={0} >
 
+<Card.Title>Répartition quotidienne des humeurs</Card.Title>
+<Card.Divider/>
       <LineChart
         data={{
         labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
@@ -164,7 +167,7 @@ var pieDataGenerator = (dataset) => {
           }
         ]
         }}
-          width={Dimensions.get("window").width} 
+          width={Dimensions.get("window").width - 50} 
           height={220}
           // yAxisLabel="$"
           // yAxisSuffix="k"
@@ -172,10 +175,16 @@ var pieDataGenerator = (dataset) => {
           chartConfig={chartConfig}
           bezier
           style={{
-            marginVertical: 8,
-            borderRadius: 16}}
+            borderRadius: 16,
+          paddingRight: 25,
+          paddingLeft: 0,
+          paddingTop: 10,
+          
+       }}
             
             />
+
+          </Card>
     </ScrollView>
   );
 }

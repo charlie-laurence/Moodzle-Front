@@ -60,11 +60,7 @@ function ChartsYearScreen(props) {
       switch (i) {
         case 0:
           for (let j = 0; j < 31; j++) {
-<<<<<<< HEAD
-            jan.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             jan.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 1:
@@ -72,101 +68,57 @@ function ChartsYearScreen(props) {
           var febDay = 29
           bissextile ? febDay = 28 : febDay = 29;
           for (let j = 0; j < febDay; j++) {
-<<<<<<< HEAD
-            feb.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             feb.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 2:
           for (let j = 0; j < 31; j++) {
-<<<<<<< HEAD
-            mar.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             mar.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 3:
           for (let j = 0; j < 30; j++) {
-<<<<<<< HEAD
-            apr.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             apr.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 4:
           for (let j = 0; j < 31; j++) {
-<<<<<<< HEAD
-            may.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             may.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 5:
           for (let j = 0; j < 30; j++) {
-<<<<<<< HEAD
-            jun.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             jun.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 6:
           for (let j = 0; j < 31; j++) {
-<<<<<<< HEAD
-            jul.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             jul.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 7:
           for (let j = 0; j < 31; j++) {
-<<<<<<< HEAD
-            aug.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             aug.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 8:
           for (let j = 0; j < 30; j++) {
-<<<<<<< HEAD
-            sep.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             sep.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 9:
           for (let j = 0; j < 31; j++) {
-<<<<<<< HEAD
-            oct.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             oct.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 10:
           for (let j = 0; j < 30; j++) {
-<<<<<<< HEAD
-            nov.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             nov.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
         case 11:
           for (let j = 0; j < 31; j++) {
-<<<<<<< HEAD
-            dec.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
-=======
             dec.push(emptyIcon)
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
           };
           break;
       }
@@ -180,13 +132,9 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-<<<<<<< HEAD
-    var rawData = await fetch("http://172.17.1.159:3000/history", {
-=======
     var t2 = performance.now()
 
-    var rawData = await fetch("http://172.17.1.144:3000/history", {
->>>>>>> 6a6ed907bd46bc1961ec663097a57717540b3521
+    var rawData = await fetch("http://172.17.1.159:3000/history", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
