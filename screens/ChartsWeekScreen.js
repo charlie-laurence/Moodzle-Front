@@ -129,7 +129,8 @@ var pieDataGenerator = (dataset) => {
         }}
       />
        
-       
+       <Text>Répartition globale des humeurs de la semaine</Text>
+
        <PieChart
         data={pieData}
         width={Dimensions.get("window").width}
@@ -154,6 +155,8 @@ var pieDataGenerator = (dataset) => {
 
       />
        
+       <Text>Variation des humeurs de la semaine</Text>
+
       <LineChart
         data={{
         labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],

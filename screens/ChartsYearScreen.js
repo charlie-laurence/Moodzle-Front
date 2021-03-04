@@ -65,7 +65,7 @@ function ChartsYearScreen(props) {
       switch (i) {
         case 0:
           for (let j = 0; j < 31; j++) {
-            jan.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            jan.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setJanDisplay(jan)
           break;
@@ -74,67 +74,67 @@ function ChartsYearScreen(props) {
           var febDay = 29
           bissextile ? febDay = 28 : febDay = 29;
           for (let j = 0; j < febDay; j++) {
-            feb.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            feb.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setFebDisplay(feb)
           break;
         case 2:
           for (let j = 0; j < 31; j++) {
-            mar.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            mar.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setMarDisplay(mar)
           break;
         case 3:
           for (let j = 0; j < 30; j++) {
-            apr.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            apr.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setAprDisplay(apr)
           break;
         case 4:
           for (let j = 0; j < 31; j++) {
-            may.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            may.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setMayDisplay(may)
           break;
         case 5:
           for (let j = 0; j < 30; j++) {
-            jun.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            jun.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setJunDisplay(jun)
           break;
         case 6:
           for (let j = 0; j < 31; j++) {
-            jul.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            jul.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setJulDisplay(jul)
           break;
         case 7:
           for (let j = 0; j < 31; j++) {
-            aug.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            aug.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setAugDisplay(aug)
           break;
         case 8:
           for (let j = 0; j < 30; j++) {
-            sep.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            sep.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setSepDisplay(sep)
           break;
         case 9:
           for (let j = 0; j < 31; j++) {
-            oct.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            oct.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setOctDisplay(oct)
           break;
         case 10:
           for (let j = 0; j < 30; j++) {
-            nov.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            nov.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setNovDisplay(nov)
           break;
         case 11:
           for (let j = 0; j < 31; j++) {
-            dec.push(<FontAwesome name="circle" size={5} color="#F2F2F2" />)
+            dec.push(<FontAwesome name="circle" size={10} color="#F2F2F2" />)
           };
           setDecDisplay(dec)
           break;
@@ -149,7 +149,7 @@ function ChartsYearScreen(props) {
 
   //Récupération du résultat renvoyé par le backend
   var fetchData = async () => {
-    var rawData = await fetch("http://172.17.1.144:3000/history", {
+    var rawData = await fetch("http://172.17.1.159:3000/history", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -244,15 +244,15 @@ function ChartsYearScreen(props) {
   const moodScoreCircle = (score) => {
     switch (score) {
       case 1:
-        return <FontAwesome color="#CD6133" name="circle" size={5} />
+        return <FontAwesome color="#CD6133" name="circle" size={10} />
       case 2:
-        return <FontAwesome color="#F0A07E" name="circle" size={5} />
+        return <FontAwesome color="#F0A07E" name="circle" size={10} />
       case 3:
-        return <FontAwesome color="#F0D231" name="circle" size={5} />
+        return <FontAwesome color="#F0D231" name="circle" size={10} />
       case 4:
-        return <FontAwesome color="#44B79D" name="circle" size={5} />
+        return <FontAwesome color="#44B79D" name="circle" size={10} />
       case 5:
-        return <FontAwesome color="#fdf9f2" name="circle" size={5} />
+        return <FontAwesome color="#fdf9f2" name="circle" size={10} />
     }
   }
 

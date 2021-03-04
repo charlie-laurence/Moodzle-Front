@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from "react";
-import { StyleSheet, Text, View, Button, Dimensions, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, Button, Dimensions, ScrollView, Image, FlatList } from "react-native";
 import {PieChart, LineChart} from "react-native-chart-kit";
 import { connect } from "react-redux";
-import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { Card, ListItem, Icon, Row } from 'react-native-elements'
 
 
 function ChartsMonthScreen(props) {
@@ -167,9 +168,38 @@ function ChartsMonthScreen(props) {
         }}
       />
 
-<Image
-        source={require('../assets/podium_moodz.jpg')}
+<Card borderRadius={50}>
+  <Card.Title>Top des activités du mois</Card.Title>
+  <Card.Divider/>
+
+  <View style={{ flexDirection: "row" }}>
+          <Image
+        source={require('../assets/podium_moodz.png')} style={{width: '60%',
+          height: '200%',
+          resizeMode: 'stretch', paddingRight: 0, marginLeft: 0}}
       />
+       <Text>coucou2</Text>
+       <Text>coucou1</Text>
+       <Text>coucou3</Text>
+
+       {/* <Image
+        source={require('../assets/moodz.png')} style={{width: '50%',
+          height: '50%',
+          resizeMode: 'stretch'}}
+      /> */}
+    </View>
+</Card>
+
+
+
+
+
+<Card borderRadius={50}>
+  <Card.Title>Répartition des humeurs du mois par jour</Card.Title>
+  <Card.Divider/>
+
+
+
 
 <Calendar
   style={{
@@ -225,6 +255,13 @@ function ChartsMonthScreen(props) {
   markingType={'period'}
 
 />
+</Card>
+
+
+
+<Card borderRadius={50}>
+  <Card.Title>Répartition globale des humeurs du mois</Card.Title>
+  <Card.Divider/>
 
       <PieChart
         data={pieData}
@@ -247,7 +284,12 @@ function ChartsMonthScreen(props) {
         hasLegend={true}  
       />
 
+
+  </Card>
+  
+  <Card borderRadius={50}>
       <LineChart
+
         data={{
           labels: lineLabel,
           datasets: [{data: lineData}]
@@ -260,9 +302,14 @@ function ChartsMonthScreen(props) {
           chartConfig={chartConfig}
           bezier
           style={{
+            marginTop: 40,
+            marginLeft: 0,
+            marginRight: 20,
             marginVertical: 8,
             borderRadius: 16}}
       />
+
+</Card>
 
     </ScrollView>
   );
