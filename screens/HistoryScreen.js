@@ -1,22 +1,42 @@
-import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import React, {useState, useEffect} from "react";
+import { StyleSheet, Text, View, Button, ScrollView, Flat } from "react-native";
+import { Card } from "react-native-elements";
 import { connect } from "react-redux";
+import { _IP_OLIV , _IP_CAPSULE } from "../statics/ip";
 
 function HistoryScreen({ navigation, updateMood }) {
+  const [historyFromBack , setHistoryFromBack] = useState([]);
+
+  /* Interroger le backend pour récupérer l'historique de l'utilisateur au chargement de la page : */
+  useEffect(() => {
+    async function fetchData() {
+      var rawResponse = await fetch(`http://${_IP_CAPSULE}:3000/dashboard`);
+      var response = await rawResponse.json();
+      setHistoryFromBack(response.history);
+    }
+    fetchData();
+  }, []);
+
+  /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
+  var moodList = historyFromBack.map((item, i) => {
+    return (
+    <Card
+      key={i}
+      bottomDivider
+    >
+      <Card.Title>
+        <Text>{item.mood_score}</Text>
+      </Card.Title>
+      <Card.Title>
+        <Text>{item.date}</Text>
+      </Card.Title>
+    </Card>
+    )
+  })
+
   return (
     <View>
-      <Text style={styles.paragraph}>HistoryScreen</Text>
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 20,
-          fontWeight: "bold",
-          marginTop: 35,
-          marginBottom: 35,
-        }}
-      >
-        Récupérer l'historique de BDD via Fetch
-      </Text>
+      <Text style={styles.paragraph}>Tableau de Bord</Text>
       <Button
         title="RETOUR SUR AJOUT MOOD"
         type="solid"
@@ -25,6 +45,9 @@ function HistoryScreen({ navigation, updateMood }) {
           updateMood();
         }}
       />
+      <ScrollView>
+        {moodList}
+      </ScrollView>
     </View>
   );
 }
