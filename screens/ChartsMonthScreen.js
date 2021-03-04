@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, Dimensions, ScrollView, Image } from "react-native";
-import {PieChart, LineChart} from "react-native-chart-kit";
+import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
-import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
+import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
+import SwitchSelector from "react-native-switch-selector";
 
 
 function ChartsMonthScreen(props) {
@@ -21,14 +22,14 @@ function ChartsMonthScreen(props) {
     fetchData()
 
     // Enregistrer les dates de départ et de fin pour le Calendrier
-}, [])
+  }, [])
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
     var dataRaw = await fetch('http://172.17.1.159:3000/history', {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `startdate=${startDate}&type=month`
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `startdate=${startDate}&type=month`
     });
 
     var data = await dataRaw.json()
@@ -44,35 +45,35 @@ function ChartsMonthScreen(props) {
     var lastSetDay = new Date(startDateFormat.getFullYear(), startDateFormat.getMonth() + 1, 0);
     setFirstDay(firstSetDay)
     setLastDay(lastSetDay)
-    
+
     var markedSetDate = {}
 
     for (let i = 0; i < dataHistory.length; i++) {
       var markColor = ''
       var dateConvertToString = new Date(dataHistory[i].date).toLocaleDateString('en-CA')
       switch (dataHistory[i].mood_score) {
-        case 1: 
+        case 1:
           markColor = "#CD6133";
           break;
-        case 2: 
+        case 2:
           markColor = "#F0A07E";
           break;
-        case 3: 
+        case 3:
           markColor = "#F0D231";
           break;
-        case 4: 
+        case 4:
           markColor = "#44B79D";
           break;
-        case 5: 
+        case 5:
           markColor = "#54857F";
           break;
       }
-      markedSetDate[dateConvertToString] = {selected: true, color: markColor}
+      markedSetDate[dateConvertToString] = { selected: true, color: markColor }
     }
     // console.log(markedSetDate)
     setCalendarData(markedSetDate)
 
-     }
+  }
 
   /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
   var pieDataGenerator = (dataset) => {
@@ -84,21 +85,21 @@ function ChartsMonthScreen(props) {
     let score5 = 0
 
     // Incrémenter les scores de 1 à chaque fois qu'une note des données correspondent 
-    for (let i = 0; i < dataset.length; i ++) {
+    for (let i = 0; i < dataset.length; i++) {
       switch (dataset[i].mood_score) {
-        case 1: 
+        case 1:
           score1 += 1;
           break;
-        case 2: 
+        case 2:
           score2 += 1;
           break;
-        case 3: 
+        case 3:
           score3 += 1;
           break;
-        case 4: 
+        case 4:
           score4 += 1;
           break;
-        case 5: 
+        case 5:
           score5 += 1;
           break;
       }
@@ -106,12 +107,12 @@ function ChartsMonthScreen(props) {
 
     // Stocker les résultats dans un états qui seront exploiter par le PieChart
     setPieData([
-      {name: 'angry',score: 1, count: score1, color:"#CD6133", legendFontColor: "#CD6133", legendFontSize: 15}, 
-      {name: 'sad', score: 2, count: score2, color:"#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15}, 
-      {name: 'meh', score: 3, count: score3, color:"#F0D231", legendFontColor: "#F0D231", legendFontSize: 15}, 
-      {name: 'happy', score: 4, count: score4, color:"#44B79D", legendFontColor: "#44B79D", legendFontSize: 15}, 
-      {name: 'super', score: 5, count: score5, color:"#54857F", legendFontColor: "#54857F", legendFontSize: 15}]
-      );
+      { name: 'angry', score: 1, count: score1, color: "#CD6133", legendFontColor: "#CD6133", legendFontSize: 15 },
+      { name: 'sad', score: 2, count: score2, color: "#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15 },
+      { name: 'meh', score: 3, count: score3, color: "#F0D231", legendFontColor: "#F0D231", legendFontSize: 15 },
+      { name: 'happy', score: 4, count: score4, color: "#44B79D", legendFontColor: "#44B79D", legendFontSize: 15 },
+      { name: 'super', score: 5, count: score5, color: "#54857F", legendFontColor: "#54857F", legendFontSize: 15 }]
+    );
   }
 
 
@@ -130,10 +131,10 @@ function ChartsMonthScreen(props) {
 
   // Calendrier
   LocaleConfig.locales['fr'] = {
-    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-    dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+    monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+    dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
     today: 'Aujourd\'hui'
   };
   LocaleConfig.defaultLocale = 'fr';
@@ -142,89 +143,78 @@ function ChartsMonthScreen(props) {
   return (
     <ScrollView>
       <Text style={styles.paragraph}>ChartsMonthScreen</Text>
-      <Button
-        title="WEEK"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(1)
-        }}
-      />
-      <Button
-        title="MONTH"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(2)
-        }}
-      />
-      <Button
-        title="YEAR"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(3)
-        }}
+      <SwitchSelector
+        options={[
+          { label: "Hebdo", value: 1 },
+          { label: "Mois", value: 2 },
+          { label: "Année", value: 3 }]}
+        textColor="#009788" //
+        selectedColor="white"
+        buttonColor="#009788"
+        borderColor="#009788"
+        hasPadding
+        initial={1}
+        onPress={value => props.changeStep(value)}
       />
 
-<Image
+      <Image
         source={require('../assets/podium_moodz.jpg')}
       />
 
-<Calendar
-  style={{
-    height: 220
-  }}
-  theme={{
-    calendarBackground: '#11ffee00'
-  }}
-  // Initially visible month. Default = Date()
-  current={startDate}
-  // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-  minDate={firstDay}
-  // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-  maxDate={lastDay}
-  // Handler which gets executed on day press. Default = undefined
-  onDayPress={(day) => {console.log('selected day', day)}}
-  // Handler which gets executed on day long press. Default = undefined
-  onDayLongPress={(day) => {console.log('selected day', day)}}
-  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-  monthFormat={'yyyy MM'}
-  // Handler which gets executed when visible month changes in calendar. Default = undefined
-  onMonthChange={(month) => {console.log('month changed', month)}}
-  // Hide month navigation arrows. Default = false
-  hideArrows={true}
-  // Replace default arrows with custom ones (direction can be 'left' or 'right')
-  renderArrow={(direction) => (<Arrow/>)}
-  // Do not show days of other months in month page. Default = false
-  hideExtraDays={true}
-  // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-  // day from another month that is visible in calendar page. Default = false
-  disableMonthChange={true}
-  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-  firstDay={1}
-  // Hide day names. Default = false
-  hideDayNames={true}
-  // Show week numbers to the left. Default = false
-  showWeekNumbers={true}
-  // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-  onPressArrowLeft={subtractMonth => subtractMonth()}
-  // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-  onPressArrowRight={addMonth => addMonth()}
-  // Disable left arrow. Default = false
-  disableArrowLeft={true}
-  // Disable right arrow. Default = false
-  disableArrowRight={true}
-  // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-  disableAllTouchEventsForDisabledDays={true}
-  // Replace default month and year title with custom one. the function receive a date as parameter.
-  renderHeader={(date) => {/*Return JSX*/}}
-  // Enable the option to swipe between months. Default = false
-  markedDates={calendarData}
-  // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-  markingType={'period'}
+      <Calendar
+        style={{
+          height: 220
+        }}
+        theme={{
+          calendarBackground: '#11ffee00'
+        }}
+        // Initially visible month. Default = Date()
+        current={startDate}
+        // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+        minDate={firstDay}
+        // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
+        maxDate={lastDay}
+        // Handler which gets executed on day press. Default = undefined
+        onDayPress={(day) => { console.log('selected day', day) }}
+        // Handler which gets executed on day long press. Default = undefined
+        onDayLongPress={(day) => { console.log('selected day', day) }}
+        // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+        monthFormat={'yyyy MM'}
+        // Handler which gets executed when visible month changes in calendar. Default = undefined
+        onMonthChange={(month) => { console.log('month changed', month) }}
+        // Hide month navigation arrows. Default = false
+        hideArrows={true}
+        // Replace default arrows with custom ones (direction can be 'left' or 'right')
+        renderArrow={(direction) => (<Arrow />)}
+        // Do not show days of other months in month page. Default = false
+        hideExtraDays={true}
+        // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+        // day from another month that is visible in calendar page. Default = false
+        disableMonthChange={true}
+        // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+        firstDay={1}
+        // Hide day names. Default = false
+        hideDayNames={true}
+        // Show week numbers to the left. Default = false
+        showWeekNumbers={true}
+        // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+        onPressArrowLeft={subtractMonth => subtractMonth()}
+        // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+        onPressArrowRight={addMonth => addMonth()}
+        // Disable left arrow. Default = false
+        disableArrowLeft={true}
+        // Disable right arrow. Default = false
+        disableArrowRight={true}
+        // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
+        disableAllTouchEventsForDisabledDays={true}
+        // Replace default month and year title with custom one. the function receive a date as parameter.
+        renderHeader={(date) => {/*Return JSX*/ }}
+        // Enable the option to swipe between months. Default = false
+        markedDates={calendarData}
+        // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+        markingType={'period'}
 
-/>
+      />
 
       <PieChart
         data={pieData}
@@ -244,24 +234,25 @@ function ChartsMonthScreen(props) {
         backgroundColor={"transparent"}
         center={[10, 0]}
         absolute
-        hasLegend={true}  
+        hasLegend={true}
       />
 
       <LineChart
         data={{
           labels: lineLabel,
-          datasets: [{data: lineData}]
+          datasets: [{ data: lineData }]
         }}
-          width={Dimensions.get("window").width} 
-          height={220}
-          // yAxisLabel="$"
-          // yAxisSuffix="k"
-          yAxisInterval={31} // optional, defaults to 1
-          chartConfig={chartConfig}
-          bezier
-          style={{
-            marginVertical: 8,
-            borderRadius: 16}}
+        width={Dimensions.get("window").width}
+        height={220}
+        // yAxisLabel="$"
+        // yAxisSuffix="k"
+        yAxisInterval={31} // optional, defaults to 1
+        chartConfig={chartConfig}
+        bezier
+        style={{
+          marginVertical: 8,
+          borderRadius: 16
+        }}
       />
 
     </ScrollView>
@@ -283,29 +274,29 @@ const styles = StyleSheet.create({
   },
 });
 
-  const chartConfig = {
-    backgroundGradientFrom: "#ffffff",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#ffffff",
-    backgroundGradientToOpacity: 0,
-  
-    decimalPlaces: 0, // optional
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    labelColor: (opacity = 1) => `#44B79D`,
-    style: {
-      borderRadius: 16
-    },
-    propsForDots: {
-      r: "2",
-      strokeWidth: "4",
-      stroke: "#44B79D"
-    }
+const chartConfig = {
+  backgroundGradientFrom: "#ffffff",
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: "#ffffff",
+  backgroundGradientToOpacity: 0,
+
+  decimalPlaces: 0, // optional
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  labelColor: (opacity = 1) => `#44B79D`,
+  style: {
+    borderRadius: 16
+  },
+  propsForDots: {
+    r: "2",
+    strokeWidth: "4",
+    stroke: "#44B79D"
   }
-  
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
-      dispatch({ type: "change-step", newstep: newstep});
+      dispatch({ type: "change-step", newstep: newstep });
     },
   };
 };

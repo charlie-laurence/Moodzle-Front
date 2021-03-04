@@ -6,6 +6,7 @@ import {
 } from "react-native-chart-kit";
 import { connect } from "react-redux";
 import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
+import SwitchSelector from "react-native-switch-selector";
    
 
 function ChartsWeekScreen(props) { 
@@ -19,8 +20,6 @@ const [pieData, setPieData] = useState([])
 useEffect(() => {
   fetchData()
 }, []);
-
-
 
 //Récupération du résultat renvoyé par le backend
 
@@ -53,9 +52,6 @@ var fetchData = async() => {
 //  lineGenerator(dataHistory)
 
 }
-
-
-
   
 /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
 var pieDataGenerator = (dataset) => {
@@ -97,36 +93,23 @@ var pieDataGenerator = (dataset) => {
    );
  }
 
-
   return (
     <ScrollView >
-
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
-        <Button
-        title="WEEK"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(1)
-        }}
-      />
-      <Button
-        title="MONTH"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(2)
-        }}
-      />
-      <Button
-        title="YEAR"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(3)
-        }}
-      />
-       
+        
+        <SwitchSelector
+          options= {[
+            { label: "Hebdo", value: 1},
+            { label: "Mois", value: 2},
+            { label: "Année", value: 3}]}
+          textColor="#009788" //
+          selectedColor="white"
+          buttonColor="#009788"
+          borderColor="#009788"
+          hasPadding
+          initial={0}
+          onPress={value => props.changeStep(value)}
+        />
        
        <PieChart
         data={pieData}
@@ -148,8 +131,6 @@ var pieDataGenerator = (dataset) => {
         // absolute
         hasLegend={false}  
         alignItems={'center'}
-
-
       />
        
       <LineChart

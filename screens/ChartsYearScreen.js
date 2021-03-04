@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import { FontAwesome } from '@expo/vector-icons';
 
+import SwitchSelector from "react-native-switch-selector";
+
+
 function ChartsYearScreen(props) {
 
   const [startDate, setStartDate] = useState('2020-05-20')
@@ -17,13 +20,9 @@ function ChartsYearScreen(props) {
     // Variable boolean qui va être True si l'année est bissextile
     var checkLeap = isLeapYear(yearDate.getFullYear())
     // initiateArray génère des tables avec des icones grises et prend pour un argument un true/false pour vérifier s'il s'agit d'une année bissextile
-    
-    var t0 = performance.now()
     initiateArray(checkLeap)
 
     // Récupère les données de la BDD + génère les tables pour l'affichage du calendrier
-    var t1 = performance.now()
-    console.log("initiateArray took" + (t1 - t0))
     fetchData()
 
   }, []);
@@ -132,7 +131,6 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-    var t2 = performance.now()
 
     var rawData = await fetch("http://172.17.1.144:3000/history", {
       method: 'POST',
@@ -144,10 +142,6 @@ function ChartsYearScreen(props) {
 
     var data = await rawData.json();
     var dataHistory = data.history // Variable qui contient les données de l'historique
-
-    var t3 = performance.now()
-
-    console.log("fetch took" + (t3-t2))
 
     // Boucle sur l'historique pour remplacer les points gris par les points de couleurs (qui varient en fonction du mood_score)
     for (var i = 0; i < dataHistory.length; i++) {
@@ -202,8 +196,6 @@ function ChartsYearScreen(props) {
     
     // Modifie la variable d'état dataDisplay qui récupère tous les tableaux concernés 
     setDataDisplay([jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec])
-    var t4 = performance.now()
-    console.log("change icon took" + (t4-t3))
   }
 
   // Fonction qui prend en variable le score et qui retourne un cercle avec la couleur associée à la note
@@ -218,7 +210,7 @@ function ChartsYearScreen(props) {
       case 4:
         return <FontAwesome color="#44B79D" name="circle" size={5} />
       case 5:
-        return <FontAwesome color="#fdf9f2" name="circle" size={5} />
+        return <FontAwesome color="#54857F" name="circle" size={5} />
     }
   }
 
@@ -231,41 +223,25 @@ function ChartsYearScreen(props) {
 
       <Text style={styles.paragraph}>ChartsYearScreen</Text>
 
-      <Button
-        title="WEEK"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(1)
-        }}
-      />
-      <Button
-        title="MONTH"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(2)
-        }}
-      />
-      <Button
-        title="YEAR"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(3)
-        }}
-      />
+      <SwitchSelector
+          options= {[
+            { label: "Hebdo", value: 1},
+            { label: "Mois", value: 2},
+            { label: "Année", value: 3}]}
+          textColor="#009788" //
+          selectedColor="white"
+          buttonColor="#009788"
+          borderColor="#009788"
+          hasPadding
+          initial={2}
+          onPress={value => props.changeStep(value)}
+        />
 
       <Table>
         <Row data={headTable} height={('auto')} style={styles.HeadStyle} textStyle={{ textAlign: 'center', justifyContent: 'flex-start' }} />
       </Table>
 
-
-      <Table
-      //  borderStyle={{borderWidth: 0.2, borderColor: '#44B79D'}}
-      >
-
-
+      <Table>
         <View style={{ flexDirection: 'row' }}>
           <TableWrapper style={{ flexDirection: 'row' }}>
             <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
