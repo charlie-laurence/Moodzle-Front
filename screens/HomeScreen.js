@@ -5,15 +5,14 @@ import { Button, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { _IP_CAPSULE } from "../statics/ip";
 
-function HomeScreen(props) {
+function HomeScreen({ navigation, pseudo, onSubmitPseudo, token, addToken }) {
   /* 
 - récupération de la valeur depuis l'input et mise à jour de l'état pseudo
 - initialisation d'un état pseudoSubmited à false pour gérer la différence 
 d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 */
 
-  console.log(props.pseudo, props.token);
-  const [pseudo, setPseudo] = useState("");
+  const [localPseudo, setLocalPseudo] = useState("");
   const [userExist, setUserExist] = useState(false);
 
   useEffect(() => {
@@ -21,8 +20,8 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
     AsyncStorage.getItem("user", (err, value) => {
       if (value) {
         value = JSON.parse(value);
-        props.onSubmitPseudo(value.pseudo);
-        props.addToken(value.token);
+        onSubmitPseudo(value.pseudo);
+        addToken(value.token);
         setUserExist(true);
       }
     });
@@ -34,7 +33,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
     const data = await fetch(`http://${_IP_CAPSULE}:3000/sign-up`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `usernameFromFront=${pseudo}`,
+      body: `usernameFromFront=${localPseudo}`,
     });
 
     const body = await data.json();
@@ -45,11 +44,10 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 
     if (body.result === true) {
       // Ajout de l'utilisateur au store :
-      props.onSubmitPseudo(newPseudo);
-      props.addToken(newToken);
+      onSubmitPseudo(newPseudo);
+      addToken(newToken);
       setUserExist(true);
     }
-
     // Ajout de l'utilisateur en local storage :
     AsyncStorage.setItem(
       "user",
@@ -66,7 +64,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           inputStyle={{ marginLeft: 10 }}
           placeholder="Nom d'utilisateur"
           onChangeText={(content) => {
-            setPseudo(content);
+            setLocalPseudo(content);
           }}
         />
         <Button
@@ -75,7 +73,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           buttonStyle={{ backgroundColor: "#009788" }}
           onPress={() => {
             handleSubmitSignup();
-            props.navigation.navigate("BottomNavigator", { screen: "Mood" });
+            navigation.navigate("BottomNavigator", { screen: "Mood" });
           }}
         />
         <Button
@@ -84,8 +82,8 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
           onPress={() => {
             AsyncStorage.setItem("user", "");
-            props.onSubmitPseudo("");
-            props.addToken("");
+            onSubmitPseudo("");
+            addToken("");
             setUserExist(false);
           }}
         />
@@ -94,26 +92,26 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
   } else if (userExist === true) {
     isUserRegistered = (
       <View>
-        <Text style={styles.paragraph}>Bienvenue {props.pseudo}</Text>
+        <Text style={styles.paragraph}>Bienvenue {pseudo}</Text>
         <Button
           title="Let's Go !"
           type="solid"
           buttonStyle={{ backgroundColor: "#009788" }}
           onPress={() => {
-            props.navigation.navigate("BottomNavigator", { screen: "Mood" });
+            navigation.navigate("BottomNavigator", { screen: "Mood" });
           }}
         />
-        <Button
+        {/* <Button
           title="Change user"
           type="solid"
           buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
           onPress={() => {
             AsyncStorage.setItem("user", "");
-            props.onSubmitPseudo("");
-            props.addToken("");
+            onSubmitPseudo("");
+            addToken("");
             setUserExist(false);
           }}
-        />
+        /> */}
       </View>
     );
   }
