@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
@@ -6,13 +6,33 @@ import {
   useFonts,
   LondrinaSolid_400Regular,
 } from "@expo-google-fonts/londrina-solid";
+import { _IP_CAPSULE } from "../statics/ip";
 
-function ReactionScreen({ mood, incrementStep }) {
+
+
+function ReactionScreen({ mood, incrementStep, token, pseudo }) {
   let [fontsLoaded] = useFonts({
     LondrinaSolid_400Regular,
   });
 
+  const [funFact, setFunFact] = useState([]);
+
+  useEffect(() => {
+  async function fetchData() {
+    var rawResponse = await fetch(`http://${_IP_CAPSULE}:3000/fun-fact`);
+    var response = await rawResponse.json();
+    setFunFact(response);
+    }
+    fetchData();
+  }, []);
+  
+   
+  
+
   console.log(mood);
+  
+  // console.log(funFact)
+
 
   if (!fontsLoaded) {
     return (
@@ -39,11 +59,11 @@ function ReactionScreen({ mood, incrementStep }) {
           <Text
             style={{
               fontFamily: "LondrinaSolid_400Regular",
-              fontSize: 35,
+              fontSize: 20,
               color: "#DF8F4A",
             }}
           >
-            Mood : {mood}
+            Mood : {token} - {mood} - {pseudo}
           </Text>
         </View>
       </View>
@@ -105,6 +125,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     mood: state.mood,
+    pseudo: state.pseudo,
+    token: state.token,
   };
 };
 
