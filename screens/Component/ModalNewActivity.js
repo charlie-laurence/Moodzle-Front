@@ -67,9 +67,7 @@ const ModalNewActivity = ({
           />
           <Picker
             selectedValue={selectedCategory}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedCategory(itemValue)
-            }
+            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
           >
             <Picker.Item label="Sport" value="sport" />
             <Picker.Item label="Social" value="social" />

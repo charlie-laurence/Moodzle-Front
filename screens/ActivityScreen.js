@@ -16,7 +16,7 @@ function ActivityScreen({
   deselectActivity,
   activitySelection,
   mood,
-  //token
+  token,
 }) {
   const [activityList, setActivityList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,17 +51,19 @@ function ActivityScreen({
     setActivityList([...activityList, local]);
   };
 
+  //Selection d'une activité (envoi dans le store)
   const handleActivityPress = (activity) => {
     activitySelection.filter((item) => item.name === activity.name).length === 0
       ? selectActivity(activity)
       : deselectActivity(activity);
   };
+
+  //Valider - Ignorer Btn Press : Envoi en BDD et passage à l'étape suivante
   const handleSkipOrValidatePress = async () => {
-    // envoi en BDD du mood de la journée (mood + activités)
     const rawResult = await fetch(`http://${_IP_CAPSULE}:3000/save-mood`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mood, activitySelection }), //token }),
+      body: JSON.stringify({ mood, activitySelection, token }),
     });
     const result = await rawResult.json();
     console.log(result);
@@ -69,7 +71,7 @@ function ActivityScreen({
   };
 
   const handleNewActivityPress = () => {
-    setModalVisible(!modalVisible);
+    toggleOverlay();
   };
 
   const toggleOverlay = () => {
@@ -237,7 +239,7 @@ const mapStateToProps = (state) => {
   return {
     activitySelection: state.activitySelection,
     mood: state.mood,
-    //token: state.token
+    token: state.token,
   };
 };
 
