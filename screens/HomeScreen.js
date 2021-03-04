@@ -5,7 +5,7 @@ import { Button, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { _IP_CAPSULE } from "../statics/ip";
 
-function HomeScreen({ navigation, pseudo, onSubmitPseudo, token, addToken }) {
+function HomeScreen({ navigation, pseudo, onSubmitPseudo, addToken }) {
   /* 
 - récupération de la valeur depuis l'input et mise à jour de l'état pseudo
 - initialisation d'un état pseudoSubmited à false pour gérer la différence 
@@ -153,7 +153,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return { pseudo: state.pseudo, token: state.token };
+  return { pseudo: state.pseudo };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
