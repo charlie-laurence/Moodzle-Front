@@ -98,8 +98,6 @@ var pieDataGenerator = (dataset) => {
  }
 
 
-
-
   return (
     <ScrollView >
 
