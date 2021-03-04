@@ -5,8 +5,10 @@ import {
   PieChart, // répartition mood (demi donut)
 } from "react-native-chart-kit";
 import { connect } from "react-redux";
-import { Card } from 'react-native-elements'
-   
+import SwitchSelector from "react-native-switch-selector";
+import { Card, ListItem, Icon, Row } from 'react-native-elements'
+
+
 
 function ChartsWeekScreen(props) { 
 
@@ -19,8 +21,6 @@ const [pieData, setPieData] = useState([])
 useEffect(() => {
   fetchData()
 }, []);
-
-
 
 //Récupération du résultat renvoyé par le backend
 
@@ -40,20 +40,14 @@ var fetchData = async() => {
     if (dataHistory[i] === undefined || dataHistory[i].mood_score === undefined) 
     {
       setterdataChart.push(1)
-      // dataHistory[i].mood_score = 0
     } else {
       setterdataChart.push(parseInt(dataHistory[i].mood_score))
   }}
-  // console.log('i', setterdataChart)
   setDataChart(setterdataChart)
-
 
  // Traitement des données pour le Pie Chart
  pieDataGenerator(dataHistory)
-//  lineGenerator(dataHistory)
-
 }
-
   
 /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
 var pieDataGenerator = (dataset) => {
@@ -95,35 +89,26 @@ var pieDataGenerator = (dataset) => {
    );
  }
 
-
   return (
     <ScrollView >
-
         <Text style={styles.paragraph}>ChartsWeekScreen</Text>
-        <Button
-        title="WEEK"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(1)
-        }}
-      />
-      <Button
-        title="MONTH"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(2)
-        }}
-      />
-      <Button
-        title="YEAR"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(3)
-        }}
-      />
+
+        <SwitchSelector
+          options= {[
+            { label: "Semaine", value: 1},
+            { label: "Mois", value: 2},
+            { label: "Année", value: 3}]}
+          textColor="#009788" //
+          selectedColor="white"
+          buttonColor="#009788"
+          borderColor="#009788"
+          hasPadding
+          initial={0}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          onPress={value => props.changeStep(value)}
+        />
+
+      
        
        <Card borderRadius={50}>
   <Card.Title>Répartition globale des humeurs de la semaine</Card.Title>
@@ -169,8 +154,8 @@ var pieDataGenerator = (dataset) => {
         }}
           width={Dimensions.get("window").width - 50} 
           height={220}
-          // yAxisLabel="$"
-          // yAxisSuffix="k"
+            // yAxisLabel="$"
+            // yAxisSuffix="k"
           yAxisInterval={7} // optional, defaults to 1
           chartConfig={chartConfig}
           bezier

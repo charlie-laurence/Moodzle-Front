@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import { connect } from "react-redux";
 
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Table, TableWrapper, Col, Cols } from 'react-native-table-component';
 import { FontAwesome } from '@expo/vector-icons';
+import { Card } from 'react-native-elements'
+
+import SwitchSelector from "react-native-switch-selector";
+
 
 function ChartsYearScreen(props) {
 
@@ -17,32 +21,26 @@ function ChartsYearScreen(props) {
     // Variable boolean qui va être True si l'année est bissextile
     var checkLeap = isLeapYear(yearDate.getFullYear())
     // initiateArray génère des tables avec des icones grises et prend pour un argument un true/false pour vérifier s'il s'agit d'une année bissextile
-    
-    var t0 = performance.now()
     initiateArray(checkLeap)
 
     // Récupère les données de la BDD + génère les tables pour l'affichage du calendrier
-    var t1 = performance.now()
-    console.log("initiateArray took" + (t1 - t0))
     fetchData()
 
   }, []);
 
-  var headTable = [' ', 'j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'];
-
-  // Initialise des tables vides pour chaque mois
-  var jan = []
-  var feb = []
-  var mar = []
-  var apr = []
-  var may = []
-  var jun = []
-  var jul = []
-  var aug = []
-  var sep = []
-  var oct = []
-  var nov = []
-  var dec = []
+  // Initialise des tables pour chaque mois avec l'entête en élément à l'index 0
+  var jan = ['J']
+  var feb = ['F']
+  var mar = ['M']
+  var apr = ['A']
+  var may = ['M']
+  var jun = ['J']
+  var jul = ['J']
+  var aug = ['A']
+  var sep = ['S']
+  var oct = ['O']
+  var nov = ['N']
+  var dec = ['D']
 
   /*  initiateArray : initialise des 12 Tables (une par mois) avec un cercle gris par jour 
       Prend en variable un Boolean qui est True si l'année en cours est bissextile*/
@@ -54,7 +52,7 @@ function ChartsYearScreen(props) {
         Ajoute une icone FontAwesome pour chaque jour du mois   
         Enregistre le résultat dans les variables de mois correspondantes 
       */
-      var emptyIcon = <FontAwesome name="circle" size={5} color="#F2F2F2" />
+      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" style={{ alignSelf: 'center'}}/>
       // var emptyIcon = ''
 
       switch (i) {
@@ -122,7 +120,8 @@ function ChartsYearScreen(props) {
           };
           break;
       }
-  }}
+    }
+  }
 
   // Fonction qui vérifie si une année est bissextille
   function isLeapYear(year) {
@@ -132,8 +131,6 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-    var t2 = performance.now()
-
     var rawData = await fetch("http://172.17.1.159:3000/history", {
       method: 'POST',
       headers: {
@@ -144,10 +141,6 @@ function ChartsYearScreen(props) {
 
     var data = await rawData.json();
     var dataHistory = data.history // Variable qui contient les données de l'historique
-
-    var t3 = performance.now()
-
-    console.log("fetch took" + (t3-t2))
 
     // Boucle sur l'historique pour remplacer les points gris par les points de couleurs (qui varient en fonction du mood_score)
     for (var i = 0; i < dataHistory.length; i++) {
@@ -162,68 +155,66 @@ function ChartsYearScreen(props) {
       */
       switch (month) {
         case 0:
-          jan[day - 1] = moodScoreCircle(moodScore)
+          jan[day] = moodScoreCircle(moodScore)
           break;
         case 1:
-          feb[day - 1] = moodScoreCircle(moodScore)
+          feb[day] = moodScoreCircle(moodScore)
           break;
         case 2:
-          mar[day - 1] = moodScoreCircle(moodScore)
+          mar[day] = moodScoreCircle(moodScore)
           break;
         case 3:
-          apr[day - 1] = moodScoreCircle(moodScore)
+          apr[day] = moodScoreCircle(moodScore)
           break;
         case 4:
-          may[day - 1] = moodScoreCircle(moodScore)
+          may[day] = moodScoreCircle(moodScore)
           break;
         case 5:
-          jun[day - 1] = moodScoreCircle(moodScore)
+          jun[day] = moodScoreCircle(moodScore)
           break;
         case 6:
-          jul[day - 1] = moodScoreCircle(moodScore)
+          jul[day] = moodScoreCircle(moodScore)
           break;
         case 7:
-          aug[day - 1] = moodScoreCircle(moodScore)
+          aug[day] = moodScoreCircle(moodScore)
           break;
         case 8:
-          sep[day - 1] = moodScoreCircle(moodScore)
+          sep[day] = moodScoreCircle(moodScore)
           break;
         case 9:
-          oct[day - 1] = moodScoreCircle(moodScore)
+          oct[day] = moodScoreCircle(moodScore)
           break;
         case 10:
-          nov[day - 1] = moodScoreCircle(moodScore)
+          nov[day] = moodScoreCircle(moodScore)
           break;
         case 11:
-          dec[day - 1] = moodScoreCircle(moodScore)
+          dec[day] = moodScoreCircle(moodScore)
           break;
       }
     }
-    
+
     // Modifie la variable d'état dataDisplay qui récupère tous les tableaux concernés 
     setDataDisplay([jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec])
-    var t4 = performance.now()
-    console.log("change icon took" + (t4-t3))
   }
 
   // Fonction qui prend en variable le score et qui retourne un cercle avec la couleur associée à la note
   const moodScoreCircle = (score) => {
     switch (score) {
       case 1:
-        return <FontAwesome color="#CD6133" name="circle" size={10} />
+        return <FontAwesome color="#CD6133" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 2:
-        return <FontAwesome color="#F0A07E" name="circle" size={10} />
+        return <FontAwesome color="#F0A07E" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 3:
-        return <FontAwesome color="#F0D231" name="circle" size={10} />
+        return <FontAwesome color="#F0D231" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 4:
-        return <FontAwesome color="#44B79D" name="circle" size={10} />
+        return <FontAwesome color="#44B79D" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 5:
-        return <FontAwesome color="#fdf9f2" name="circle" size={10} />
+        return <FontAwesome color="#54857F" name="circle" size={10} style={{ alignSelf: 'center' }} />
     }
   }
 
-  // dataTable qui contient les variables d'états pour chaque mois (1 mois = 1 colonne)
-  var tableTitle = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+  // Table qui contient les labels des jours
+  var tableTitle = [' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
 
   return (
     <ScrollView>
@@ -231,51 +222,35 @@ function ChartsYearScreen(props) {
 
       <Text style={styles.paragraph}>ChartsYearScreen</Text>
 
-      <Button
-        title="WEEK"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(1)
-        }}
-      />
-      <Button
-        title="MONTH"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(2)
-        }}
-      />
-      <Button
-        title="YEAR"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(3)
-        }}
-      />
+      <SwitchSelector
+          options= {[
+            { label: "Semaine", value: 1},
+            { label: "Mois", value: 2},
+            { label: "Année", value: 3}]}
+          textColor="#009788" //
+          selectedColor="white"
+          buttonColor="#009788"
+          borderColor="#009788"
+          hasPadding
+          initial={2}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          onPress={value => props.changeStep(value)}
+        />
 
-      <Table>
-        <Row data={headTable} height={('auto')} style={styles.HeadStyle} textStyle={{ textAlign: 'center', justifyContent: 'flex-start' }} />
-      </Table>
+      <Card borderRadius={30}>
+        <Table>
+          <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00' }}>
+            <TableWrapper style={{ flexDirection: 'row' }}>
+              <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
+            </TableWrapper>
 
+            <TableWrapper style={{ flex: 1, backgroundColor: '#11ffee00' }}>
+              <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center' }} />
+            </TableWrapper>
+          </View>
+        </Table>
+      </Card>
 
-      <Table
-      //  borderStyle={{borderWidth: 0.2, borderColor: '#44B79D'}}
-      >
-
-
-        <View style={{ flexDirection: 'row' }}>
-          <TableWrapper style={{ flexDirection: 'row' }}>
-            <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
-          </TableWrapper>
-
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center' }} />
-          </TableWrapper>
-        </View>
-      </Table>
     </ScrollView>
   );
 }

@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, Dimensions, ScrollView, Image, FlatList } from "react-native";
-import {PieChart, LineChart} from "react-native-chart-kit";
+import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-import { Card } from 'react-native-elements'
+import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { Card, ListItem, Icon, Row } from 'react-native-elements'
+import SwitchSelector from "react-native-switch-selector";
 
 
 function ChartsMonthScreen(props) {
@@ -22,14 +23,14 @@ function ChartsMonthScreen(props) {
     fetchData()
 
     // Enregistrer les dates de départ et de fin pour le Calendrier
-}, [])
+  }, [])
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
     var dataRaw = await fetch('http://172.17.1.159:3000/history', {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `startdate=${startDate}&type=month`
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `startdate=${startDate}&type=month`
     });
 
     var data = await dataRaw.json()
@@ -45,35 +46,35 @@ function ChartsMonthScreen(props) {
     var lastSetDay = new Date(startDateFormat.getFullYear(), startDateFormat.getMonth() + 1, 0);
     setFirstDay(firstSetDay)
     setLastDay(lastSetDay)
-    
+
     var markedSetDate = {}
 
     for (let i = 0; i < dataHistory.length; i++) {
       var markColor = ''
       var dateConvertToString = new Date(dataHistory[i].date).toLocaleDateString('en-CA')
       switch (dataHistory[i].mood_score) {
-        case 1: 
+        case 1:
           markColor = "#CD6133";
           break;
-        case 2: 
+        case 2:
           markColor = "#F0A07E";
           break;
-        case 3: 
+        case 3:
           markColor = "#F0D231";
           break;
-        case 4: 
+        case 4:
           markColor = "#44B79D";
           break;
-        case 5: 
+        case 5:
           markColor = "#54857F";
           break;
       }
-      markedSetDate[dateConvertToString] = {selected: true, color: markColor}
+      markedSetDate[dateConvertToString] = { selected: true, color: markColor }
     }
     // console.log(markedSetDate)
     setCalendarData(markedSetDate)
 
-     }
+  }
 
   /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
   var pieDataGenerator = (dataset) => {
@@ -85,21 +86,21 @@ function ChartsMonthScreen(props) {
     let score5 = 0
 
     // Incrémenter les scores de 1 à chaque fois qu'une note des données correspondent 
-    for (let i = 0; i < dataset.length; i ++) {
+    for (let i = 0; i < dataset.length; i++) {
       switch (dataset[i].mood_score) {
-        case 1: 
+        case 1:
           score1 += 1;
           break;
-        case 2: 
+        case 2:
           score2 += 1;
           break;
-        case 3: 
+        case 3:
           score3 += 1;
           break;
-        case 4: 
+        case 4:
           score4 += 1;
           break;
-        case 5: 
+        case 5:
           score5 += 1;
           break;
       }
@@ -107,12 +108,12 @@ function ChartsMonthScreen(props) {
 
     // Stocker les résultats dans un états qui seront exploiter par le PieChart
     setPieData([
-      {name: 'angry',score: 1, count: score1, color:"#CD6133", legendFontColor: "#CD6133", legendFontSize: 15}, 
-      {name: 'sad', score: 2, count: score2, color:"#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15}, 
-      {name: 'meh', score: 3, count: score3, color:"#F0D231", legendFontColor: "#F0D231", legendFontSize: 15}, 
-      {name: 'happy', score: 4, count: score4, color:"#44B79D", legendFontColor: "#44B79D", legendFontSize: 15}, 
-      {name: 'super', score: 5, count: score5, color:"#54857F", legendFontColor: "#54857F", legendFontSize: 15}]
-      );
+      { name: 'angry', score: 1, count: score1, color: "#CD6133", legendFontColor: "#CD6133", legendFontSize: 15 },
+      { name: 'sad', score: 2, count: score2, color: "#F0A07E", legendFontColor: "#F0A07E", legendFontSize: 15 },
+      { name: 'meh', score: 3, count: score3, color: "#F0D231", legendFontColor: "#F0D231", legendFontSize: 15 },
+      { name: 'happy', score: 4, count: score4, color: "#44B79D", legendFontColor: "#44B79D", legendFontSize: 15 },
+      { name: 'super', score: 5, count: score5, color: "#54857F", legendFontColor: "#54857F", legendFontSize: 15 }]
+    );
   }
 
 
@@ -131,10 +132,10 @@ function ChartsMonthScreen(props) {
 
   // Calendrier
   LocaleConfig.locales['fr'] = {
-    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-    dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+    monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+    dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
     today: 'Aujourd\'hui'
   };
   LocaleConfig.defaultLocale = 'fr';
@@ -143,36 +144,28 @@ function ChartsMonthScreen(props) {
   return (
     <ScrollView paddingBottom={100}>
       <Text style={styles.paragraph}>ChartsMonthScreen</Text>
-      <Button
-        title="WEEK"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(1)
-        }}
-      />
-      <Button
-        title="MONTH"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(2)
-        }}
-      />
-      <Button
-        title="YEAR"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(3)
-        }}
+
+      
+      <SwitchSelector
+          options= {[
+            { label: "Semaine", value: 1},
+            { label: "Mois", value: 2},
+            { label: "Année", value: 3}]}
+          textColor="#009788" //
+          selectedColor="white"
+          buttonColor="#009788"
+          borderColor="#009788"
+          hasPadding
+          initial={1}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          onPress={value => props.changeStep(value)}
       />
 
-<Card borderRadius={50}>
-  <Card.Title>Top des activités du mois</Card.Title>
-  <Card.Divider/>
+      <Card borderRadius={50}>
+        <Card.Title>Top des activités du mois</Card.Title>
+        <Card.Divider />
 
-  <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row" }}>
           <Image
         source={require('../assets/podium_moodz.png')} style={{width: '60%',
           height: '200%',
@@ -335,29 +328,29 @@ const styles = StyleSheet.create({
   },
 });
 
-  const chartConfig = {
-    backgroundGradientFrom: "#ffffff",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#ffffff",
-    backgroundGradientToOpacity: 0,
-  
-    decimalPlaces: 0, // optional
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    labelColor: (opacity = 1) => `#44B79D`,
-    style: {
-      borderRadius: 16
-    },
-    propsForDots: {
-      r: "2",
-      strokeWidth: "4",
-      stroke: "#44B79D"
-    }
+const chartConfig = {
+  backgroundGradientFrom: "#ffffff",
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: "#ffffff",
+  backgroundGradientToOpacity: 0,
+
+  decimalPlaces: 0, // optional
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  labelColor: (opacity = 1) => `#44B79D`,
+  style: {
+    borderRadius: 16
+  },
+  propsForDots: {
+    r: "2",
+    strokeWidth: "4",
+    stroke: "#44B79D"
   }
-  
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
-      dispatch({ type: "change-step", newstep: newstep});
+      dispatch({ type: "change-step", newstep: newstep });
     },
   };
 };
