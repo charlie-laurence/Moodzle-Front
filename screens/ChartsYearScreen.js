@@ -29,19 +29,19 @@ function ChartsYearScreen(props) {
 
   var headTable = [' ', 'j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'];
 
-  // Initialise des tables vides pour chaque mois
-  var jan = []
-  var feb = []
-  var mar = []
-  var apr = []
-  var may = []
-  var jun = []
-  var jul = []
-  var aug = []
-  var sep = []
-  var oct = []
-  var nov = []
-  var dec = []
+  // Initialise des tables pour chaque mois avec l'entête en élément à l'index 0
+  var jan = ['J']
+  var feb = ['F']
+  var mar = ['M']
+  var apr = ['A']
+  var may = ['M']
+  var jun = ['J']
+  var jul = ['J']
+  var aug = ['A']
+  var sep = ['S']
+  var oct = ['O']
+  var nov = ['N']
+  var dec = ['D']
 
   /*  initiateArray : initialise des 12 Tables (une par mois) avec un cercle gris par jour 
       Prend en variable un Boolean qui est True si l'année en cours est bissextile*/
@@ -155,40 +155,40 @@ function ChartsYearScreen(props) {
       */
       switch (month) {
         case 0:
-          jan[day - 1] = moodScoreCircle(moodScore)
+          jan[day] = moodScoreCircle(moodScore)
           break;
         case 1:
-          feb[day - 1] = moodScoreCircle(moodScore)
+          feb[day] = moodScoreCircle(moodScore)
           break;
         case 2:
-          mar[day - 1] = moodScoreCircle(moodScore)
+          mar[day] = moodScoreCircle(moodScore)
           break;
         case 3:
-          apr[day - 1] = moodScoreCircle(moodScore)
+          apr[day] = moodScoreCircle(moodScore)
           break;
         case 4:
-          may[day - 1] = moodScoreCircle(moodScore)
+          may[day] = moodScoreCircle(moodScore)
           break;
         case 5:
-          jun[day - 1] = moodScoreCircle(moodScore)
+          jun[day] = moodScoreCircle(moodScore)
           break;
         case 6:
-          jul[day - 1] = moodScoreCircle(moodScore)
+          jul[day] = moodScoreCircle(moodScore)
           break;
         case 7:
-          aug[day - 1] = moodScoreCircle(moodScore)
+          aug[day] = moodScoreCircle(moodScore)
           break;
         case 8:
-          sep[day - 1] = moodScoreCircle(moodScore)
+          sep[day] = moodScoreCircle(moodScore)
           break;
         case 9:
-          oct[day - 1] = moodScoreCircle(moodScore)
+          oct[day] = moodScoreCircle(moodScore)
           break;
         case 10:
-          nov[day - 1] = moodScoreCircle(moodScore)
+          nov[day] = moodScoreCircle(moodScore)
           break;
         case 11:
-          dec[day - 1] = moodScoreCircle(moodScore)
+          dec[day] = moodScoreCircle(moodScore)
           break;
       }
     }
@@ -214,7 +214,7 @@ function ChartsYearScreen(props) {
   }
 
   // dataTable qui contient les variables d'états pour chaque mois (1 mois = 1 colonne)
-  var tableTitle = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+  var tableTitle = [' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
 
   return (
     <ScrollView>
@@ -247,7 +247,7 @@ function ChartsYearScreen(props) {
           </TableWrapper>
 
           <TableWrapper style={{ flex: 1 }}>
-            <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center' }} />
+            <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center', justifyContent: 'center' }} />
           </TableWrapper>
         </View>
       </Table>

@@ -5,9 +5,9 @@ import {
   PieChart, // répartition mood (demi donut)
 } from "react-native-chart-kit";
 import { connect } from "react-redux";
-import { FontAwesome5, FontAwesomeIcon } from "@expo/vector-icons";
 import SwitchSelector from "react-native-switch-selector";
-   
+import { Card, ListItem, Icon, Row } from 'react-native-elements'
+
 
 function ChartsWeekScreen(props) { 
 
@@ -39,18 +39,13 @@ var fetchData = async() => {
     if (dataHistory[i] === undefined || dataHistory[i].mood_score === undefined) 
     {
       setterdataChart.push(1)
-      // dataHistory[i].mood_score = 0
     } else {
       setterdataChart.push(parseInt(dataHistory[i].mood_score))
   }}
-  // console.log('i', setterdataChart)
   setDataChart(setterdataChart)
-
 
  // Traitement des données pour le Pie Chart
  pieDataGenerator(dataHistory)
-//  lineGenerator(dataHistory)
-
 }
   
 /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
@@ -111,51 +106,53 @@ var pieDataGenerator = (dataset) => {
           onPress={value => props.changeStep(value)}
         />
        
-       <PieChart
-        data={pieData}
-        width={Dimensions.get("window").width}
-        height={220}
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientFromOpacity: 0,
-          backgroundGradientTo: "#08130D",
-          backgroundGradientToOpacity: 0,
-          strokeWidth: 2,
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          barPercentage: 0.5,
-        }}
-        accessor={"count"}
-        backgroundColor={"transparent"}
-        center={[10, 0]}
-        // absolute
-        hasLegend={false}  
-        alignItems={'center'}
-      />
-       
-       <Text>Variation des humeurs de la semaine</Text>
+       <Card borderRadius={50}>
+        <Card.Title>Répartition des humeurs de la semaine</Card.Title>
+        <Card.Divider />
+          <PieChart
+            data={pieData}
+            width={Dimensions.get("window").width}
+            height={220}
+            chartConfig={{
+              backgroundGradientFrom: "#1E2923",
+              backgroundGradientFromOpacity: 0,
+              backgroundGradientTo: "#08130D",
+              backgroundGradientToOpacity: 0,
+              strokeWidth: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              barPercentage: 0.5,
+            }}
+            accessor={"count"}
+            backgroundColor={"transparent"}
+            center={[10, 0]}
+            // absolute
+            hasLegend={false}  
+            alignItems={'center'}
+          />
+       </Card>
 
-      <LineChart
-        data={{
-        labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-        datasets: [
-          {
-            data: dataChart
-          }
-        ]
-        }}
+       <Card borderRadius={50}>
+        <Card.Title>Variation des humeurs de la semaine</Card.Title>
+        <Card.Divider />
+        <LineChart
+          data={{
+            labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+            datasets: [{data: dataChart}]
+          }}
           width={Dimensions.get("window").width} 
           height={220}
-          // yAxisLabel="$"
-          // yAxisSuffix="k"
+            // yAxisLabel="$"
+            // yAxisSuffix="k"
           yAxisInterval={7} // optional, defaults to 1
           chartConfig={chartConfig}
           bezier
           style={{
             marginVertical: 8,
             borderRadius: 16}}
-            
-            />
+        />
+      </Card>
+
     </ScrollView>
   );
 }
