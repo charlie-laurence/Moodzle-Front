@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import { Button, Input, Overlay } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { _IP_OLIV , _IP_CAPSULE} from "../../statics/ip";
+import { _IP_OLIV, _IP_CAPSULE } from "../../statics/ip";
 import { connect } from "react-redux";
 
 const ModalNewActivity = ({
@@ -29,8 +29,7 @@ const ModalNewActivity = ({
       });
       const result = await rawResult.json();
       console.log(result);
-      //envoi en local storage --> besoin d'une écoute sur le localstorage ou etat tampon pour mettre à jour la liste affichée
-
+      //envoi en local storage
       let localList = await AsyncStorage.getItem("moodzle-activities");
       localList = JSON.parse(localList);
       if (localList.length > 0) {
@@ -57,34 +56,39 @@ const ModalNewActivity = ({
       isVisible={visible}
       onBackdropPress={toggleOverlay}
       overlayStyle={styles.overlay}
-    >
-      <Input
-        placeholder="Activité..."
-        containerStyle={styles.inputBox}
-        inputStyle={{ paddingTop: 10 }}
-        value={newActivity}
-        onChangeText={(value) => setNewActivity(value)}
-      />
-      <Picker
-        selectedValue={selectedCategory}
-        onValueChange={(itemValue, itemIndex) => setSelectedCategory(itemValue)}
-      >
-        <Picker.Item label="Sport" value="sport" />
-        <Picker.Item label="Social" value="social" />
-        <Picker.Item label="Culture" value="culture" />
-      </Picker>
-      <Button
-        buttonStyle={{
-          backgroundColor: "#5B63AE",
-          width: "90%",
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-        title={"Ajouter"}
-        titleStyle={{ color: "#fff" }}
-        onPress={() => handleValidatePress()}
-      />
-    </Overlay>
+      children={
+        <View>
+          <Input
+            placeholder="Activité..."
+            containerStyle={styles.inputBox}
+            inputStyle={{ paddingTop: 10 }}
+            value={newActivity}
+            onChangeText={(value) => setNewActivity(value)}
+          />
+          <Picker
+            selectedValue={selectedCategory}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedCategory(itemValue)
+            }
+          >
+            <Picker.Item label="Sport" value="sport" />
+            <Picker.Item label="Social" value="social" />
+            <Picker.Item label="Culture" value="culture" />
+          </Picker>
+          <Button
+            buttonStyle={{
+              backgroundColor: "#5B63AE",
+              width: "90%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+            title={"Ajouter"}
+            titleStyle={{ color: "#fff" }}
+            onPress={() => handleValidatePress()}
+          />
+        </View>
+      }
+    ></Overlay>
   );
 };
 
