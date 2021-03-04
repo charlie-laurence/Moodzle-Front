@@ -1,7 +1,25 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import { connect } from "react-redux";
 
-export default function ReactionScreen(props) {
+
+function ReactionScreen(props) {
+
+const findFunFact = async () => {
+  const dataFunFact = await fetch("http://172.17.1.15:3000/fun-fact", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `usernameFromFront=${props.pseudo}&token=${props.token}`,
+  });
+  const body = await dataFunFact.json();
+}
+findFunFact();
+
+if(body.result === true){
+  console.log("bodyFunFacts :", body)
+}
+
+
   return (
     <View>
         <Text style={styles.paragraph}>ReactionScreen</Text>
@@ -33,3 +51,12 @@ const styles = StyleSheet.create({
     marginTop: 70
   },
 });
+
+function mapStateToProps(state) {
+  return { pseudo: state.pseudo, mood: state.mood, token: state.token };
+}
+
+export default connect(
+  mapStateToProps, null
+  )
+  (ReactionScreen);

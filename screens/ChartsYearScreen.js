@@ -49,7 +49,7 @@ var setterdataChart = []
          return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
     }
        
-console.log(days_of_a_year(current_year))
+// console.log(days_of_a_year(current_year))
 
 
 var headTable = [' ','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'] ;
