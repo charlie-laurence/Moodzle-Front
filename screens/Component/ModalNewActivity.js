@@ -28,21 +28,21 @@ const ModalNewActivity = ({
         body: JSON.stringify(newActivityToBeAdded),
       });
       const result = await rawResult.json();
-      console.log(result);
       //envoi en local storage
       let localList = await AsyncStorage.getItem("moodzle-activities");
       localList = JSON.parse(localList);
       if (localList.length > 0) {
         const filteredLocal = localList.filter(
-          (activity) => activity.name === newActivity
+          (activity) => activity.name === newActivityToBeAdded.name
         );
-        filteredLocal.length === 0 &&
-          (await AsyncStorage.setItem(
+        if (filteredLocal.length === 0) {
+          await AsyncStorage.setItem(
             "moodzle-activities",
             JSON.stringify([...localList, newActivityToBeAdded])
-          ));
+          );
+          updateLocalList(newActivityToBeAdded);
+        }
       }
-      updateLocalList(newActivityToBeAdded);
       selectActivity(newActivityToBeAdded);
       setNewActivity("");
       toggleOverlay();
@@ -77,7 +77,7 @@ const ModalNewActivity = ({
           </Picker>
           <Button
             buttonStyle={{
-              backgroundColor: "#5B63AE",
+              backgroundColor: "#DF8F4A",
               width: "90%",
               marginLeft: "auto",
               marginRight: "auto",
