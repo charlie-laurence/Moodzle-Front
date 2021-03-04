@@ -53,7 +53,7 @@ function ChartsYearScreen(props) {
         Ajoute une icone FontAwesome pour chaque jour du mois   
         Enregistre le résultat dans les variables de mois correspondantes 
       */
-      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" />
+      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" iconStyle={}/>
       // var emptyIcon = ''
 
       switch (i) {
