@@ -145,17 +145,18 @@ function ChartsMonthScreen(props) {
     <ScrollView>
       <Text style={styles.paragraph}>ChartsMonthScreen</Text>
       <SwitchSelector
-        options={[
-          { label: "Hebdo", value: 1 },
-          { label: "Mois", value: 2 },
-          { label: "Année", value: 3 }]}
-        textColor="#009788" //
-        selectedColor="white"
-        buttonColor="#009788"
-        borderColor="#009788"
-        hasPadding
-        initial={1}
-        onPress={value => props.changeStep(value)}
+          options= {[
+            { label: "Semaine", value: 1},
+            { label: "Mois", value: 2},
+            { label: "Année", value: 3}]}
+          textColor="#009788" //
+          selectedColor="white"
+          buttonColor="#009788"
+          borderColor="#009788"
+          hasPadding
+          initial={1}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          onPress={value => props.changeStep(value)}
       />
 
       <Card borderRadius={50}>

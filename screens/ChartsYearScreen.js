@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import { connect } from "react-redux";
 
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Table, TableWrapper, Col, Cols } from 'react-native-table-component';
 import { FontAwesome } from '@expo/vector-icons';
+import { Card } from 'react-native-elements'
 
 import SwitchSelector from "react-native-switch-selector";
 
@@ -26,8 +27,6 @@ function ChartsYearScreen(props) {
     fetchData()
 
   }, []);
-
-  var headTable = [' ', 'j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'];
 
   // Initialise des tables pour chaque mois avec l'entête en élément à l'index 0
   var jan = ['J']
@@ -53,7 +52,7 @@ function ChartsYearScreen(props) {
         Ajoute une icone FontAwesome pour chaque jour du mois   
         Enregistre le résultat dans les variables de mois correspondantes 
       */
-      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" iconStyle={}/>
+      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" style={{ alignSelf: 'center'}}/>
       // var emptyIcon = ''
 
       switch (i) {
@@ -121,7 +120,8 @@ function ChartsYearScreen(props) {
           };
           break;
       }
-  }}
+    }
+  }
 
   // Fonction qui vérifie si une année est bissextille
   function isLeapYear(year) {
@@ -192,7 +192,7 @@ function ChartsYearScreen(props) {
           break;
       }
     }
-    
+
     // Modifie la variable d'état dataDisplay qui récupère tous les tableaux concernés 
     setDataDisplay([jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec])
   }
@@ -201,19 +201,19 @@ function ChartsYearScreen(props) {
   const moodScoreCircle = (score) => {
     switch (score) {
       case 1:
-        return <FontAwesome color="#CD6133" name="circle" size={10} />
+        return <FontAwesome color="#CD6133" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 2:
-        return <FontAwesome color="#F0A07E" name="circle" size={10} />
+        return <FontAwesome color="#F0A07E" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 3:
-        return <FontAwesome color="#F0D231" name="circle" size={10} />
+        return <FontAwesome color="#F0D231" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 4:
-        return <FontAwesome color="#44B79D" name="circle" size={10} />
+        return <FontAwesome color="#44B79D" name="circle" size={10} style={{ alignSelf: 'center' }} />
       case 5:
-        return <FontAwesome color="#54857F" name="circle" size={10} />
+        return <FontAwesome color="#54857F" name="circle" size={10} style={{ alignSelf: 'center' }} />
     }
   }
 
-  // dataTable qui contient les variables d'états pour chaque mois (1 mois = 1 colonne)
+  // Table qui contient les labels des jours
   var tableTitle = [' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
 
   return (
@@ -224,7 +224,7 @@ function ChartsYearScreen(props) {
 
       <SwitchSelector
           options= {[
-            { label: "Hebdo", value: 1},
+            { label: "Semaine", value: 1},
             { label: "Mois", value: 2},
             { label: "Année", value: 3}]}
           textColor="#009788" //
@@ -233,24 +233,24 @@ function ChartsYearScreen(props) {
           borderColor="#009788"
           hasPadding
           initial={2}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
           onPress={value => props.changeStep(value)}
         />
 
-      <Table>
-        <Row data={headTable} height={('auto')} style={styles.HeadStyle} textStyle={{ textAlign: 'center', justifyContent: 'flex-start' }} />
-      </Table>
+      <Card borderRadius={30}>
+        <Table>
+          <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00' }}>
+            <TableWrapper style={{ flexDirection: 'row' }}>
+              <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
+            </TableWrapper>
 
-      <Table>
-        <View style={{ flexDirection: 'row' }}>
-          <TableWrapper style={{ flexDirection: 'row' }}>
-            <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
-          </TableWrapper>
+            <TableWrapper style={{ flex: 1, backgroundColor: '#11ffee00' }}>
+              <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center' }} />
+            </TableWrapper>
+          </View>
+        </Table>
+      </Card>
 
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center', justifyContent: 'center' }} />
-          </TableWrapper>
-        </View>
-      </Table>
     </ScrollView>
   );
 }

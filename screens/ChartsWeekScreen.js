@@ -94,7 +94,7 @@ var pieDataGenerator = (dataset) => {
         
         <SwitchSelector
           options= {[
-            { label: "Hebdo", value: 1},
+            { label: "Semaine", value: 1},
             { label: "Mois", value: 2},
             { label: "Année", value: 3}]}
           textColor="#009788" //
@@ -103,6 +103,7 @@ var pieDataGenerator = (dataset) => {
           borderColor="#009788"
           hasPadding
           initial={0}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
           onPress={value => props.changeStep(value)}
         />
        
