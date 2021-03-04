@@ -133,6 +133,8 @@ var pieDataGenerator = (dataset) => {
         alignItems={'center'}
       />
        
+       <Text>Variation des humeurs de la semaine</Text>
+
       <LineChart
         data={{
         labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],

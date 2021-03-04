@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button, Dimensions, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, Button, Dimensions, ScrollView, Image, FlatList } from "react-native";
 import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
-import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { Card, ListItem, Icon, Row } from 'react-native-elements'
 import SwitchSelector from "react-native-switch-selector";
 
 
@@ -157,103 +158,149 @@ function ChartsMonthScreen(props) {
         onPress={value => props.changeStep(value)}
       />
 
-      <Image
-        source={require('../assets/podium_moodz.jpg')}
-      />
+      <Card borderRadius={50}>
+        <Card.Title>Top des activités du mois</Card.Title>
+        <Card.Divider />
 
-      <Calendar
-        style={{
-          height: 220
-        }}
-        theme={{
-          calendarBackground: '#11ffee00'
-        }}
-        // Initially visible month. Default = Date()
-        current={startDate}
-        // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-        minDate={firstDay}
-        // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-        maxDate={lastDay}
-        // Handler which gets executed on day press. Default = undefined
-        onDayPress={(day) => { console.log('selected day', day) }}
-        // Handler which gets executed on day long press. Default = undefined
-        onDayLongPress={(day) => { console.log('selected day', day) }}
-        // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-        monthFormat={'yyyy MM'}
-        // Handler which gets executed when visible month changes in calendar. Default = undefined
-        onMonthChange={(month) => { console.log('month changed', month) }}
-        // Hide month navigation arrows. Default = false
-        hideArrows={true}
-        // Replace default arrows with custom ones (direction can be 'left' or 'right')
-        renderArrow={(direction) => (<Arrow />)}
-        // Do not show days of other months in month page. Default = false
-        hideExtraDays={true}
-        // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-        // day from another month that is visible in calendar page. Default = false
-        disableMonthChange={true}
-        // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-        firstDay={1}
-        // Hide day names. Default = false
-        hideDayNames={true}
-        // Show week numbers to the left. Default = false
-        showWeekNumbers={true}
-        // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-        onPressArrowLeft={subtractMonth => subtractMonth()}
-        // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-        onPressArrowRight={addMonth => addMonth()}
-        // Disable left arrow. Default = false
-        disableArrowLeft={true}
-        // Disable right arrow. Default = false
-        disableArrowRight={true}
-        // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-        disableAllTouchEventsForDisabledDays={true}
-        // Replace default month and year title with custom one. the function receive a date as parameter.
-        renderHeader={(date) => {/*Return JSX*/ }}
-        // Enable the option to swipe between months. Default = false
-        markedDates={calendarData}
-        // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-        markingType={'period'}
+        <View style={{ flexDirection: "row" }}>
+          <Image
+            source={require('../assets/podium_moodz.png')} style={{
+              width: '60%',
+              height: '200%',
+              resizeMode: 'stretch', paddingRight: 0, marginLeft: 0
+            }}
+          />
+          <Text>coucou2</Text>
+          <Text>coucou1</Text>
+          <Text>coucou3</Text>
 
-      />
+          {/* <Image
+        source={require('../assets/moodz.png')} style={{width: '50%',
+          height: '50%',
+          resizeMode: 'stretch'}}
+      /> */}
+        </View>
+      </Card>
 
-      <PieChart
-        data={pieData}
-        width={Dimensions.get("window").width}
-        height={220}
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientFromOpacity: 0,
-          backgroundGradientTo: "#08130D",
-          backgroundGradientToOpacity: 0,
-          strokeWidth: 2,
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          barPercentage: 0.5,
-        }}
-        accessor={"count"}
-        backgroundColor={"transparent"}
-        center={[10, 0]}
-        absolute
-        hasLegend={true}
-      />
+      <Card borderRadius={50}>
+        <Card.Title>Répartition des humeurs du mois par jour</Card.Title>
+        <Card.Divider />
 
-      <LineChart
-        data={{
-          labels: lineLabel,
-          datasets: [{ data: lineData }]
-        }}
-        width={Dimensions.get("window").width}
-        height={220}
-        // yAxisLabel="$"
-        // yAxisSuffix="k"
-        yAxisInterval={31} // optional, defaults to 1
-        chartConfig={chartConfig}
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 16
-        }}
-      />
+        <Calendar
+          style={{
+            height: 220
+          }}
+          theme={{
+            calendarBackground: '#11ffee00'
+          }}
+          // Initially visible month. Default = Date()
+          current={startDate}
+          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+          minDate={firstDay}
+          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
+          maxDate={lastDay}
+          // Handler which gets executed on day press. Default = undefined
+          onDayPress={(day) => { console.log('selected day', day) }}
+          // Handler which gets executed on day long press. Default = undefined
+          onDayLongPress={(day) => { console.log('selected day', day) }}
+          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+          monthFormat={'yyyy MM'}
+          // Handler which gets executed when visible month changes in calendar. Default = undefined
+          onMonthChange={(month) => { console.log('month changed', month) }}
+          // Hide month navigation arrows. Default = false
+          hideArrows={true}
+          // Replace default arrows with custom ones (direction can be 'left' or 'right')
+          renderArrow={(direction) => (<Arrow />)}
+          // Do not show days of other months in month page. Default = false
+          hideExtraDays={true}
+          // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+          // day from another month that is visible in calendar page. Default = false
+          disableMonthChange={true}
+          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+          firstDay={1}
+          // Hide day names. Default = false
+          hideDayNames={true}
+          // Show week numbers to the left. Default = false
+          showWeekNumbers={true}
+          // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+          onPressArrowLeft={subtractMonth => subtractMonth()}
+          // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+          onPressArrowRight={addMonth => addMonth()}
+          // Disable left arrow. Default = false
+          disableArrowLeft={true}
+          // Disable right arrow. Default = false
+          disableArrowRight={true}
+          // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
+          disableAllTouchEventsForDisabledDays={true}
+          // Replace default month and year title with custom one. the function receive a date as parameter.
+          renderHeader={(date) => {/*Return JSX*/ }}
+          // Enable the option to swipe between months. Default = false
+          markedDates={calendarData}
+          // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+          markingType={'period'}
+
+        />
+      </Card>
+
+      <Card borderRadius={50}>
+        <Card.Title>Répartition globale des humeurs du mois</Card.Title>
+        <Card.Divider />
+        <PieChart
+          data={pieData}
+          width={Dimensions.get("window").width}
+          height={220}
+          chartConfig={{
+            backgroundGradientFrom: "#1E2923",
+            backgroundGradientFromOpacity: 0,
+            backgroundGradientTo: "#08130D",
+            backgroundGradientToOpacity: 0,
+            strokeWidth: 2,
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            barPercentage: 0.5,
+          }}
+          accessor={"count"}
+          backgroundColor={"transparent"}
+          center={[10, 0]}
+          absolute
+          hasLegend={true}
+        />
+      </Card>
+
+      <Card borderRadius={50}>
+        <LineChart
+
+          data={{
+            labels: lineLabel,
+            datasets: [{ data: lineData }]
+          }}
+          width={Dimensions.get("window").width}
+          height={220}
+          // yAxisLabel="$"
+          // yAxisSuffix="k"
+          yAxisInterval={31} // optional, defaults to 1
+          chartConfig={chartConfig}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16
+          }}
+          width={Dimensions.get("window").width}
+          height={220}
+          // yAxisLabel="$"
+          // yAxisSuffix="k"
+          yAxisInterval={31} // optional, defaults to 1
+          chartConfig={chartConfig}
+          bezier
+          style={{
+            marginTop: 40,
+            marginLeft: 0,
+            marginRight: 20,
+            marginVertical: 8,
+            borderRadius: 16
+          }}
+        />
+      </Card>
 
     </ScrollView>
   );

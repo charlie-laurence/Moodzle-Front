@@ -38,8 +38,7 @@
     "react-native-table-component": "^1.2.1",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.2",
-    "redux": "^4.0.5",
-    "@typescript-eslint/eslint-plugin": "typescript-eslint/parserbabel-eslinteslinteslint-config-airbnbeslint-plugin-importeslint-plugin-jsx-a11yeslint-plugin-reacttypescript"
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

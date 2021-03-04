@@ -53,7 +53,7 @@ function ChartsYearScreen(props) {
         Ajoute une icone FontAwesome pour chaque jour du mois   
         Enregistre le résultat dans les variables de mois correspondantes 
       */
-      var emptyIcon = <FontAwesome name="circle" size={5} color="#F2F2F2" />
+      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" />
       // var emptyIcon = ''
 
       switch (i) {
@@ -131,7 +131,6 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-
     var rawData = await fetch("http://172.17.1.144:3000/history", {
       method: 'POST',
       headers: {
@@ -202,15 +201,15 @@ function ChartsYearScreen(props) {
   const moodScoreCircle = (score) => {
     switch (score) {
       case 1:
-        return <FontAwesome color="#CD6133" name="circle" size={5} />
+        return <FontAwesome color="#CD6133" name="circle" size={10} />
       case 2:
-        return <FontAwesome color="#F0A07E" name="circle" size={5} />
+        return <FontAwesome color="#F0A07E" name="circle" size={10} />
       case 3:
-        return <FontAwesome color="#F0D231" name="circle" size={5} />
+        return <FontAwesome color="#F0D231" name="circle" size={10} />
       case 4:
-        return <FontAwesome color="#44B79D" name="circle" size={5} />
+        return <FontAwesome color="#44B79D" name="circle" size={10} />
       case 5:
-        return <FontAwesome color="#54857F" name="circle" size={5} />
+        return <FontAwesome color="#54857F" name="circle" size={10} />
     }
   }
 
