@@ -12,13 +12,13 @@ import { FontAwesome5 } from "@expo/vector-icons";
 function ChartsMonthScreen(props) {
 
   const [pieData, setPieData] = useState([])
-  const [startDate, setStartDate] = useState('2020-05-20')
+  const [startDate, setStartDate] = useState('2020-02-20')
   const [lineLabel, setLineLabel] = useState([''])
   const [lineData, setLineData] = useState([0])
   const [firstDay, setFirstDay] = useState()
   const [lastDay, setLastDay] = useState()
   const [calendarData, setCalendarData] = useState({})
-  const [topActivities, setTopActivities] = useState([])
+  const [topActivities, setTopActivities] = useState(['', '', ''])
 
 
   /* Hook d'effet à l'ouverture de la page pour charger les données*/
@@ -30,7 +30,7 @@ function ChartsMonthScreen(props) {
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
-    var dataRaw = await fetch('http://172.17.1.159:3000/history', {
+    var dataRaw = await fetch('http://172.17.1.144:3000/history', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `startdate=${startDate}&type=month`
@@ -40,38 +40,34 @@ function ChartsMonthScreen(props) {
     var dataHistory = data.history
 
 
- // Top activités
+    // Top activités
 
- // Récupération du tableau d'activités
- var allMonthActivities  = []
- var eachMonthActivity = []
+    // Récupération du tableau d'activités
+    var allMonthActivities = []
+    var eachMonthActivity = []
 
- for (var i = 0 ; i < dataHistory.length;i++){
-allMonthActivities.push(dataHistory[i].activity)
- }
+    for (var i = 0; i < dataHistory.length; i++) {
+      allMonthActivities.push(dataHistory[i].activity)
+    }
 
-// Aller récupérer les activités de chaque jour (certains ayant plusieurs activités)
-for (var j = 0 ; j < allMonthActivities.length;j++){
-  for (var i = 0; i < allMonthActivities[j].length; i++) {
-  eachMonthActivity.push(allMonthActivities[j][i].name)
-}}
+    // Aller récupérer les activités de chaque jour (certains ayant plusieurs activités)
+    for (var j = 0; j < allMonthActivities.length; j++) {
+      for (var i = 0; i < allMonthActivities[j].length; i++) {
+        eachMonthActivity.push(allMonthActivities[j][i].name)
+      }
+    }
 
-// Traitement pour connaitre les 3 activités les + sélectionnées
+    // Traitement pour connaitre les 3 activités les + sélectionnées
+    var map = eachMonthActivity.reduce(function (p, c) {
+      p[c] = (p[c] || 0) + 1;
+      return p;
+    }, {});
 
+    var top5Activities = Object.keys(map).sort(function (a, b) {
+      return map[b] - map[a];
+    });
 
-var map = eachMonthActivity.reduce(function(p, c) {
-  p[c] = (p[c] || 0) + 1;
-  return p;
-}, {});
-
-var top5Activities = Object.keys(map).sort(function(a, b) {
-  return map[b] - map[a];
-});
-
-setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
-
-
-
+    setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
 
 
     // Traitement des données pour le Pie Chart
@@ -89,7 +85,7 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
 
     for (let i = 0; i < dataHistory.length; i++) {
       var markColor = ''
-      var dateConvertToString = new Date(dataHistory[i].date).toLocaleDateString('en-CA')
+      var dateConvertToString = new Date(dataHistory[i].date).toISOString().substring(0, 10)
       switch (dataHistory[i].mood_score) {
         case 1:
           markColor = "#CD6133";
@@ -107,8 +103,10 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
           markColor = "#54857F";
           break;
       }
-      markedSetDate[dateConvertToString] = { selected: true, color: markColor }
+      markedSetDate[dateConvertToString] = { selected: true, selectedColor: markColor }
     }
+    // console.log(markedSetDate)
+    console.log(markedSetDate)
     setCalendarData(markedSetDate)
 
   }
@@ -161,7 +159,7 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
 
     for (let i = 1; i < dataset.length; i++) {
       (i % 5) === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push('') //Modulo 5 pour avoir des labels tous les 5 jours
-      
+
       lineDataArray.push(parseInt(dataset[i].mood_score))
     }
     setLineLabel(lineLabelsArray)
@@ -180,179 +178,176 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
 
 
 
- 
+
 
   return (
     <ScrollView paddingBottom={100}>
 
-      
+
       <SwitchSelector
-          options= {[
-            { label: "Semaine", value: 1},
-            { label: "Mois", value: 2},
-            { label: "Année", value: 3}]}
-          textColor="#009788" //
-          selectedColor="white"
-          buttonColor="#009788"
-          borderColor="#009788"
-          hasPadding
-          initial={1}
-          style = {{width: 200, alignSelf: 'flex-end', marginTop: 40,marginRight:17 }}
-          onPress={value => props.changeStep(value)}
+        options={[
+          { label: "Semaine", value: 1 },
+          { label: "Mois", value: 2 },
+          { label: "Année", value: 3 }]}
+        textColor="#009788" //
+        selectedColor="white"
+        buttonColor="#009788"
+        borderColor="#009788"
+        hasPadding
+        initial={1}
+        style={{ width: 200, alignSelf: 'flex-end', marginTop: 40, marginRight: 17 }}
+        onPress={value => props.changeStep(value)}
       />
 
-      <Card borderRadius={50} containerStyle={{height: 300}} >
-        <Card.Title style={{color:'#57706D'}}>Top des activités du mois</Card.Title>
+      <Card borderRadius={50} containerStyle={{ height: 300 }} >
+        <Card.Title style={{ color: '#57706D' }}>Top des activités du mois</Card.Title>
         <Card.Divider />
 
-        <View style={{ flexDirection: "row", paddingBottom:0,
-      marginBottom:0, flex:1 }}>
+        <View style={{
+          flexDirection: "row", paddingBottom: 0,
+          marginBottom: 0, flex: 1
+        }}>
           <Image
-        source={require('../assets/podium_moodzle_moodz.png')} style={{width: 220,
-          height: 220,
-          resizeMode: 'stretch', 
-          paddingRight: 0, 
-          marginLeft: 20,
-        marginTop: 0,
-      paddingTop: 0}}
-      />
-    
-      <View style={{marginLeft: -50, width: 100, marginTop: 10}} >
-       <Text style={{color:'#57706D'}}><FontAwesome name="circle" size={10} color="#5B63AE" iconStyle={{marginRight:10}} />{` ${topActivities[0]}`}</Text>
-       <Text style={{color:'#57706D'}}><FontAwesome name="circle" size={10} color="#44B79D" style={{ alignSelf: 'center', marginRight:50}}/>{` ${topActivities[1]}`}</Text>
-       <Text style={{color:'#57706D'}}><FontAwesome name="circle" size={10} color="#df8f4a" style={{ alignSelf: 'center', marginRight:50}}/>{` ${topActivities[2]}`}</Text>
-       </View>
-       {/* <Card.Image
+            source={require('../assets/podium_moodzle_moodz.png')} style={{
+              width: 220,
+              height: 220,
+              resizeMode: 'stretch',
+              paddingRight: 0,
+              marginLeft: 20,
+              marginTop: 0,
+              paddingTop: 0
+            }}
+          />
+
+          <View style={{ marginLeft: -50, width: 100, marginTop: 10 }} >
+            <Text style={{ color: '#57706D' }}><FontAwesome name="circle" size={10} color="#5B63AE" iconStyle={{ marginRight: 10 }} />{` ${topActivities[0]}`}</Text>
+            <Text style={{ color: '#57706D' }}><FontAwesome name="circle" size={10} color="#44B79D" style={{ alignSelf: 'center', marginRight: 50 }} />{` ${topActivities[1]}`}</Text>
+            <Text style={{ color: '#57706D' }}><FontAwesome name="circle" size={10} color="#df8f4a" style={{ alignSelf: 'center', marginRight: 50 }} />{` ${topActivities[2]}`}</Text>
+          </View>
+          {/* <Card.Image
         source={require('../assets/moodz.png')} style={{width: '50%',
           height: '35%',
           resizeMode: 'stretch',
         paddingBottom:0,
       marginBottom:0}}
       /> */}
-    </View>
-</Card>
+        </View>
+      </Card>
+
+
+      <Card borderRadius={50} style={{ marginBottom: 10 }}>
+        <Card.Title style={{ color: '#57706D' }}>Calendrier des humeurs</Card.Title>
+        <Card.Divider />
+
+        <Calendar
+          style={{
+            height: 200,
+            marginBottom: 50,
+            marginTop: 0,
+            paddingTop: 0
+          }}
+          theme={{
+            calendarBackground: '#11ffee00'
+          }}
+          // Initially visible month. Default = Date()
+          current={startDate}
+          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+          minDate={firstDay}
+          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
+          maxDate={lastDay}
+          // Handler which gets executed on day press. Default = undefined
+          onDayPress={(day) => { console.log('selected day', day) }}
+          // Handler which gets executed on day long press. Default = undefined
+          onDayLongPress={(day) => { console.log('selected day', day) }}
+          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+          monthFormat={'yyyy MM'}
+          // Handler which gets executed when visible month changes in calendar. Default = undefined
+          onMonthChange={(month) => { console.log('month changed', month) }}
+          // Hide month navigation arrows. Default = false
+          hideArrows={true}
+          // Replace default arrows with custom ones (direction can be 'left' or 'right')
+          renderArrow={(direction) => (<Arrow />)}
+          // Do not show days of other months in month page. Default = false
+          hideExtraDays={true}
+          // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+          // day from another month that is visible in calendar page. Default = false
+          disableMonthChange={true}
+          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+          firstDay={1}
+          // Hide day names. Default = false
+          hideDayNames={true}
+          // Show week numbers to the left. Default = false
+          showWeekNumbers={true}
+          // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+          onPressArrowLeft={subtractMonth => subtractMonth()}
+          // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+          onPressArrowRight={addMonth => addMonth()}
+          // Disable left arrow. Default = false
+          disableArrowLeft={true}
+          // Disable right arrow. Default = false
+          disableArrowRight={true}
+          // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
+          disableAllTouchEventsForDisabledDays={true}
+          // Replace default month and year title with custom one. the function receive a date as parameter.
+          renderHeader={(date) => {/*Return JSX*/ }}
+          // Enable the option to swipe between months. Default = false
+          markedDates={calendarData}
+        />
+      </Card>
 
 
 
+      <Card borderRadius={50}>
+        <Card.Title style={{ color: '#57706D' }}>Répartition globale des humeurs du mois</Card.Title>
+        <Card.Divider />
+        <View style={{
+          flexDirection: "row", paddingBottom: 0,
+          marginBottom: 0, flex: 1
+        }}>
+          <PieChart
+            data={pieData}
+            width={Dimensions.get("window").width}
+            height={220}
+            chartConfig={{
+              backgroundGradientFrom: "#1E2923",
+              backgroundGradientFromOpacity: 0,
+              backgroundGradientTo: "#08130D",
+              backgroundGradientToOpacity: 0,
+              strokeWidth: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              barPercentage: 0.5,
+            }}
+            accessor={"count"}
+            backgroundColor={"transparent"}
+            center={[10, 0]}
+            absolute
+            hasLegend={false}
+            alignItems={'center'}
 
+          />
+          <View style={{ marginTop: 32, marginLeft: -130, width: 100 }} >
 
-<Card borderRadius={50} style={{marginBottom:10}}>
-  <Card.Title style={{color:'#57706D'}}>Calendrier des humeurs</Card.Title>
-  <Card.Divider/>
+            <Text style={{ marginBottom: 8 }}><FontAwesome5 name='angry' size={25} color="#CD6133" /></Text>
+            <Text style={{ marginBottom: 8 }}><FontAwesome5 name='sad-cry' size={25} color="#F0A07E" /></Text>
+            <Text style={{ marginBottom: 8 }}><FontAwesome5 name='meh' size={25} color="#F0D231" /></Text>
+            <Text style={{ marginBottom: 8 }}><FontAwesome5 name='grin-squint' size={25} color="#44B79D" /></Text>
+            <Text style={{ marginBottom: 8 }}><FontAwesome5 name='smile-beam' size={25} color="#54857F" /></Text>
+          </View>
+        </View>
+      </Card>
 
+      <Card borderRadius={50} >
 
+        <Card.Title style={{ color: '#57706D' }}>Répartition quotidienne des humeurs</Card.Title>
+        <Card.Divider />
+        <LineChart
 
-
-<Calendar
-  style={{
-    height: 200,
-    marginBottom: 50,
-    marginTop: 0,
-    paddingTop: 0
-  }}
-  theme={{
-    calendarBackground: '#11ffee00'
-  }}
-  // Initially visible month. Default = Date()
-  current={startDate}
-  // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-  minDate={firstDay}
-  // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-  maxDate={lastDay}
-  // Handler which gets executed on day press. Default = undefined
-  onDayPress={(day) => {console.log('selected day', day)}}
-  // Handler which gets executed on day long press. Default = undefined
-  onDayLongPress={(day) => {console.log('selected day', day)}}
-  // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-  monthFormat={'yyyy MM'}
-  // Handler which gets executed when visible month changes in calendar. Default = undefined
-  onMonthChange={(month) => {console.log('month changed', month)}}
-  // Hide month navigation arrows. Default = false
-  hideArrows={true}
-  // Replace default arrows with custom ones (direction can be 'left' or 'right')
-  renderArrow={(direction) => (<Arrow/>)}
-  // Do not show days of other months in month page. Default = false
-  hideExtraDays={true}
-  // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-  // day from another month that is visible in calendar page. Default = false
-  disableMonthChange={true}
-  // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-  firstDay={1}
-  // Hide day names. Default = false
-  hideDayNames={true}
-  // Show week numbers to the left. Default = false
-  showWeekNumbers={true}
-  // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-  onPressArrowLeft={subtractMonth => subtractMonth()}
-  // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-  onPressArrowRight={addMonth => addMonth()}
-  // Disable left arrow. Default = false
-  disableArrowLeft={true}
-  // Disable right arrow. Default = false
-  disableArrowRight={true}
-  // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-  disableAllTouchEventsForDisabledDays={true}
-  // Replace default month and year title with custom one. the function receive a date as parameter.
-  renderHeader={(date) => {/*Return JSX*/}}
-  // Enable the option to swipe between months. Default = false
-  markedDates={calendarData}
-  // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-  markingType={'period'}
-
-/>
-</Card>
-
-
-
-<Card borderRadius={50}>
-  <Card.Title style={{color:'#57706D'}}>Répartition globale des humeurs du mois</Card.Title>
-  <Card.Divider/>
-  <View style={{ flexDirection: "row", paddingBottom:0,
-      marginBottom:0, flex:1 }}>
-      <PieChart
-        data={pieData}
-        width={Dimensions.get("window").width}
-        height={220}
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientFromOpacity: 0,
-          backgroundGradientTo: "#08130D",
-          backgroundGradientToOpacity: 0,
-          strokeWidth: 2,
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          barPercentage: 0.5,
-        }}
-        accessor={"count"}
-        backgroundColor={"transparent"}
-        center={[10, 0]}
-        absolute
-        hasLegend={false}  
-        alignItems={'center'}
-
-      />
-<View style={{marginTop: 32 ,marginLeft: -130, width: 100}} >
-
-<Text style={{marginBottom:8}}><FontAwesome5 name='angry' size={25} color="#CD6133" /></Text>
-<Text style={{marginBottom:8}}><FontAwesome5 name='sad-cry' size={25} color="#F0A07E" /></Text>
-<Text style={{marginBottom:8}}><FontAwesome5 name='meh' size={25} color="#F0D231" /></Text>
-<Text style={{marginBottom:8}}><FontAwesome5 name='grin-squint' size={25} color="#44B79D" /></Text>
-<Text style={{marginBottom:8}}><FontAwesome5 name='smile-beam' size={25} color="#54857F" /></Text>
-       </View>
-</View>
-  </Card>
-
-  <Card borderRadius={50} >
-
-  <Card.Title style={{color:'#57706D'}}>Répartition quotidienne des humeurs</Card.Title>
-  <Card.Divider/>
-      <LineChart
-
-        data={{
-          labels: lineLabel,
-          datasets: [{data: lineData}]
-        }}
-          width={Dimensions.get("window").width -50} 
+          data={{
+            labels: lineLabel,
+            datasets: [{ data: lineData }]
+          }}
+          width={Dimensions.get("window").width - 50}
           height={220}
           // yAxisLabel="$"
           // yAxisSuffix="k"
@@ -360,13 +355,14 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
           chartConfig={chartConfig}
           bezier
           style={{
-          borderRadius: 16,
-          paddingRight: 25,
-          paddingLeft: 0,
-          paddingTop: 10}}
-      />
+            borderRadius: 16,
+            paddingRight: 25,
+            paddingLeft: 0,
+            paddingTop: 10
+          }}
+        />
 
-</Card>
+      </Card>
 
     </ScrollView >
   );

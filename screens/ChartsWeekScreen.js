@@ -11,28 +11,28 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 
 
-function ChartsWeekScreen(props) { 
+function ChartsWeekScreen(props) {
 
-const [dataChart, setDataChart] = useState([0, 0, 0, 0, 0, 0, 0])
-const [startDate, setStartDate] = useState('2020-05-20')
-const [pieData, setPieData] = useState([])
+  const [dataChart, setDataChart] = useState([0, 0, 0, 0, 0, 0, 0])
+  const [startDate, setStartDate] = useState('2020-05-20')
+  const [pieData, setPieData] = useState([])
 
 
-/* Hook d'effet à l'ouverture de la page pour charger les données*/
-useEffect(() => {
-  fetchData()
-}, []);
+  /* Hook d'effet à l'ouverture de la page pour charger les données*/
+  useEffect(() => {
+    fetchData()
+  }, []);
 
-//Récupération du résultat renvoyé par le backend
+  //Récupération du résultat renvoyé par le backend
 
-var fetchData = async() => {
-  var rawDatas = await fetch("http://172.17.1.159:3000/history", {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  },
-  body : `startdate=${startDate}&type=week`
-});
+  var fetchData = async () => {
+    var rawDatas = await fetch("http://172.17.1.144:3000/history", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      body: `startdate=${startDate}&type=week`
+    });
 
   var datas = await rawDatas.json();
   var dataHistory = datas.history
@@ -155,7 +155,7 @@ var pieDataGenerator = (dataset) => {
        </View>
 </View>
       </Card>
-       
+
       <Card borderRadius={50} flex={0} >
 
 <Card.Title style={{color:'#57706D'}}>Répartition quotidienne des humeurs</Card.Title>
@@ -171,22 +171,20 @@ var pieDataGenerator = (dataset) => {
         }}
           width={Dimensions.get("window").width - 50} 
           height={220}
-            // yAxisLabel="$"
-            // yAxisSuffix="k"
+          // yAxisLabel="$"
+          // yAxisSuffix="k"
           yAxisInterval={7} // optional, defaults to 1
           chartConfig={chartConfig}
           bezier
           style={{
             borderRadius: 16,
-          paddingRight: 25,
-          paddingLeft: 0,
-          paddingTop: 10,
-          
-       }}
-            
-            />
+            paddingRight: 25,
+            paddingLeft: 0,
+            paddingTop: 10,
+          }}
+        />
 
-          </Card>
+      </Card>
     </ScrollView>
   );
 }
@@ -228,7 +226,7 @@ const chartConfig = {
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
-      dispatch({ type: "change-step", newstep: newstep});
+      dispatch({ type: "change-step", newstep: newstep });
     },
   };
 };
