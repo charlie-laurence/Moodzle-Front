@@ -26,6 +26,31 @@ function ChartsYearScreen(props) {
 
     // Récupère les données de la BDD + génère les tables pour l'affichage du calendrier
     fetchData()
+<<<<<<< HEAD
+=======
+    }, []);
+
+  
+    // Définir l'année et connaitre le nombre de jour (année bissextile ou non)
+    var today = new Date();
+    var current_year = today.getFullYear()
+    console.log(current_year)
+    
+
+    function days_of_a_year(year) 
+    {      
+      return isLeapYear(year) ? 366 : 365;
+    }
+        function isLeapYear(year) {
+         return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
+    }
+       
+// console.log(days_of_a_year(current_year))
+
+
+var headTable = [' ','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'] ;
+
+>>>>>>> MoodzReaction
 
   }, []);
 
