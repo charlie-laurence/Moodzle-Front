@@ -52,7 +52,7 @@ function ChartsYearScreen(props) {
         Ajoute une icone FontAwesome pour chaque jour du mois   
         Enregistre le résultat dans les variables de mois correspondantes 
       */
-      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" style={{ alignSelf: 'center'}}/>
+      var emptyIcon = <FontAwesome name="circle" size={13} color="#F2F2F2" style={{ alignSelf: 'center'}}/>
       // var emptyIcon = ''
 
       switch (i) {
@@ -131,7 +131,7 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-    var rawData = await fetch("http://192.168.181.153:3000/history", {
+    var rawData = await fetch("http://172.17.1.144:3000/history", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -201,15 +201,15 @@ function ChartsYearScreen(props) {
   const moodScoreCircle = (score) => {
     switch (score) {
       case 1:
-        return <FontAwesome color="#CD6133" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#CD6133" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 2:
-        return <FontAwesome color="#F0A07E" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#F0A07E" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 3:
-        return <FontAwesome color="#F0D231" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#F0D231" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 4:
-        return <FontAwesome color="#44B79D" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#44B79D" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 5:
-        return <FontAwesome color="#54857F" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#54857F" name="circle" size={13} style={{ alignSelf: 'center' }} />
     }
   }
 
@@ -220,7 +220,6 @@ function ChartsYearScreen(props) {
     <ScrollView>
 
 
-      <Text style={styles.paragraph}>ChartsYearScreen</Text>
 
       <SwitchSelector
           options= {[
@@ -233,19 +232,19 @@ function ChartsYearScreen(props) {
           borderColor="#009788"
           hasPadding
           initial={2}
-          style = {{width: 200, alignSelf: 'flex-end', marginTop: 5, marginEnd: 15}}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 40,marginRight:17 }}
           onPress={value => props.changeStep(value)}
         />
 
       <Card borderRadius={30}>
         <Table>
-          <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00' }}>
+          <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00'}}>
             <TableWrapper style={{ flexDirection: 'row' }}>
-              <Col data={tableTitle} width={20} height={14} textStyle={{ textAlign: 'center' }} />
+              <Col data={tableTitle} width={20} height={15} textStyle={{ textAlign: 'center', color:'#57706D' }} />
             </TableWrapper>
 
             <TableWrapper style={{ flex: 1, backgroundColor: '#11ffee00' }}>
-              <Cols data={dataDisplay} style={{ flex: 1 }} height={14} textStyle={{ textAlign: 'center' }} />
+              <Cols data={dataDisplay} style={{ flex: 1 }} height={15} textStyle={{ textAlign: 'center', color:'#57706D' }} />
             </TableWrapper>
           </View>
         </Table>
