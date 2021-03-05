@@ -62,15 +62,15 @@ export default function SettingsScreen(props) {
         
           
 
- <ListItem>
-      <ListItem.Title>Mode Nuit</ListItem.Title>
+ <ListItem bottomDivider>
+      <ListItem.Title >Mode Nuit</ListItem.Title>
       
       <Switch
           style={{ marginTop: 0 }}
           onValueChange={toggleSwitchDark}
           value={switchDarkMode}
         />
- <ListItem bottomDivider ></ListItem>
+ <ListItem  ></ListItem>
       </ListItem>
     
       <ListItem>
