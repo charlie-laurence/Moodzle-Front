@@ -28,7 +28,7 @@ function ChartsWeekScreen(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
-      body: `startdate=${startDate}&type=week`,
+      body: `startdate=${startDate}&type=week`
     });
 
     var datas = await rawDatas.json();
