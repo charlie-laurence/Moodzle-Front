@@ -111,7 +111,7 @@ var pieDataGenerator = (dataset) => {
 
       
        
-       <Card borderRadius={50}>
+       <Card borderRadius={50} style={{}} >
   <Card.Title style={{color:'#57706D'}}>Répartition globale des humeurs de la semaine</Card.Title>
   <Card.Divider/>
   <View style={{ flexDirection: "row", paddingBottom:0,
