@@ -67,7 +67,7 @@ function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
         />
         <Image style={styles.liane} source={require("../assets/liane2.png")} />
         <Text style={[styles.textMoodz, { transform: [{ rotate: "20deg" }] }]}>
-          Quelle est ton humeur du jour { pseudo } ?
+          Quelle est ton humeur du jour {pseudo} ?
         </Text>
         <View style={styles.moodContainer}>{icons}</View>
       </View>
@@ -133,7 +133,12 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-  return { mood: state.mood, step: state.step, pseudo : state.pseudo, token: state.token };
+  return {
+    mood: state.mood,
+    step: state.step,
+    pseudo: state.pseudo,
+    token: state.token,
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoodScreen);
