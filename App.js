@@ -9,10 +9,11 @@ import { Ionicons } from "@expo/vector-icons";
 
 import mood from "./reducers/mood.reducer";
 import step from "./reducers/step.reducer";
+import activitySelection from "./reducers/activitySelect.reducer";
 import pseudo from "./reducers/pseudo.reducer";
 import chartstep from "./reducers/chartstep.reducer";
 import token from "./reducers/token.reducer";
-
+import storedMoodId from "./reducers/storedMoodId.reducer";
 import {
   useFonts,
   LondrinaSolid_400Regular,
@@ -28,12 +29,23 @@ import ChartsWeekScreen from "./screens/ChartsWeekScreen";
 import ChartsMonthScreen from "./screens/ChartsMonthScreen";
 import ChartsYearScreen from "./screens/ChartsYearScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import ReactionScreen from "./screens/ReactionScreen";
 
 // Comment add
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const store = createStore(combineReducers({ mood, step, chartstep, pseudo, token }));
+const store = createStore(
+  combineReducers({
+    mood,
+    step,
+    activitySelection,
+    chartstep,
+    pseudo,
+    token,
+    storedMoodId,
+  })
+);
 
 const BottomNavigator = () => {
   return (
@@ -78,7 +90,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Mood" component={MoodNavigation} /> 
+          <Stack.Screen name="Mood" component={MoodNavigation} />
           <Stack.Screen name="ChartsWeek" component={ChartsWeekScreen} />
           <Stack.Screen name="ChartsMonth" component={ChartsMonthScreen} />
           <Stack.Screen name="ChartsYear" component={ChartsYearScreen} />

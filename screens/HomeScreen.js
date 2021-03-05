@@ -1,119 +1,220 @@
 import React, { useState, useEffect } from "react";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { StyleSheet, ImageBackground, Text, View } from "react-native";
-
 import { Button, Input } from "react-native-elements";
-
 import { connect } from "react-redux";
+import { proxy } from "../statics/ip";
+import SignIn from "./Component/SignIn";
+import SignUp from "./Component/SignUp";
+import SignBtn from "./Component/SignBtn";
 
-function HomeScreen(props) {
-
-/* 
+function HomeScreen({
+  navigation,
+  pseudo,
+  onSubmitPseudo,
+  token,
+  addToken,
+  displayHistory,
+  reloadActivity,
+  reloadMood,
+}) {
+  /* 
 - récupération de la valeur depuis l'input et mise à jour de l'état pseudo
 - initialisation d'un état pseudoSubmited à false pour gérer la différence 
 d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 */
 
-  const [pseudo, setPseudo] = useState("");
+  const [localPseudo, setLocalPseudo] = useState("");
+  const [localMail, setLocalMail] = useState("");
+  const [localPwd, setLocalPwd] = useState("");
   const [userExist, setUserExist] = useState(false);
+  const [selection, setSelection] = useState("Sign-Up");
 
-
-/* 
-- enregistrement du pseudo dans le local storage
-*/  
   useEffect(() => {
-    AsyncStorage.getItem("pseudo", (err, value) => {
+    //Récupération des données utilisateurs (pseudo, token) dans local storage et affectation au store
+    AsyncStorage.getItem("user", (err, value) => {
       if (value) {
-        setPseudo(value);
-        props.onSubmitPseudo(value);
+        value = JSON.parse(value);
+        onSubmitPseudo(value.pseudo);
+        addToken(value.token);
+        getDailyMood(value.token);
         setUserExist(true);
       }
     });
   }, [userExist]);
 
-/* 
-- envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD
-*/
-  var handleSubmitSignup = async () => {
-    const data = await fetch("http://172.17.1.15:3000/sign-up", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `usernameFromFront=${props.pseudo}&token=${props.token}`,
-    });
-
-  const body = await data.json()
-  console.log("result :", body.result)
-
-  if(body.result === true){
-    props.addToken(body.token);
-    setUserExist(true);
-    console.log("token :", body.token)
-    console.log('username :', body.saveUser.username)
-    console.log("allinfo :", body)
-  }
+  //Fonction pour récupérer les données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour (appelée dans le useEffect)
+  const getDailyMood = async (token) => {
+    try {
+      const rawResult = await fetch(
+        // `proxy/daily-mood/${token}`
+        `${proxy}/daily-mood/${token}`
+      );
+      const result = await rawResult.json();
+      if (result.mood) {
+        displayHistory(); //état step du reducer passé @4
+        const activityToReload = result.mood_data.activity.map((activity) => ({
+          name: activity.name,
+          category: activity.category,
+        }));
+        reloadActivity(activityToReload); //état activitySelection du reducer repeuplé avec les activités renseignées et enregistrées en BDD
+        reloadMood(result.mood_data.id); //état storedMoodId mis à jour avec l'id du mood déjà renseigné en BDD
+      } else {
+        reloadMood("");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  //Fonction de création d'un utilisateur (BDD, Store et Local Storage)
+  // A REVERIFIER
+  var handleSubmitSignup = async () => {
+    try {
+      // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
+      const data = await fetch(`${proxy}/sign-up`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `username=${localPseudo}&email=${localEmail}&password=${localPwd}`,
+      });
+
+      //
+      const body = await data.json();
+      console.log("result :", body.result);
+
+      let newPseudo = body.saveUser.username;
+      let newToken = body.token;
+
+      if (body.result === true) {
+        // Ajout de l'utilisateur au store :
+        onSubmitPseudo(newPseudo);
+        addToken(newToken);
+        setUserExist(true);
+      }
+      // Ajout de l'utilisateur en local storage :
+      AsyncStorage.setItem(
+        "user",
+        JSON.stringify({
+          email: localMail,
+          password: localPwd,
+          pseudo: newPseudo,
+          token: newToken,
+        })
+      );
+      // Navigation vers écran Mood
+      navigation.navigate("BottomNavigator", { screen: "Mood" });
+    } catch (err) {
+      console.log("something went wrong with sign-up process");
+    }
+  };
+
+  //Fonction de connexion pour utilisateur déjà existant en BDD
+  const handleSubmitSignIn = async () => {
+    try {
+      // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
+      const data = await fetch(`${proxy}/sign-in`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `email=${localMail}&password=${localPwd}`,
+      });
+
+      const body = await data.json();
+      console.log(body.msg);
+
+      //Traitement en fonction du resultat de la reqûete : true -> connexion / false -> rien ne se passe (gestion & affichage des erreurs par la suite...)
+      if (body.result === true) {
+        const receivedPseudo = body.username;
+        const receivedToken = body.token;
+        // Ajout de l'utilisateur au store :
+        onSubmitPseudo(receivedPseudo);
+        addToken(receivedToken);
+        setUserExist(true);
+        // Ajout de l'utilisateur en local storage :
+        AsyncStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: localMail,
+            password: localPwd,
+            pseudo: receivedPseudo,
+            token: receivedToken,
+          })
+        );
+        // Navigation vers écran Mood
+        navigation.navigate("BottomNavigator", { screen: "Mood" });
+      } else {
+        console.log("Echec connexion : email &/ou mot de passe incorrect(s) ");
+      }
+    } catch (err) {
+      console.log("something went wrong with sign-in process");
+    }
+  };
+
+  //Fonction envoyée en props dans composant SignBtn afin d'afficher le processus de connexion désiré : Sign-up vs Log-in
+  const changeSelection = (option) => {
+    setSelection(option);
+  };
+
+  //Fonctions envoyées en props dans composants SignUp & SignIn pour modifier les états locaux localPseudo, localMail, localPwd
+  const handleLocalMail = (value) => {
+    setLocalMail(value);
+  };
+  const handleLocalPseudo = (value) => {
+    setLocalPseudo(value);
+  };
+  const handleLocalPwd = (value) => {
+    setLocalPwd(value);
+  };
+
+  //Défition de l'affichage selon si les données de l'utilisateur sont enregistrées en localstorage ou non
   var isUserRegistered;
   if (userExist === false) {
+    //Si Non => Formulaire pour rentrer ses informations : Sign UP (Sign IN doit être ajouté)
     isUserRegistered = (
-      <View>
-      <Input
-        containerStyle={{ marginBottom: 25, width: 200 }}
-        inputStyle={{ marginLeft: 10 }}
-        placeholder="Nom d'utilisateur"
-        onChangeText={(content) => {
-          setPseudo(content);
-          AsyncStorage.setItem("pseudo", content);
-          props.onSubmitPseudo(content)
-        }}
-      />
-      <Button
-        title="C'est parti !"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.onSubmitPseudo(pseudo);
-          AsyncStorage.setItem("pseudo", pseudo);
-          handleSubmitSignup();
-          props.navigation.navigate("BottomNavigator", { screen: "Mood" });
-        }}
-      />
-      <Button
-        title="Change user"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
-        onPress={() => {
-          AsyncStorage.setItem("pseudo", "");
-          props.onSubmitPseudo("");
-          setUserExist(false);
-        }}
-      />
+      <View style={styles.page}>
+        <View style={styles.selectionContainer}>
+          <SignBtn selection={selection} changeSelection={changeSelection} />
+        </View>
+        <View style={styles.connexionContainer}>
+          {selection === "Sign-Up" ? (
+            <SignUp
+              handleLocalMail={handleLocalMail}
+              handleLocalPseudo={handleLocalPseudo}
+              handleLocalPwd={handleLocalPwd}
+            />
+          ) : (
+            <SignIn
+              handleLocalMail={handleLocalMail}
+              handleLocalPwd={handleLocalPwd}
+            />
+          )}
+        </View>
+        <View style={styles.btnContainer}>
+          <Button
+            title="C'est parti !"
+            type="solid"
+            buttonStyle={{ backgroundColor: "#5B63AE" }}
+            onPress={() => {
+              selection === "Sign-Up"
+                ? handleSubmitSignup()
+                : handleSubmitSignIn();
+            }}
+          />
+        </View>
       </View>
     );
-  } else if(userExist === true){
+  } else if (userExist === true) {
+    //Si Oui => Message de Bienvenue
     isUserRegistered = (
       <View>
-      <Text style={styles.paragraph}>Bienvenue {props.pseudo}</Text>
-      <Button
-        title="Let's Go !"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.navigation.navigate("BottomNavigator", { screen: "Mood" });
-        }}
-      />
-      <Button
-        title="Change user"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
-        onPress={() => {
-          AsyncStorage.setItem("pseudo", "");
-          setUserExist(false);
-          props.onSubmitPseudo("");
-        }}
-      />
+        <Text style={styles.paragraph}>Bienvenue {pseudo}</Text>
+        <Button
+          title="C'est parti !"
+          type="solid"
+          buttonStyle={{ backgroundColor: "#009788" }}
+          onPress={() => {
+            navigation.navigate("BottomNavigator", { screen: "Mood" });
+          }}
+        />
       </View>
     );
   }
@@ -124,7 +225,6 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
       style={styles.container}
     >
       {isUserRegistered}
-  
     </ImageBackground>
   );
 }
@@ -142,21 +242,51 @@ const styles = StyleSheet.create({
     color: "black",
     marginBottom: 20,
   },
+  page: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectionContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  connexionContainer: {
+    flex: 1,
+    padding: 20,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  btnContainer: {
+    flex: 1,
+  },
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSubmitPseudo: function(pseudo) {
-      dispatch({ type: "savePseudo", pseudo: pseudo })
-      },
-    addToken: function(token) {
-      dispatch({ type: "addToken", token: token})
-    } 
+    onSubmitPseudo: function (pseudo) {
+      dispatch({ type: "savePseudo", pseudo: pseudo });
+    },
+    addToken: function (token) {
+      dispatch({ type: "addToken", token: token });
+    },
+    displayHistory: function () {
+      dispatch({ type: "mood-already-entered" });
+    },
+    reloadActivity: (activity) => {
+      dispatch({ type: "reload", activity });
+    },
+    reloadMood: (id) => {
+      dispatch({ type: "store-moodId", id });
+    },
   };
 }
 
 function mapStateToProps(state) {
-  return { pseudo: state.pseudo, token: state.token };
+  return {
+    pseudo: state.pseudo,
+    token: state.token,
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
