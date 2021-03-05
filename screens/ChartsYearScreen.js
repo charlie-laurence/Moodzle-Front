@@ -1,134 +1,256 @@
-import React, {useEffect} from "react";
-import { StyleSheet, Text, View, Button, ScrollView} from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import { connect } from "react-redux";
 
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Table, TableWrapper, Col, Cols } from 'react-native-table-component';
+import { FontAwesome } from '@expo/vector-icons';
+import { Card } from 'react-native-elements'
+
+import SwitchSelector from "react-native-switch-selector";
 
 
 function ChartsYearScreen(props) {
 
+  const [startDate, setStartDate] = useState('2020-05-20')
+  const [dataDisplay, setDataDisplay] = useState([])
 
-{/* <ion-icon name="ellipse"></ion-icon> 
-ou
-<i class="fas fa-circle"></i>
-*/}
+  useEffect(() => {
+    // Récupère l'année de la date actuelle
+    var yearDate = new Date(startDate);
 
+    // Variable boolean qui va être True si l'année est bissextile
+    var checkLeap = isLeapYear(yearDate.getFullYear())
+    // initiateArray génère des tables avec des icones grises et prend pour un argument un true/false pour vérifier s'il s'agit d'une année bissextile
+    initiateArray(checkLeap)
 
-//Récupération du résultat renvoyé par le backend
-
-var fetchData = async() => {
-  var rawDatas = await fetch("http://172.17.1.159:3000/history", {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  }
- 
-});
-
-var datas = await rawDatas.json();
-var dataHistory = datas.history
-var setterdataChart = []
- }
-  
-    useEffect(() => {
+    // Récupère les données de la BDD + génère les tables pour l'affichage du calendrier
     fetchData()
-    }, []);
 
-  
-    // Définir l'année et connaitre le nombre de jour (année bissextile ou non)
-    var today = new Date();
-    var current_year = today.getFullYear()
-    console.log(current_year)
-    
+  }, []);
 
-    function days_of_a_year(year) 
-    {      
-      return isLeapYear(year) ? 366 : 365;
+  // Initialise des tables pour chaque mois avec l'entête en élément à l'index 0
+  var jan = ['J']
+  var feb = ['F']
+  var mar = ['M']
+  var apr = ['A']
+  var may = ['M']
+  var jun = ['J']
+  var jul = ['J']
+  var aug = ['A']
+  var sep = ['S']
+  var oct = ['O']
+  var nov = ['N']
+  var dec = ['D']
+
+  /*  initiateArray : initialise des 12 Tables (une par mois) avec un cercle gris par jour 
+      Prend en variable un Boolean qui est True si l'année en cours est bissextile*/
+  const initiateArray = (bissextile) => {
+    // Boucle for sur les 12 mois de l'année
+    for (let i = 0; i < 12; i++) {
+      /* 
+        Condition sur l'index qui correspond au mois (l'index 0 correspond au mois de Janvier)
+        Ajoute une icone FontAwesome pour chaque jour du mois   
+        Enregistre le résultat dans les variables de mois correspondantes 
+      */
+      var emptyIcon = <FontAwesome name="circle" size={13} color="#F2F2F2" style={{ alignSelf: 'center'}}/>
+      // var emptyIcon = ''
+
+      switch (i) {
+        case 0:
+          for (let j = 0; j < 31; j++) {
+            jan.push(emptyIcon)
+          };
+          break;
+        case 1:
+          // Vérifier si années bissextile (28j si oui, 29j sinon)
+          var febDay = 29
+          bissextile ? febDay = 28 : febDay = 29;
+          for (let j = 0; j < febDay; j++) {
+            feb.push(emptyIcon)
+          };
+          break;
+        case 2:
+          for (let j = 0; j < 31; j++) {
+            mar.push(emptyIcon)
+          };
+          break;
+        case 3:
+          for (let j = 0; j < 30; j++) {
+            apr.push(emptyIcon)
+          };
+          break;
+        case 4:
+          for (let j = 0; j < 31; j++) {
+            may.push(emptyIcon)
+          };
+          break;
+        case 5:
+          for (let j = 0; j < 30; j++) {
+            jun.push(emptyIcon)
+          };
+          break;
+        case 6:
+          for (let j = 0; j < 31; j++) {
+            jul.push(emptyIcon)
+          };
+          break;
+        case 7:
+          for (let j = 0; j < 31; j++) {
+            aug.push(emptyIcon)
+          };
+          break;
+        case 8:
+          for (let j = 0; j < 30; j++) {
+            sep.push(emptyIcon)
+          };
+          break;
+        case 9:
+          for (let j = 0; j < 31; j++) {
+            oct.push(emptyIcon)
+          };
+          break;
+        case 10:
+          for (let j = 0; j < 30; j++) {
+            nov.push(emptyIcon)
+          };
+          break;
+        case 11:
+          for (let j = 0; j < 31; j++) {
+            dec.push(emptyIcon)
+          };
+          break;
+      }
     }
-        function isLeapYear(year) {
-         return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
+  }
+
+  // Fonction qui vérifie si une année est bissextille
+  function isLeapYear(year) {
+    return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
+  }
+
+
+  //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
+  var fetchData = async () => {
+    var rawData = await fetch("http://172.17.1.144:3000/history", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      body: `startdate=${startDate}&type=year`
+    });
+
+    var data = await rawData.json();
+    var dataHistory = data.history // Variable qui contient les données de l'historique
+
+    // Boucle sur l'historique pour remplacer les points gris par les points de couleurs (qui varient en fonction du mood_score)
+    for (var i = 0; i < dataHistory.length; i++) {
+      var convertDate = new Date(dataHistory[i].date) // Reconverti la date de l'historique 
+      var month = parseInt(convertDate.getMonth()) // Récupère le mois
+      var day = parseInt(convertDate.getDate()) // Récupère le jour
+      var moodScore = parseInt(dataHistory[i].mood_score) // Récupère le mood score
+
+      /* Condition sur le mois (getMonth initialise janvier à 0)
+        Modifie la Table correspondante au mois et remplace le jour avec un Mood enregistré par une icone colorée
+        moodScoreCircle retourne une icône fontAwesome avec une couleur différente en fonction du score
+      */
+      switch (month) {
+        case 0:
+          jan[day] = moodScoreCircle(moodScore)
+          break;
+        case 1:
+          feb[day] = moodScoreCircle(moodScore)
+          break;
+        case 2:
+          mar[day] = moodScoreCircle(moodScore)
+          break;
+        case 3:
+          apr[day] = moodScoreCircle(moodScore)
+          break;
+        case 4:
+          may[day] = moodScoreCircle(moodScore)
+          break;
+        case 5:
+          jun[day] = moodScoreCircle(moodScore)
+          break;
+        case 6:
+          jul[day] = moodScoreCircle(moodScore)
+          break;
+        case 7:
+          aug[day] = moodScoreCircle(moodScore)
+          break;
+        case 8:
+          sep[day] = moodScoreCircle(moodScore)
+          break;
+        case 9:
+          oct[day] = moodScoreCircle(moodScore)
+          break;
+        case 10:
+          nov[day] = moodScoreCircle(moodScore)
+          break;
+        case 11:
+          dec[day] = moodScoreCircle(moodScore)
+          break;
+      }
     }
-       
-console.log(days_of_a_year(current_year))
 
+    // Modifie la variable d'état dataDisplay qui récupère tous les tableaux concernés 
+    setDataDisplay([jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec])
+  }
 
-var headTable = [' ','j', 'f', 'm', 'a', 'm', 'j', 'j', 'a', 's', 'o', 'n', 'd'] ;
+  // Fonction qui prend en variable le score et qui retourne un cercle avec la couleur associée à la note
+  const moodScoreCircle = (score) => {
+    switch (score) {
+      case 1:
+        return <FontAwesome color="#CD6133" name="circle" size={13} style={{ alignSelf: 'center' }} />
+      case 2:
+        return <FontAwesome color="#F0A07E" name="circle" size={13} style={{ alignSelf: 'center' }} />
+      case 3:
+        return <FontAwesome color="#F0D231" name="circle" size={13} style={{ alignSelf: 'center' }} />
+      case 4:
+        return <FontAwesome color="#44B79D" name="circle" size={13} style={{ alignSelf: 'center' }} />
+      case 5:
+        return <FontAwesome color="#54857F" name="circle" size={13} style={{ alignSelf: 'center' }} />
+    }
+  }
 
-
-var dataTable = [
-    ['6', '1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-    ['a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e','a', 'b', 'c', 'd', 'e'],
-    ['1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5','1', '2', '3', '4', '5'],
-  ]
-  var tableTitle = ['1', '2', '3', '4', '5','6', '7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
-
-
-
-
-
-
+  // Table qui contient les labels des jours
+  var tableTitle = [' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
 
   return (
-    <View>
-        <Text style={styles.paragraph}>ChartsYearScreen</Text>
-      <Button
-        title="WEEK"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(1)
-        }}
-      />
-      <Button
-        title="MONTH"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(2)
-        }}
-      />
-      <Button
-        title="YEAR"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
-        onPress={() => {
-          props.changeStep(3)
-        }}
-      />
-<ScrollView>
-
- 
-<Table>
-        <Row data={headTable}  height={('auto')}  style={styles.HeadStyle} textStyle={{textAlign:'center', justifyContent:'flex-start'}}/>
-      </Table>
+    <ScrollView>
 
 
-    <Table
-    //  borderStyle={{borderWidth: 0.2, borderColor: '#44B79D'}}
-     >
-   
 
-<View style={{flexDirection: 'row'}}>
-      <TableWrapper style={{flexDirection: 'row'}}>
-        <Col data={tableTitle}  width={20} height={14} textStyle={{textAlign:'center'}}/> 
-      </TableWrapper>
+      <SwitchSelector
+          options= {[
+            { label: "Semaine", value: 1},
+            { label: "Mois", value: 2},
+            { label: "Année", value: 3}]}
+          textColor="#009788" //
+          selectedColor="white"
+          buttonColor="#009788"
+          borderColor="#009788"
+          hasPadding
+          initial={2}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 40,marginRight:17 }}
+          onPress={value => props.changeStep(value)}
+        />
 
-      <TableWrapper style={{flex: 1}}>
-        <Cols data={dataTable} style= {{flex: 1}} height={14} textStyle={{textAlign:'center'}}/>
-      </TableWrapper>
-      </View>
-    </Table>
+      <Card borderRadius={30}>
+        <Table>
+          <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00'}}>
+            <TableWrapper style={{ flexDirection: 'row' }}>
+              <Col data={tableTitle} width={20} height={15} textStyle={{ textAlign: 'center', color:'#57706D' }} />
+            </TableWrapper>
+
+            <TableWrapper style={{ flex: 1, backgroundColor: '#11ffee00' }}>
+              <Cols data={dataDisplay} style={{ flex: 1 }} height={15} textStyle={{ textAlign: 'center', color:'#57706D' }} />
+            </TableWrapper>
+          </View>
+        </Table>
+      </Card>
+
     </ScrollView>
-    </View>
   );
 }
 
@@ -145,40 +267,41 @@ const styles = StyleSheet.create({
     color: "#009788",
     marginTop: 70
   },
-  HeadStyle: { 
+  HeadStyle: {
     height: 50,
     alignContent: "space-between",
     backgroundColor: '#ffffff'
   },
-  TableText: { 
+  TableText: {
     margin: 1,
     alignContent: "center",
     textAlign: "center",
     color: '#44B79D'
   },
-  TableStyle :{
-flex : 1,
-margin: 6,
-height: 100,
+  TableStyle: {
+    flex: 1,
+    margin: 6,
+    height: 100,
   },
-  DaylyTable: { 
+  DaylyTable: {
     margin: 1,
     alignContent: "center",
     textAlign: "center",
-    justifyContent : 'flex-start',
-    flexDirection:'column',
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
 
   },
-  singleHead: { 
-    width: 20, height: 20, 
-    backgroundColor: '#c8e1ff' },
+  singleHead: {
+    width: 20, height: 20,
+    backgroundColor: '#c8e1ff'
+  },
 
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
-      dispatch({ type: "change-step", newstep: newstep});
+      dispatch({ type: "change-step", newstep: newstep });
     },
   };
 };
