@@ -159,8 +159,9 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
     let lineLabelsArray = []
     let lineDataArray = []
 
-    for (let i = 0; i < dataset.length; i++) {
+    for (let i = 1; i < dataset.length; i++) {
       (i % 5) === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push('') //Modulo 5 pour avoir des labels tous les 5 jours
+      
       lineDataArray.push(parseInt(dataset[i].mood_score))
     }
     setLineLabel(lineLabelsArray)
@@ -201,23 +202,25 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
       />
 
       <Card borderRadius={50} containerStyle={{height: 300}} >
-        <Card.Title>Top des activités du mois</Card.Title>
+        <Card.Title style={{color:'#57706D'}}>Top des activités du mois</Card.Title>
         <Card.Divider />
 
         <View style={{ flexDirection: "row", paddingBottom:0,
       marginBottom:0, flex:1 }}>
           <Image
-        source={require('../assets/podium_moodz.png')} style={{width: 220,
-          height: 200,
+        source={require('../assets/podium_moodzle_moodz.png')} style={{width: 220,
+          height: 220,
           resizeMode: 'stretch', 
           paddingRight: 0, 
-          marginLeft: 0}}
+          marginLeft: 20,
+        marginTop: 0,
+      paddingTop: 0}}
       />
     
-      <View style={{marginLeft: -20, width: 100}} >
-       <Text><FontAwesome name="circle" size={10} color="#5B63AE" iconStyle={{marginRight:10}} />{topActivities[0]}</Text>
-       <Text><FontAwesome name="circle" size={10} color="#44B79D" style={{ alignSelf: 'center', marginRight:50}}/>{topActivities[1]}</Text>
-       <Text><FontAwesome name="circle" size={10} color="#df8f4a" style={{ alignSelf: 'center', marginRight:50}}/>{topActivities[2]}</Text>
+      <View style={{marginLeft: -50, width: 100, marginTop: 10}} >
+       <Text style={{color:'#57706D'}}><FontAwesome name="circle" size={10} color="#5B63AE" iconStyle={{marginRight:10}} />{` ${topActivities[0]}`}</Text>
+       <Text style={{color:'#57706D'}}><FontAwesome name="circle" size={10} color="#44B79D" style={{ alignSelf: 'center', marginRight:50}}/>{` ${topActivities[1]}`}</Text>
+       <Text style={{color:'#57706D'}}><FontAwesome name="circle" size={10} color="#df8f4a" style={{ alignSelf: 'center', marginRight:50}}/>{` ${topActivities[2]}`}</Text>
        </View>
        {/* <Card.Image
         source={require('../assets/moodz.png')} style={{width: '50%',
@@ -234,7 +237,7 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
 
 
 <Card borderRadius={50} style={{marginBottom:10}}>
-  <Card.Title>Calendrier des humeurs</Card.Title>
+  <Card.Title style={{color:'#57706D'}}>Calendrier des humeurs</Card.Title>
   <Card.Divider/>
 
 
@@ -302,7 +305,7 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
 
 
 <Card borderRadius={50}>
-  <Card.Title>Répartition globale des humeurs du mois</Card.Title>
+  <Card.Title style={{color:'#57706D'}}>Répartition globale des humeurs du mois</Card.Title>
   <Card.Divider/>
   <View style={{ flexDirection: "row", paddingBottom:0,
       marginBottom:0, flex:1 }}>
@@ -328,7 +331,7 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
         alignItems={'center'}
 
       />
-<View style={{marginTop: 35 ,marginLeft: -130, width: 100}} >
+<View style={{marginTop: 32 ,marginLeft: -130, width: 100}} >
 
 <Text style={{marginBottom:8}}><FontAwesome5 name='angry' size={25} color="#CD6133" /></Text>
 <Text style={{marginBottom:8}}><FontAwesome5 name='sad-cry' size={25} color="#F0A07E" /></Text>
@@ -341,7 +344,7 @@ setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
 
   <Card borderRadius={50} >
 
-  <Card.Title>Répartition quotidienne des humeurs</Card.Title>
+  <Card.Title style={{color:'#57706D'}}>Répartition quotidienne des humeurs</Card.Title>
   <Card.Divider/>
       <LineChart
 
@@ -385,21 +388,20 @@ const styles = StyleSheet.create({
 });
 
 const chartConfig = {
-  backgroundGradientFrom: "#ffffff",
+  backgroundGradientFrom: "#F0D231",
   backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#ffffff",
+  backgroundGradientTo: "#F0D231",
   backgroundGradientToOpacity: 0,
-
   decimalPlaces: 0, // optional
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  labelColor: (opacity = 1) => `#44B79D`,
+  color: (opacity = 1) => `rgba(68, 183, 157, ${opacity})`,
+  labelColor: (opacity = 1) => `#57706D`,
   style: {
     borderRadius: 16
   },
   propsForDots: {
-    r: "2",
-    strokeWidth: "4",
-    stroke: "#44B79D"
+    r: "1",
+    strokeWidth: "3",
+    stroke: "#F0A07E"
   }
 }
 

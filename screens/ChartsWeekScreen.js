@@ -112,7 +112,7 @@ var pieDataGenerator = (dataset) => {
       
        
        <Card borderRadius={50}>
-  <Card.Title>Répartition globale des humeurs de la semaine</Card.Title>
+  <Card.Title style={{color:'#57706D'}}>Répartition globale des humeurs de la semaine</Card.Title>
   <Card.Divider/>
   <View style={{ flexDirection: "row", paddingBottom:0,
       marginBottom:0, flex:1 }}>
@@ -139,7 +139,13 @@ var pieDataGenerator = (dataset) => {
 
 
       />
-      <View style={{marginTop: 35 ,marginLeft: -130, width: 100}} >
+      <View style={{marginTop: 32 ,marginLeft: -130, width: 100}} >
+
+<Text style={{marginBottom:8}}><FontAwesome5 name='angry' size={25} color="#CD6133" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='sad-cry' size={25} color="#F0A07E" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='meh' size={25} color="#F0D231" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='grin-squint' size={25} color="#44B79D" /></Text>
+<Text style={{marginBottom:8}}><FontAwesome5 name='smile-beam' size={25} color="#54857F" /></Text>
 
 {/* <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[0].name} size={25} color={pieData[0].color} /></Text>
 <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[1].name} size={25} color={pieData[0].color} /></Text> */}
@@ -152,7 +158,7 @@ var pieDataGenerator = (dataset) => {
        
       <Card borderRadius={50} flex={0} >
 
-<Card.Title>Répartition quotidienne des humeurs</Card.Title>
+<Card.Title style={{color:'#57706D'}}>Répartition quotidienne des humeurs</Card.Title>
 <Card.Divider/>
       <LineChart
         data={{
@@ -201,21 +207,21 @@ const styles = StyleSheet.create({
 });
 
 const chartConfig = {
-  backgroundGradientFrom: "#ffffff",
+  backgroundGradientFrom: "#F0D231",
   backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#ffffff",
+  backgroundGradientTo: "#F0D231",
   backgroundGradientToOpacity: 0,
 
   decimalPlaces: 0, // optional
-  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-  labelColor: (opacity = 1) => `#44B79D`,
+  color: (opacity = 1) => `rgba(68, 183, 157, ${opacity})`,
+  labelColor: (opacity = 1) => `#57706D`,
   style: {
     borderRadius: 16
   },
   propsForDots: {
-    r: "2",
-    strokeWidth: "4",
-    stroke: "#44B79D"
+    r: "2.5",
+    strokeWidth: "5",
+    stroke: "#F0A07E"
   }
 }
 

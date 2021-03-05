@@ -52,7 +52,7 @@ function ChartsYearScreen(props) {
         Ajoute une icone FontAwesome pour chaque jour du mois   
         Enregistre le résultat dans les variables de mois correspondantes 
       */
-      var emptyIcon = <FontAwesome name="circle" size={10} color="#F2F2F2" style={{ alignSelf: 'center'}}/>
+      var emptyIcon = <FontAwesome name="circle" size={13} color="#F2F2F2" style={{ alignSelf: 'center'}}/>
       // var emptyIcon = ''
 
       switch (i) {
@@ -201,15 +201,15 @@ function ChartsYearScreen(props) {
   const moodScoreCircle = (score) => {
     switch (score) {
       case 1:
-        return <FontAwesome color="#CD6133" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#CD6133" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 2:
-        return <FontAwesome color="#F0A07E" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#F0A07E" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 3:
-        return <FontAwesome color="#F0D231" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#F0D231" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 4:
-        return <FontAwesome color="#44B79D" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#44B79D" name="circle" size={13} style={{ alignSelf: 'center' }} />
       case 5:
-        return <FontAwesome color="#54857F" name="circle" size={10} style={{ alignSelf: 'center' }} />
+        return <FontAwesome color="#54857F" name="circle" size={13} style={{ alignSelf: 'center' }} />
     }
   }
 
@@ -240,11 +240,11 @@ function ChartsYearScreen(props) {
         <Table>
           <View style={{ flexDirection: 'row', backgroundColor: '#11ffee00'}}>
             <TableWrapper style={{ flexDirection: 'row' }}>
-              <Col data={tableTitle} width={20} height={15} textStyle={{ textAlign: 'center' }} />
+              <Col data={tableTitle} width={20} height={15} textStyle={{ textAlign: 'center', color:'#57706D' }} />
             </TableWrapper>
 
             <TableWrapper style={{ flex: 1, backgroundColor: '#11ffee00' }}>
-              <Cols data={dataDisplay} style={{ flex: 1 }} height={15} textStyle={{ textAlign: 'center' }} />
+              <Cols data={dataDisplay} style={{ flex: 1 }} height={15} textStyle={{ textAlign: 'center', color:'#57706D' }} />
             </TableWrapper>
           </View>
         </Table>
