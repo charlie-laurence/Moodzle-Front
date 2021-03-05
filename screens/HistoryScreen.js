@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
-import { StyleSheet, Text, View, Button, ScrollView, Flat } from "react-native";
-import { Card } from "react-native-elements";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { Card, Button } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { _IP_OLIV , _IP_CAPSULE } from "../statics/ip";
@@ -20,30 +20,48 @@ function HistoryScreen({ navigation, updateMood }) {
   }, []);
 
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
-    var moodList = historyFromBack.map((item, i) => {
 
+    var moodList = historyFromBack.reverse().map((item, i) => {
+      
+      // Formatage des dates :
+      var date = new Date(item.date);
+      var format =
+        date.getDate() +
+        "/" +
+        (date.getMonth() + 1) +
+        "/" +
+        date.getFullYear();
+
+      // Récupérer les activités de chaques jours :
       var activityList = [];
       for (var j=0 ; j<item.activity.length ; j++) {
         activityList.push(item.activity[j].name);
       }
 
+      // Style particulier pour Key = 0 :
+      if ( i === 0) {
+        var wrapperDesign = styles.cardWrapper0;
+        var containerDesign = styles.cardContainer0;
+      } else {
+        var wrapperDesign = styles.cardWrapper;
+        var containerDesign = styles.cardWrapper;
+      };
+
     return (
     <Card
       key={i}
-      bottomDivider
-      wrapperStyle={styles.cardWrapper}
-      containerStyle={styles.cardContainer}
+      wrapperStyle={wrapperDesign}
+      containerStyle={containerDesign}
     >
       <FontAwesome5
         style={{margin:15}}
-        key={i}
         name={moodData[item.mood_score-1].icon}
         size={70}
         color={moodData[item.mood_score-1].color}
         score={item.mood_score}
       />
       <Card.Title style={{color:"#57706D"}}>
-        <Text>{item.date}</Text>
+        <Text>{format}</Text>
       </Card.Title>
       <Card.Title style={{color:"#57706D"}}>
         <Text>{activityList.join(", ")}</Text>
@@ -55,17 +73,15 @@ function HistoryScreen({ navigation, updateMood }) {
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>Tableau de Bord</Text>
+      <View>
       <Button
-        title="RETOUR SUR AJOUT MOOD"
-        type="solid"
-        buttonStyle={{ backgroundColor: "#009788" }}
+        title={"Modifier mon mood"}
+        titleStyle={{ color: "white", fontSize: 16 }}
+        buttonStyle={{ backgroundColor: "#54857F", justifyContent:'center', alignItems:'center', borderRadius:50 , width:150, marginBottom:10, marginTop:15, marginLeft:15 }}
         onPress={() => {
           updateMood();
         }}
       />
-      <View
-      // style={{paddingBottom:200}}
-      >
       <ScrollView>
         {moodList}
       </ScrollView>
@@ -77,6 +93,26 @@ function HistoryScreen({ navigation, updateMood }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor:"#F0FFF9",
+  },
+  cardWrapper0: {
+    display:"flex",
+    justifyContent:"space-around",
+    alignItems:"center",
+    height:250,
+  },
+  cardContainer0: {
+    padding:0,
+    backgroundColor: "white",
+    shadowColor: "#F0FFF9",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+    borderColor: "white",
+    borderRadius: 25,
   },
   cardWrapper: {
     display:"flex",
