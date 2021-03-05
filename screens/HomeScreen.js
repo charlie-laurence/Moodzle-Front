@@ -4,6 +4,9 @@ import { StyleSheet, ImageBackground, Text, View } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { proxy } from "../statics/ip";
+import SignIn from "./Component/SignIn";
+import SignUp from "./Component/SignUp";
+import SignBtn from "./Component/SignBtn";
 
 function HomeScreen({
   navigation,
@@ -34,41 +37,39 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         setUserExist(true);
       }
     });
-
-    //Récupération des données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour
-    const getDailyMood = async (token) => {
-      try {
-        const rawResult = await fetch(
-          // `proxy/daily-mood/${token}`
-          `${proxy}/daily-mood/${token}`
-        );
-        const result = await rawResult.json();
-        if (result.mood) {
-          displayHistory(); //état step du reducer passé @4
-          const activityToReload = result.mood_data.activity.map(
-            (activity) => ({
-              name: activity.name,
-              category: activity.category,
-            })
-          );
-          reloadActivity(activityToReload); //état activitySelection du reducer repeuplé avec les activités renseignées et enregistrées en BDD
-          reloadMood(result.mood_data.id); //état storedMoodId mis à jour avec l'id du mood déjà renseigné en BDD
-        } else {
-          reloadMood("");
-        }
-      } catch (err) {
-        console.log("bonjour je suis l'erreur");
-        console.log(err);
-      }
-    };
     getDailyMood(token);
   }, [userExist]);
+
+  //Fonction pour récupérer les données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour (appelée dans le useEffect)
+  const getDailyMood = async (token) => {
+    try {
+      const rawResult = await fetch(
+        // `proxy/daily-mood/${token}`
+        `${proxy}/daily-mood/${token}`
+      );
+      const result = await rawResult.json();
+      if (result.mood) {
+        displayHistory(); //état step du reducer passé @4
+        const activityToReload = result.mood_data.activity.map((activity) => ({
+          name: activity.name,
+          category: activity.category,
+        }));
+        reloadActivity(activityToReload); //état activitySelection du reducer repeuplé avec les activités renseignées et enregistrées en BDD
+        reloadMood(result.mood_data.id); //état storedMoodId mis à jour avec l'id du mood déjà renseigné en BDD
+      } else {
+        reloadMood("");
+      }
+    } catch (err) {
+      console.log("bonjour je suis l'erreur");
+      console.log(err);
+    }
+  };
 
   //Fonction de création d'un utilisateur (BDD, Store et Local Storage)
   var handleSubmitSignup = async () => {
     try {
       // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
-      const data = await fetch(`http://${_IP_CAPSULE}:3000/sign-up`, {
+      const data = await fetch(`${proxy}/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `usernameFromFront=${localPseudo}`,
@@ -96,8 +97,10 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
     }
   };
 
+  //Défition de l'affichage selon si les données de l'utilisateur sont enregistrées en localstorage ou non
   var isUserRegistered;
   if (userExist === false) {
+    //Si Non => Formulaire pour rentrer ses informations : Sign UP (Sign IN doit être ajouté)
     isUserRegistered = (
       <View>
         <Input
@@ -117,52 +120,39 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
             navigation.navigate("BottomNavigator", { screen: "Mood" });
           }}
         />
-        <Button
-          title="Change user"
-          type="solid"
-          buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
-          onPress={() => {
-            AsyncStorage.setItem("user", "");
-            onSubmitPseudo("");
-            addToken("");
-            setUserExist(false);
-          }}
-        />
       </View>
     );
   } else if (userExist === true) {
+    //Si Oui => Message de Bienvenue
     isUserRegistered = (
       <View>
         <Text style={styles.paragraph}>Bienvenue {pseudo}</Text>
         <Button
-          title="Let's Go !"
+          title="C'est parti !"
           type="solid"
           buttonStyle={{ backgroundColor: "#009788" }}
           onPress={() => {
             navigation.navigate("BottomNavigator", { screen: "Mood" });
           }}
         />
-        {/* <Button
-          title="Change user"
-          type="solid"
-          buttonStyle={{ backgroundColor: "#009788", marginTop: 10 }}
-          onPress={() => {
-            AsyncStorage.setItem("user", "");
-            onSubmitPseudo("");
-            addToken("");
-            setUserExist(false);
-          }}
-        /> */}
       </View>
     );
   }
 
   return (
+    // <ImageBackground
+    //   source={require("../assets/MoodzSignUp.png")}
+    //   style={styles.container}
+    // >
+    //   {isUserRegistered}
+    // </ImageBackground>
     <ImageBackground
       source={require("../assets/MoodzSignUp.png")}
       style={styles.container}
     >
-      {isUserRegistered}
+      <SignBtn />
+      <SignIn />
+      <SignUp />
     </ImageBackground>
   );
 }
