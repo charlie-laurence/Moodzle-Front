@@ -26,7 +26,7 @@ function ChartsWeekScreen(props) {
   //Récupération du résultat renvoyé par le backend
 
   var fetchData = async () => {
-    var rawDatas = await fetch("http://172.17.1.144:3000/history", {
+    var rawDatas = await fetch("http://172.17.1.159:3000/history", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',

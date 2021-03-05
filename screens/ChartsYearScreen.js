@@ -131,7 +131,7 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-    var rawData = await fetch("http://172.17.1.144:3000/history", {
+    var rawData = await fetch("http://172.17.1.159:3000/history", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
