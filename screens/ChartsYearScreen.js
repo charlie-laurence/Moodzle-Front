@@ -140,7 +140,7 @@ function ChartsYearScreen(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
-      body: `startdate=${startDate}&type=year`,
+      body: `startdate=${startDate}&type=year&token=${props.token}`
     });
 
     var data = await rawData.json();

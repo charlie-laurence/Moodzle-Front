@@ -40,7 +40,7 @@ function ChartsMonthScreen(props) {
     var dataRaw = await fetch(`${proxy}/history`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `startdate=${startDate}&type=month`,
+      body: `startdate=${startDate}&type=month&token=${props.token}`,
     });
 
     var data = await dataRaw.json();
