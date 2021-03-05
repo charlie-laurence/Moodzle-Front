@@ -41,7 +41,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         setUserExist(true);
       }
     });
-  }, [userExist]);
+  }, []);
 
   //Fonction pour récupérer les données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour (appelée dans le useEffect)
   const getDailyMood = async (token) => {
@@ -75,7 +75,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
       const data = await fetch(`${proxy}/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `username=${localPseudo}&email=${localEmail}&password=${localPwd}`,
+        body: `username=${localPseudo}&email=${localMail}&password=${localPwd}`,
       });
 
       //
@@ -99,10 +99,12 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           password: localPwd,
           pseudo: newPseudo,
           token: newToken,
+
         })
       );
       // Navigation vers écran Mood
       navigation.navigate("BottomNavigator", { screen: "Mood" });
+      setUserExist(false);
     } catch (err) {
       console.log("something went wrong with sign-up process");
     }
@@ -128,7 +130,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         // Ajout de l'utilisateur au store :
         onSubmitPseudo(receivedPseudo);
         addToken(receivedToken);
-        setUserExist(true);
+        getDailyMood(receivedToken);
         // Ajout de l'utilisateur en local storage :
         AsyncStorage.setItem(
           "user",
@@ -141,6 +143,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         );
         // Navigation vers écran Mood
         navigation.navigate("BottomNavigator", { screen: "Mood" });
+        setUserExist(false);
       } else {
         console.log("Echec connexion : email &/ou mot de passe incorrect(s) ");
       }
@@ -213,6 +216,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           buttonStyle={{ backgroundColor: "#009788" }}
           onPress={() => {
             navigation.navigate("BottomNavigator", { screen: "Mood" });
+            setUserExist(false)
           }}
         />
       </View>
