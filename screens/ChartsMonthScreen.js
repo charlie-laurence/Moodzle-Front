@@ -57,18 +57,18 @@ function ChartsMonthScreen(props) {
       }
     }
 
-    // Traitement pour connaitre les 3 activités les + sélectionnées
+    // Traitement pour compter le nombre d'occurences de chaque activité
     var map = eachMonthActivity.reduce(function (p, c) {
       p[c] = (p[c] || 0) + 1;
       return p;
     }, {});
 
-    var top5Activities = Object.keys(map).sort(function (a, b) {
+    // Trier les activités par ordre décroissant d'occurence
+    var topSortActivities = Object.keys(map).sort(function (a, b) {
       return map[b] - map[a];
     });
 
-    setTopActivities([top5Activities[0], top5Activities[1], top5Activities[2]])
-
+    setTopActivities([topSortActivities[0], topSortActivities[1], topSortActivities[2]])
 
     // Traitement des données pour le Pie Chart
     pieDataGenerator(dataHistory)
@@ -106,7 +106,6 @@ function ChartsMonthScreen(props) {
       markedSetDate[dateConvertToString] = { selected: true, selectedColor: markColor }
     }
     // console.log(markedSetDate)
-    console.log(markedSetDate)
     setCalendarData(markedSetDate)
 
   }
@@ -175,10 +174,6 @@ function ChartsMonthScreen(props) {
     today: 'Aujourd\'hui'
   };
   LocaleConfig.defaultLocale = 'fr';
-
-
-
-
 
   return (
     <ScrollView paddingBottom={100}>
