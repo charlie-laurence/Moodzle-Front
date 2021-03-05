@@ -75,7 +75,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
       const data = await fetch(`${proxy}/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `username=${localPseudo}&email=${localEmail}&password=${localPwd}`,
+        body: `username=${localPseudo}&email=${localMail}&password=${localPwd}`,
       });
 
       //
@@ -90,19 +90,20 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         onSubmitPseudo(newPseudo);
         addToken(newToken);
         setUserExist(true);
+
+        // Ajout de l'utilisateur en local storage :
+        AsyncStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: localMail,
+            password: localPwd,
+            pseudo: newPseudo,
+            token: newToken,
+          })
+        );
+        // Navigation vers écran Mood
+        navigation.navigate("BottomNavigator", { screen: "Mood" });
       }
-      // Ajout de l'utilisateur en local storage :
-      AsyncStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: localMail,
-          password: localPwd,
-          pseudo: newPseudo,
-          token: newToken,
-        })
-      );
-      // Navigation vers écran Mood
-      navigation.navigate("BottomNavigator", { screen: "Mood" });
     } catch (err) {
       console.log("something went wrong with sign-up process");
     }
