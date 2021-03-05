@@ -43,7 +43,7 @@ function HomeScreen({
 
   //Vérification de l'existence d'un mood renseigné ce-jour pour l'utilisateur
   useEffect(() => {
-    getDailyMood(token);
+    isConnected && getDailyMood(token);
   }, [isConnected]);
 
   //Fonction pour récupérer les données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour (appelée dans le useEffect)
@@ -78,7 +78,6 @@ function HomeScreen({
       });
 
       const body = await data.json();
-      console.log("result :", body.result);
       let newPseudo = body.saveUser.username;
       let newToken = body.token;
 
@@ -115,8 +114,6 @@ function HomeScreen({
       });
 
       const body = await data.json();
-      console.log(body.msg);
-
       //Traitement en fonction du resultat de la reqûete : true -> connexion / false -> rien ne se passe (gestion & affichage des erreurs par la suite...)
       if (body.result === true) {
         const receivedPseudo = body.username;
@@ -206,7 +203,6 @@ function HomeScreen({
           buttonStyle={{ backgroundColor: "#009788" }}
           onPress={() => {
             navigation.navigate("BottomNavigator", { screen: "Mood" });
-            setUserExist(false);
           }}
         />
       </View>

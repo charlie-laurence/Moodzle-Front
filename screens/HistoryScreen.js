@@ -15,14 +15,12 @@ function HistoryScreen({ updateMood, token }) {
       var rawResponse = await fetch(`${proxy}/dashboard/${token}`);
       var response = await rawResponse.json();
       var responseHistory = response.history;
-      console.log(responseHistory);
       setHistoryFromBack(responseHistory);
     }
     fetchData();
   }, []);
 
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
-
   var moodList = historyFromBack.reverse().map((item, i) => {
     // Formatage des dates :
     var date = new Date(item.date);
