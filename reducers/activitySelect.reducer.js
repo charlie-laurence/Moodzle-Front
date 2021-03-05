@@ -8,6 +8,8 @@ export default function (activitySelection = [], action) {
     return activitySelection.filter(
       (activity) => activity.name !== action.activity.name
     );
+  } else if (action.type === "reload") {
+    return action.activity;
   } else {
     return activitySelection;
   }

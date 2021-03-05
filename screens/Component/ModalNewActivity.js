@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions } from "react-native";
 import { Button, Input, Overlay } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { _IP_OLIV, _IP_CAPSULE } from "../../statics/ip";
+import { proxy } from "../../statics/ip";
 import { connect } from "react-redux";
 
 const ModalNewActivity = ({
@@ -21,14 +21,14 @@ const ModalNewActivity = ({
         name: newActivity,
         category: selectedCategory,
       };
-      // envoi en BDD de la nouvelle activité (nom, categorie)
-      const rawResult = await fetch(`http://${_IP_CAPSULE}:3000/add-activity`, {
+      // Envoi en BDD de la nouvelle activité (nom, categorie)
+      const rawResult = await fetch(`${proxy}/add-activity`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newActivityToBeAdded),
       });
       const result = await rawResult.json();
-      //envoi en local storage
+      // Envoi en local storage
       let localList = await AsyncStorage.getItem("moodzle-activities");
       localList = JSON.parse(localList);
       if (localList.length > 0) {

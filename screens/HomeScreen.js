@@ -3,9 +3,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, ImageBackground, Text, View } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { connect } from "react-redux";
-import { _IP_CAPSULE } from "../statics/ip";
+import { proxy } from "../statics/ip";
 
-function HomeScreen({ navigation, pseudo, onSubmitPseudo, addToken }) {
+function HomeScreen({
+  navigation,
+  pseudo,
+  onSubmitPseudo,
+  token,
+  addToken,
+  displayHistory,
+  reloadActivity,
+  reloadMood,
+}) {
   /* 
 - récupération de la valeur depuis l'input et mise à jour de l'état pseudo
 - initialisation d'un état pseudoSubmited à false pour gérer la différence 
@@ -25,34 +34,66 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         setUserExist(true);
       }
     });
+
+    //Récupération des données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour
+    const getDailyMood = async (token) => {
+      try {
+        const rawResult = await fetch(
+          // `proxy/daily-mood/${token}`
+          `${proxy}/daily-mood/${token}`
+        );
+        const result = await rawResult.json();
+        if (result.mood) {
+          displayHistory(); //état step du reducer passé @4
+          const activityToReload = result.mood_data.activity.map(
+            (activity) => ({
+              name: activity.name,
+              category: activity.category,
+            })
+          );
+          reloadActivity(activityToReload); //état activitySelection du reducer repeuplé avec les activités renseignées et enregistrées en BDD
+          reloadMood(result.mood_data.id); //état storedMoodId mis à jour avec l'id du mood déjà renseigné en BDD
+        } else {
+          reloadMood("");
+        }
+      } catch (err) {
+        console.log("bonjour je suis l'erreur");
+        console.log(err);
+      }
+    };
+    getDailyMood(token);
   }, [userExist]);
 
   //Fonction de création d'un utilisateur (BDD, Store et Local Storage)
   var handleSubmitSignup = async () => {
-    // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
-    const data = await fetch(`http://${_IP_CAPSULE}:3000/sign-up`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `usernameFromFront=${localPseudo}`,
-    });
+    try {
+      // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
+      const data = await fetch(`http://${_IP_CAPSULE}:3000/sign-up`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `usernameFromFront=${localPseudo}`,
+      });
 
-    const body = await data.json();
-    console.log("result :", body.result);
+      const body = await data.json();
+      console.log("result :", body.result);
 
-    let newPseudo = body.saveUser.username;
-    let newToken = body.token;
+      let newPseudo = body.saveUser.username;
+      let newToken = body.token;
 
-    if (body.result === true) {
-      // Ajout de l'utilisateur au store :
-      onSubmitPseudo(newPseudo);
-      addToken(newToken);
-      setUserExist(true);
+      if (body.result === true) {
+        // Ajout de l'utilisateur au store :
+        onSubmitPseudo(newPseudo);
+        addToken(newToken);
+        setUserExist(true);
+      }
+      // Ajout de l'utilisateur en local storage :
+      AsyncStorage.setItem(
+        "user",
+        JSON.stringify({ pseudo: newPseudo, token: newToken })
+      );
+    } catch (err) {
+      console.log("something went wrong with sign-up process");
     }
-    // Ajout de l'utilisateur en local storage :
-    AsyncStorage.setItem(
-      "user",
-      JSON.stringify({ pseudo: newPseudo, token: newToken })
-    );
   };
 
   var isUserRegistered;
@@ -149,11 +190,23 @@ function mapDispatchToProps(dispatch) {
     addToken: function (token) {
       dispatch({ type: "addToken", token: token });
     },
+    displayHistory: function () {
+      dispatch({ type: "mood-already-entered" });
+    },
+    reloadActivity: (activity) => {
+      dispatch({ type: "reload", activity });
+    },
+    reloadMood: (id) => {
+      dispatch({ type: "store-moodId", id });
+    },
   };
 }
 
 function mapStateToProps(state) {
-  return { pseudo: state.pseudo };
+  return {
+    pseudo: state.pseudo,
+    token: state.token,
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

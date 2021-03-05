@@ -7,7 +7,7 @@ import { categories } from "../statics/category";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalNewActivity from "./Component/ModalNewActivity";
 import ActivityBar from "./Component/ActivityBar";
-import { _IP_CAPSULE } from "../statics/ip";
+import { proxy } from "../statics/ip";
 
 function ActivityScreen({
   incrementStep,
@@ -17,9 +17,13 @@ function ActivityScreen({
   activitySelection,
   mood,
   token,
+  storedMoodId,
+  sendMoodIdToStore,
 }) {
   const [activityList, setActivityList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  console.log("stored mood id:", storedMoodId);
 
   useEffect(() => {
     //1ère utilisation : Stockage en Local d'une liste initiale d'activités
@@ -60,14 +64,19 @@ function ActivityScreen({
 
   //Valider - Ignorer Btn Press : Envoi en BDD et passage à l'étape suivante
   const handleSkipOrValidatePress = async () => {
-    const rawResult = await fetch(`http://${_IP_CAPSULE}:3000/save-mood`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mood, activitySelection, token }),
-    });
-    const result = await rawResult.json();
-    console.log(result);
-    incrementStep();
+    try {
+      const rawResult = await fetch(`${proxy}/save-mood`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ storedMoodId, token, mood, activitySelection }),
+      });
+      const result = await rawResult.json();
+      console.log(JSON.stringify(result));
+      sendMoodIdToStore(result.moodId);
+      incrementStep();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleNewActivityPress = () => {
@@ -232,6 +241,9 @@ const mapDispatchToProps = (dispatch) => {
     deselectActivity: (activity) => {
       dispatch({ type: "deselect", activity });
     },
+    sendMoodIdToStore: (id) => {
+      dispatch({ type: "store-moodId", id });
+    },
   };
 };
 
@@ -240,6 +252,7 @@ const mapStateToProps = (state) => {
     activitySelection: state.activitySelection,
     mood: state.mood,
     token: state.token,
+    storedMoodId: state.storedMoodId,
   };
 };
 

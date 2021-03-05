@@ -9,7 +9,7 @@ import {
 import { ListItem } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
-import { _IP_OLIV, _IP_CAPSULE } from "../../statics/ip";
+import { proxy } from "../../statics/ip";
 import { Ionicons } from "@expo/vector-icons";
 
 function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
@@ -19,11 +19,13 @@ function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
   /* Interroger le backend pour récupérer la liste des activités au chargement de la page : */
   useEffect(() => {
     async function fetchData() {
-      var rawResponse = await fetch(
-        `http://${_IP_CAPSULE}:3000/load-activities`
-      );
-      var response = await rawResponse.json();
-      setActivityFromBack(response);
+      try {
+        var rawResponse = await fetch(`${proxy}/load-activities`);
+        var response = await rawResponse.json();
+        setActivityFromBack(response);
+      } catch (err) {
+        console.log("Erreur lors de la récupération des activités");
+      }
     }
     fetchData();
   }, []);

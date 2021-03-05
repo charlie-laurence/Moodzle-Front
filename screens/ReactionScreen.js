@@ -12,8 +12,6 @@ function ReactionScreen({ mood, incrementStep }) {
     LondrinaSolid_400Regular,
   });
 
-  console.log(mood);
-
   if (!fontsLoaded) {
     return (
       <View>
