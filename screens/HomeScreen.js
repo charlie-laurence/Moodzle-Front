@@ -86,7 +86,6 @@ function HomeScreen({
         // Ajout de l'utilisateur au store :
         onSubmitPseudo(newPseudo);
         addToken(newToken);
-
         // Ajout de l'utilisateur en local storage :
         AsyncStorage.setItem(
           "user",
@@ -97,10 +96,6 @@ function HomeScreen({
             token: newToken,
           })
         );
-
-        // // Navigation vers écran Mood
-        // navigation.navigate("BottomNavigator", { screen: "Mood" });
-
         //Connexion
         login();
       }
@@ -139,8 +134,6 @@ function HomeScreen({
             token: receivedToken,
           })
         );
-        // // Navigation vers écran Mood
-        // navigation.navigate("BottomNavigator", { screen: "Mood" });
         //Connexion
         login();
       } else {
@@ -213,6 +206,7 @@ function HomeScreen({
           buttonStyle={{ backgroundColor: "#009788" }}
           onPress={() => {
             navigation.navigate("BottomNavigator", { screen: "Mood" });
+            setUserExist(false);
           }}
         />
       </View>

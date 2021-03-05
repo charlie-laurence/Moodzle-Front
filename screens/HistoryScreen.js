@@ -14,7 +14,9 @@ function HistoryScreen({ updateMood, token }) {
     async function fetchData() {
       var rawResponse = await fetch(`${proxy}/dashboard/${token}`);
       var response = await rawResponse.json();
-      setHistoryFromBack(response.history);
+      var responseHistory = response.history;
+      console.log(responseHistory);
+      setHistoryFromBack(responseHistory);
     }
     fetchData();
   }, []);
