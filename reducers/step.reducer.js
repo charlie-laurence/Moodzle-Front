@@ -7,6 +7,8 @@ export default function (step = 1, action) {
     return prevStep;
   } else if (action.type === "update-mood") {
     return 1;
+  } else if (action.type === "mood-already-entered") {
+    return 4;
   } else {
     return step;
   }

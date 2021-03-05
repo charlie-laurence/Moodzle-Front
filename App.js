@@ -13,7 +13,7 @@ import activitySelection from "./reducers/activitySelect.reducer";
 import pseudo from "./reducers/pseudo.reducer";
 import chartstep from "./reducers/chartstep.reducer";
 import token from "./reducers/token.reducer";
-
+import storedMoodId from "./reducers/storedMoodId.reducer";
 import {
   useFonts,
   LondrinaSolid_400Regular,
@@ -36,7 +36,15 @@ import ReactionScreen from "./screens/ReactionScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const store = createStore(
-  combineReducers({ mood, step, activitySelection, chartstep, pseudo, token })
+  combineReducers({
+    mood,
+    step,
+    activitySelection,
+    chartstep,
+    pseudo,
+    token,
+    storedMoodId,
+  })
 );
 
 const BottomNavigator = () => {
@@ -82,7 +90,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Mood" component={MoodNavigation} /> 
+          <Stack.Screen name="Mood" component={MoodNavigation} />
           <Stack.Screen name="ChartsWeek" component={ChartsWeekScreen} />
           <Stack.Screen name="ChartsMonth" component={ChartsMonthScreen} />
           <Stack.Screen name="ChartsYear" component={ChartsYearScreen} />
