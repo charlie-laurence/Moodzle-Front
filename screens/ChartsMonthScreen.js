@@ -7,12 +7,12 @@ import { Card, ListItem, Icon, Row } from 'react-native-elements'
 import SwitchSelector from "react-native-switch-selector";
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from "@expo/vector-icons";
-
+import { _IP_CAPSULE } from "../statics/ip";
 
 function ChartsMonthScreen(props) {
 
   const [pieData, setPieData] = useState([])
-  const [startDate, setStartDate] = useState('2020-05-20')
+  const [startDate, setStartDate] = useState('2020-12-20')
   const [lineLabel, setLineLabel] = useState([''])
   const [lineData, setLineData] = useState([0])
   const [firstDay, setFirstDay] = useState()
@@ -30,7 +30,7 @@ function ChartsMonthScreen(props) {
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
-    var dataRaw = await fetch('http://172.17.1.144:3000/history', {
+    var dataRaw = await fetch(`http://${_IP_CAPSULE}:3000/history`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `startdate=${startDate}&type=month`
@@ -237,7 +237,7 @@ function ChartsMonthScreen(props) {
         <Calendar
           style={{
             height: 200,
-            marginBottom: 80,
+            marginBottom: 40,
             marginTop: 0,
             paddingTop: 0
           }}

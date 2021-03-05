@@ -8,8 +8,7 @@ import { connect } from "react-redux";
 import SwitchSelector from "react-native-switch-selector";
 import { Card, ListItem, Icon, Row } from 'react-native-elements'
 import { FontAwesome5 } from "@expo/vector-icons";
-
-
+import { _IP_CAPSULE } from "../statics/ip";
 
 function ChartsWeekScreen(props) {
 
@@ -26,7 +25,7 @@ function ChartsWeekScreen(props) {
   //Récupération du résultat renvoyé par le backend
 
   var fetchData = async () => {
-    var rawDatas = await fetch("http://172.17.1.144:3000/history", {
+    var rawDatas = await fetch(`http://${_IP_CAPSULE}:3000/history`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
