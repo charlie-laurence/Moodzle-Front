@@ -12,7 +12,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 function ChartsMonthScreen(props) {
 
   const [pieData, setPieData] = useState([])
-  const [startDate, setStartDate] = useState('2020-02-20')
+  const [startDate, setStartDate] = useState('2020-05-20')
   const [lineLabel, setLineLabel] = useState([''])
   const [lineData, setLineData] = useState([0])
   const [firstDay, setFirstDay] = useState()
@@ -237,7 +237,7 @@ function ChartsMonthScreen(props) {
         <Calendar
           style={{
             height: 200,
-            marginBottom: 50,
+            marginBottom: 80,
             marginTop: 0,
             paddingTop: 0
           }}
