@@ -25,7 +25,10 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 */
 
   const [localPseudo, setLocalPseudo] = useState("");
+  const [localMail, setLocalMail] = useState("");
+  const [localPwd, setLocalPwd] = useState("");
   const [userExist, setUserExist] = useState(false);
+  const [selection, setSelection] = useState("Sign-Up");
 
   useEffect(() => {
     //Récupération des données utilisateurs (pseudo, token) dans local storage et affectation au store
@@ -34,10 +37,10 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         value = JSON.parse(value);
         onSubmitPseudo(value.pseudo);
         addToken(value.token);
+        getDailyMood(value.token);
         setUserExist(true);
       }
     });
-    getDailyMood(token);
   }, [userExist]);
 
   //Fonction pour récupérer les données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour (appelée dans le useEffect)
@@ -60,21 +63,22 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         reloadMood("");
       }
     } catch (err) {
-      console.log("bonjour je suis l'erreur");
       console.log(err);
     }
   };
 
   //Fonction de création d'un utilisateur (BDD, Store et Local Storage)
+  // A REVERIFIER
   var handleSubmitSignup = async () => {
     try {
       // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
       const data = await fetch(`${proxy}/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `usernameFromFront=${localPseudo}`,
+        body: `username=${localPseudo}&email=${localEmail}&password=${localPwd}`,
       });
 
+      //
       const body = await data.json();
       console.log("result :", body.result);
 
@@ -90,11 +94,75 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
       // Ajout de l'utilisateur en local storage :
       AsyncStorage.setItem(
         "user",
-        JSON.stringify({ pseudo: newPseudo, token: newToken })
+        JSON.stringify({
+          email: localMail,
+          password: localPwd,
+          pseudo: newPseudo,
+          token: newToken,
+        })
       );
+      // Navigation vers écran Mood
+      navigation.navigate("BottomNavigator", { screen: "Mood" });
     } catch (err) {
       console.log("something went wrong with sign-up process");
     }
+  };
+
+  //Fonction de connexion pour utilisateur déjà existant en BDD
+  const handleSubmitSignIn = async () => {
+    try {
+      // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
+      const data = await fetch(`${proxy}/sign-in`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `email=${localMail}&password=${localPwd}`,
+      });
+
+      const body = await data.json();
+      console.log(body.msg);
+
+      //Traitement en fonction du resultat de la reqûete : true -> connexion / false -> rien ne se passe (gestion & affichage des erreurs par la suite...)
+      if (body.result === true) {
+        const receivedPseudo = body.username;
+        const receivedToken = body.token;
+        // Ajout de l'utilisateur au store :
+        onSubmitPseudo(receivedPseudo);
+        addToken(receivedToken);
+        setUserExist(true);
+        // Ajout de l'utilisateur en local storage :
+        AsyncStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: localMail,
+            password: localPwd,
+            pseudo: receivedPseudo,
+            token: receivedToken,
+          })
+        );
+        // Navigation vers écran Mood
+        navigation.navigate("BottomNavigator", { screen: "Mood" });
+      } else {
+        console.log("Echec connexion : email &/ou mot de passe incorrect(s) ");
+      }
+    } catch (err) {
+      console.log("something went wrong with sign-in process");
+    }
+  };
+
+  //Fonction envoyée en props dans composant SignBtn afin d'afficher le processus de connexion désiré : Sign-up vs Log-in
+  const changeSelection = (option) => {
+    setSelection(option);
+  };
+
+  //Fonctions envoyées en props dans composants SignUp & SignIn pour modifier les états locaux localPseudo, localMail, localPwd
+  const handleLocalMail = (value) => {
+    setLocalMail(value);
+  };
+  const handleLocalPseudo = (value) => {
+    setLocalPseudo(value);
+  };
+  const handleLocalPwd = (value) => {
+    setLocalPwd(value);
   };
 
   //Défition de l'affichage selon si les données de l'utilisateur sont enregistrées en localstorage ou non
@@ -102,24 +170,36 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
   if (userExist === false) {
     //Si Non => Formulaire pour rentrer ses informations : Sign UP (Sign IN doit être ajouté)
     isUserRegistered = (
-      <View>
-        <Input
-          containerStyle={{ marginBottom: 25, width: 200 }}
-          inputStyle={{ marginLeft: 10 }}
-          placeholder="Nom d'utilisateur"
-          onChangeText={(content) => {
-            setLocalPseudo(content);
-          }}
-        />
-        <Button
-          title="C'est parti !"
-          type="solid"
-          buttonStyle={{ backgroundColor: "#009788" }}
-          onPress={() => {
-            handleSubmitSignup();
-            navigation.navigate("BottomNavigator", { screen: "Mood" });
-          }}
-        />
+      <View style={styles.page}>
+        <View style={styles.selectionContainer}>
+          <SignBtn selection={selection} changeSelection={changeSelection} />
+        </View>
+        <View style={styles.connexionContainer}>
+          {selection === "Sign-Up" ? (
+            <SignUp
+              handleLocalMail={handleLocalMail}
+              handleLocalPseudo={handleLocalPseudo}
+              handleLocalPwd={handleLocalPwd}
+            />
+          ) : (
+            <SignIn
+              handleLocalMail={handleLocalMail}
+              handleLocalPwd={handleLocalPwd}
+            />
+          )}
+        </View>
+        <View style={styles.btnContainer}>
+          <Button
+            title="C'est parti !"
+            type="solid"
+            buttonStyle={{ backgroundColor: "#5B63AE" }}
+            onPress={() => {
+              selection === "Sign-Up"
+                ? handleSubmitSignup()
+                : handleSubmitSignIn();
+            }}
+          />
+        </View>
       </View>
     );
   } else if (userExist === true) {
@@ -140,19 +220,11 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
   }
 
   return (
-    // <ImageBackground
-    //   source={require("../assets/MoodzSignUp.png")}
-    //   style={styles.container}
-    // >
-    //   {isUserRegistered}
-    // </ImageBackground>
     <ImageBackground
       source={require("../assets/MoodzSignUp.png")}
       style={styles.container}
     >
-      <SignBtn />
-      <SignIn />
-      <SignUp />
+      {isUserRegistered}
     </ImageBackground>
   );
 }
@@ -169,6 +241,24 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
     marginBottom: 20,
+  },
+  page: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectionContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  connexionContainer: {
+    flex: 1,
+    padding: 20,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  btnContainer: {
+    flex: 1,
   },
 });
 

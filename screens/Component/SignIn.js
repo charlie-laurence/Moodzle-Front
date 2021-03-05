@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import { Input, Button } from "react-native-elements";
+import { Input } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
-const SignIn = () => {
-  const [mail, setMail] = useState("");
-  const [pwd, setPwd] = useState("");
+const SignIn = ({ handleLocalMail, handleLocalPwd }) => {
   const [showPwd, setShowPwd] = useState(false);
 
   const handleEyePwdPress = () => {
     setShowPwd(!showPwd);
+  };
+
+  const updateMail = (value) => {
+    handleLocalMail(value);
+  };
+  const updatePwd = (value) => {
+    handleLocalPwd(value);
   };
 
   return (
@@ -17,7 +22,7 @@ const SignIn = () => {
       <Input
         placeholder="Courriel"
         leftIcon={<Ionicons name="mail-outline" size={24} color="black" />}
-        onChangeText={(value) => setMail(value)}
+        onChangeText={(value) => updateMail(value)}
       />
       <Input
         placeholder="Mot de Passe"
@@ -40,7 +45,7 @@ const SignIn = () => {
           )
         }
         secureTextEntry={!showPwd}
-        onChangeText={(value) => setPwd(value)}
+        onChangeText={(value) => updatePwd(value)}
       />
     </View>
   );
