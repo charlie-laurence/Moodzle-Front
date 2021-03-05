@@ -7,7 +7,7 @@ import { categories } from "../statics/category";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalNewActivity from "./Component/ModalNewActivity";
 import ActivityBar from "./Component/ActivityBar";
-import {_IP_CAPSULE} from "../statics/ip";
+import { _IP_CAPSULE } from "../statics/ip";
 
 function ActivityScreen({
   incrementStep,
@@ -16,7 +16,7 @@ function ActivityScreen({
   deselectActivity,
   activitySelection,
   mood,
-  //token
+  token,
 }) {
   const [activityList, setActivityList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,11 +31,11 @@ function ActivityScreen({
           setActivityList(JSON.parse(list));
         } else {
           const jsonInitialList = JSON.stringify([
-            { category: "sport", name: "football" },
-            { category: "social", name: "boire un verre" },
-            { category: "culture", name: "cinema" },
-            { category: "culture", name: "piano" },
-            { category: "sport", name: "piscine" },
+            { category: "sport", name: "Football" },
+            { category: "social", name: "Boire un verre" },
+            { category: "culture", name: "Cinema" },
+            { category: "culture", name: "Piano" },
+            { category: "sport", name: "Piscine" },
           ]);
           await AsyncStorage.setItem("moodzle-activities", jsonInitialList);
           setActivityList(JSON.parse(jsonInitialList));
@@ -51,17 +51,19 @@ function ActivityScreen({
     setActivityList([...activityList, local]);
   };
 
+  //Selection d'une activité (envoi dans le store)
   const handleActivityPress = (activity) => {
     activitySelection.filter((item) => item.name === activity.name).length === 0
       ? selectActivity(activity)
       : deselectActivity(activity);
   };
+
+  //Valider - Ignorer Btn Press : Envoi en BDD et passage à l'étape suivante
   const handleSkipOrValidatePress = async () => {
-    // envoi en BDD du mood de la journée (mood + activités)
     const rawResult = await fetch(`http://${_IP_CAPSULE}:3000/save-mood`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({mood, activitySelection}), //token }),
+      body: JSON.stringify({ mood, activitySelection, token }),
     });
     const result = await rawResult.json();
     console.log(result);
@@ -69,7 +71,7 @@ function ActivityScreen({
   };
 
   const handleNewActivityPress = () => {
-    setModalVisible(!modalVisible);
+    toggleOverlay();
   };
 
   const toggleOverlay = () => {
@@ -104,7 +106,7 @@ function ActivityScreen({
 
   return (
     <View style={styles.container}>
-      <View style={styles.btnContainer}>
+      <View style={styles.topBtnContainer}>
         <Button
           buttonStyle={{ backgroundColor: "#fff" }}
           title={"Retour"}
@@ -112,17 +114,17 @@ function ActivityScreen({
           onPress={() => decrementStep()}
         />
       </View>
-      <View style={styles.searchBar}>
+      <View style={styles.searchBarContainer}>
         <ActivityBar updateLocalList={updateLocalList} />
       </View>
-      <View style={styles.activityWrapper}>
-        <View style={styles.activityContainer}>{activitiesBtn}</View>
+      <View style={styles.activityContainer}>
+        <View style={styles.activityWrapper}>{activitiesBtn}</View>
       </View>
       <View style={styles.lower}>
         <View style={styles.newActivityContainer}>
           <FontAwesome5
             name="plus-circle"
-            size={30}
+            size={35}
             color="#DF8F4A"
             onPress={() => handleNewActivityPress()}
           />
@@ -155,43 +157,57 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: Dimensions.get("window").height,
   },
-  btnContainer: {
-    flex: 0.25,
+  topBtnContainer: {
+    flex: 0.5,
     flexDirection: "row",
     justifyContent: "space-between",
     width: Dimensions.get("window").width,
     marginTop: 15,
     padding: 25,
   },
-  activityWrapper: { flex: 1, justifyContent: "center", alignItems: "center" },
+  searchBarContainer: {
+    position: "absolute",
+    top: 150,
+    justifyContent: "center",
+    alignItems: "center",
+    width: Dimensions.get("window").width,
+    backgroundColor: "transparent",
+    zIndex: 1,
+    maxHeight: (Dimensions.get("window").height * 70) / 100,
+  },
   activityContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  activityWrapper: {
     flex: 0.5,
     flexWrap: "wrap",
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     width: Dimensions.get("window").width,
-    marginTop: 15,
     padding: 25,
   },
   lower: {
     flex: 1,
     justifyContent: "flex-start",
     width: Dimensions.get("window").width,
-    paddingBottom: 50,
-  },
-  searchBar: {
-    flex: 0.5,
-    justifyContent: "center",
-    alignItems: "center",
-    width: Dimensions.get("window").width,
+    paddingBottom: 20,
   },
   newActivityContainer: {
     flex: 1,
-    flexDirection: "row",
+    // flexDirection: "row",
     alignItems: "center",
-    paddingLeft: 40,
+    justifyContent: "center",
+    // paddingLeft: 40,
     width: Dimensions.get("window").width,
+  },
+  addActivityTxt: {
+    // marginLeft: 15,
+    marginTop: 10,
+    fontSize: 14,
+    color: "#57706D",
   },
   validateContainer: {
     flex: 1,
@@ -199,11 +215,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingRight: 40,
     width: Dimensions.get("window").width,
-  },
-  addActivityTxt: {
-    marginLeft: 15,
-    fontSize: 16,
-    color: "#57706D",
   },
 });
 
@@ -228,7 +239,7 @@ const mapStateToProps = (state) => {
   return {
     activitySelection: state.activitySelection,
     mood: state.mood,
-    //token: state.token
+    token: state.token,
   };
 };
 

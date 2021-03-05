@@ -1,6 +1,6 @@
 import React from "react";
-import { LogBox } from "react-native";
-LogBox.ignoreLogs(["Warning: ..."]);
+// import { LogBox } from "react-native";
+// LogBox.ignoreLogs(["Warning: ..."]);
 
 import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
@@ -10,7 +10,9 @@ import { Ionicons } from "@expo/vector-icons";
 import mood from "./reducers/mood.reducer";
 import step from "./reducers/step.reducer";
 import activitySelection from "./reducers/activitySelect.reducer";
+import pseudo from "./reducers/pseudo.reducer";
 import chartstep from "./reducers/chartstep.reducer";
+import token from "./reducers/token.reducer";
 
 import {
   useFonts,
@@ -29,10 +31,12 @@ import ChartsYearScreen from "./screens/ChartsYearScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import ReactionScreen from "./screens/ReactionScreen";
 
+// Comment add
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const store = createStore(
-  combineReducers({ mood, step, activitySelection, chartstep })
+  combineReducers({ mood, step, activitySelection, chartstep, pseudo, token })
 );
 
 const BottomNavigator = () => {
@@ -78,8 +82,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Mood" component={MoodNavigation} />
-          <Stack.Screen name="Reaction" component={ReactionScreen} />
+          <Stack.Screen name="Mood" component={MoodNavigation} /> 
           <Stack.Screen name="ChartsWeek" component={ChartsWeekScreen} />
           <Stack.Screen name="ChartsMonth" component={ChartsMonthScreen} />
           <Stack.Screen name="ChartsYear" component={ChartsYearScreen} />

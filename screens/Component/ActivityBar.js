@@ -9,7 +9,7 @@ import {
 import { ListItem } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { connect } from "react-redux";
-import { _IP_OLIV , _IP_CAPSULE } from "../../statics/ip";
+import { _IP_OLIV, _IP_CAPSULE } from "../../statics/ip";
 import { Ionicons } from "@expo/vector-icons";
 
 function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
@@ -19,7 +19,9 @@ function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
   /* Interroger le backend pour récupérer la liste des activités au chargement de la page : */
   useEffect(() => {
     async function fetchData() {
-      var rawResponse = await fetch(`http://${_IP_CAPSULE}:3000/load-activities`);
+      var rawResponse = await fetch(
+        `http://${_IP_CAPSULE}:3000/load-activities`
+      );
       var response = await rawResponse.json();
       setActivityFromBack(response);
     }
@@ -34,7 +36,6 @@ function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
       return activity.name.match(regex);
     });
   }
-  console.log(filteredActivities);
 
   //Afficher le résultat filtré sous forme de liste:
   let filteredListItem = filteredActivities.map((activity, i) => {
@@ -99,6 +100,8 @@ const styles = StyleSheet.create({
   listContainer: {
     width: (Dimensions.get("window").width * 75) / 100,
     marginTop: 5,
+    maxHeight: (Dimensions.get("window").height * 70) / 100,
+    zIndex: 1,
   },
 });
 
