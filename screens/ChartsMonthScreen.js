@@ -10,7 +10,7 @@ import SwitchSelector from "react-native-switch-selector";
 function ChartsMonthScreen(props) {
 
   const [pieData, setPieData] = useState([])
-  const [startDate, setStartDate] = useState('2020-05-20')
+  const [startDate, setStartDate] = useState('2020-02-20')
   const [lineLabel, setLineLabel] = useState([''])
   const [lineData, setLineData] = useState([0])
   const [firstDay, setFirstDay] = useState()
@@ -27,7 +27,7 @@ function ChartsMonthScreen(props) {
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
-    var dataRaw = await fetch('http://172.17.1.159:3000/history', {
+    var dataRaw = await fetch('http://192.168.181.153:3000/history', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `startdate=${startDate}&type=month`
@@ -51,7 +51,7 @@ function ChartsMonthScreen(props) {
 
     for (let i = 0; i < dataHistory.length; i++) {
       var markColor = ''
-      var dateConvertToString = new Date(dataHistory[i].date).toLocaleDateString('en-CA')
+      var dateConvertToString = new Date(dataHistory[i].date).toISOString().substring(0, 10)
       switch (dataHistory[i].mood_score) {
         case 1:
           markColor = "#CD6133";
@@ -69,9 +69,10 @@ function ChartsMonthScreen(props) {
           markColor = "#54857F";
           break;
       }
-      markedSetDate[dateConvertToString] = { selected: true, color: markColor }
+      markedSetDate[dateConvertToString] = { selected: true, selectedColor: markColor }
     }
     // console.log(markedSetDate)
+    console.log(markedSetDate)
     setCalendarData(markedSetDate)
 
   }
@@ -157,7 +158,7 @@ function ChartsMonthScreen(props) {
           borderColor="#009788"
           hasPadding
           initial={1}
-          style = {{width: 200, alignSelf: 'flex-end', marginTop: 1}}
+          style = {{width: 200, alignSelf: 'flex-end', marginTop: 5, marginEnd: 15}}
           onPress={value => props.changeStep(value)}
       />
 
@@ -184,15 +185,9 @@ function ChartsMonthScreen(props) {
 </Card>
 
 
-
-
-
 <Card borderRadius={50} style={{marginBottom:10}}>
   <Card.Title>Calendrier des humeurs</Card.Title>
   <Card.Divider/>
-
-
-
 
 <Calendar
   style={{
@@ -247,9 +242,6 @@ function ChartsMonthScreen(props) {
   renderHeader={(date) => {/*Return JSX*/}}
   // Enable the option to swipe between months. Default = false
   markedDates={calendarData}
-  // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-  markingType={'period'}
-
 />
 </Card>
 
