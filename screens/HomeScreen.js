@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StyleSheet, ImageBackground, Text, View } from "react-native";
-import { Button, Input } from "react-native-elements";
+import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { proxy } from "../statics/ip";
 import SignIn from "./Component/SignIn";
@@ -17,39 +17,39 @@ function HomeScreen({
   displayHistory,
   reloadActivity,
   reloadMood,
+  isConnected,
+  login,
 }) {
-  /* 
-- récupération de la valeur depuis l'input et mise à jour de l'état pseudo
-- initialisation d'un état pseudoSubmited à false pour gérer la différence 
-d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
-*/
-
   const [localPseudo, setLocalPseudo] = useState("");
   const [localMail, setLocalMail] = useState("");
   const [localPwd, setLocalPwd] = useState("");
-  const [userExist, setUserExist] = useState(false);
   const [selection, setSelection] = useState("Sign-Up");
 
   useEffect(() => {
-    //Récupération des données utilisateurs (pseudo, token) dans local storage et affectation au store
+    //Récupération des données utilisateurs (pseudo, token) dans local storage et affectation au store à l'initialisation du composant
     AsyncStorage.getItem("user", (err, value) => {
       if (value) {
         value = JSON.parse(value);
+        //Mise à jour des états pseudo & token dans le store
         onSubmitPseudo(value.pseudo);
         addToken(value.token);
-        getDailyMood(value.token);
-        setUserExist(true);
+        //Etat local userExist passé à true
+        login();
+      } else {
+        console.log("Aucun utilisateur en local storage");
       }
     });
   }, []);
 
+  //Vérification de l'existence d'un mood renseigné ce-jour pour l'utilisateur
+  useEffect(() => {
+    isConnected && getDailyMood(token);
+  }, [isConnected]);
+
   //Fonction pour récupérer les données de l'utilisateur pour vérifier si un mood a été renseigné ce-jour (appelée dans le useEffect)
   const getDailyMood = async (token) => {
     try {
-      const rawResult = await fetch(
-        // `proxy/daily-mood/${token}`
-        `${proxy}/daily-mood/${token}`
-      );
+      const rawResult = await fetch(`${proxy}/daily-mood/${token}`);
       const result = await rawResult.json();
       if (result.mood) {
         displayHistory(); //état step du reducer passé @4
@@ -68,8 +68,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
   };
 
   //Fonction de création d'un utilisateur (BDD, Store et Local Storage)
-  // A REVERIFIER
-  var handleSubmitSignup = async () => {
+  var handleSignup = async () => {
     try {
       // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
       const data = await fetch(`${proxy}/sign-up`, {
@@ -78,10 +77,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         body: `username=${localPseudo}&email=${localMail}&password=${localPwd}`,
       });
 
-      //
       const body = await data.json();
-      console.log("result :", body.result);
-
       let newPseudo = body.saveUser.username;
       let newToken = body.token;
 
@@ -89,29 +85,26 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         // Ajout de l'utilisateur au store :
         onSubmitPseudo(newPseudo);
         addToken(newToken);
-        setUserExist(true);
+        // Ajout de l'utilisateur en local storage :
+        AsyncStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: localMail,
+            password: localPwd,
+            pseudo: newPseudo,
+            token: newToken,
+          })
+        );
+        //Connexion
+        login();
       }
-      // Ajout de l'utilisateur en local storage :
-      AsyncStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: localMail,
-          password: localPwd,
-          pseudo: newPseudo,
-          token: newToken,
-
-        })
-      );
-      // Navigation vers écran Mood
-      navigation.navigate("BottomNavigator", { screen: "Mood" });
-      setUserExist(false);
     } catch (err) {
       console.log("something went wrong with sign-up process");
     }
   };
 
   //Fonction de connexion pour utilisateur déjà existant en BDD
-  const handleSubmitSignIn = async () => {
+  const handleSignIn = async () => {
     try {
       // Envoi du pseudo du nouvel utilisateur vers le back pour l'enregistrer en BDD (récupération d'un toker depuis back)
       const data = await fetch(`${proxy}/sign-in`, {
@@ -121,8 +114,6 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
       });
 
       const body = await data.json();
-      console.log(body.msg);
-
       //Traitement en fonction du resultat de la reqûete : true -> connexion / false -> rien ne se passe (gestion & affichage des erreurs par la suite...)
       if (body.result === true) {
         const receivedPseudo = body.username;
@@ -130,7 +121,6 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
         // Ajout de l'utilisateur au store :
         onSubmitPseudo(receivedPseudo);
         addToken(receivedToken);
-        getDailyMood(receivedToken);
         // Ajout de l'utilisateur en local storage :
         AsyncStorage.setItem(
           "user",
@@ -141,9 +131,8 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
             token: receivedToken,
           })
         );
-        // Navigation vers écran Mood
-        navigation.navigate("BottomNavigator", { screen: "Mood" });
-        setUserExist(false);
+        //Connexion
+        login();
       } else {
         console.log("Echec connexion : email &/ou mot de passe incorrect(s) ");
       }
@@ -170,7 +159,7 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
 
   //Défition de l'affichage selon si les données de l'utilisateur sont enregistrées en localstorage ou non
   var isUserRegistered;
-  if (userExist === false) {
+  if (isConnected === false) {
     //Si Non => Formulaire pour rentrer ses informations : Sign UP (Sign IN doit être ajouté)
     isUserRegistered = (
       <View style={styles.page}>
@@ -197,15 +186,13 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
             type="solid"
             buttonStyle={{ backgroundColor: "#5B63AE" }}
             onPress={() => {
-              selection === "Sign-Up"
-                ? handleSubmitSignup()
-                : handleSubmitSignIn();
+              selection === "Sign-Up" ? handleSignup() : handleSignIn();
             }}
           />
         </View>
       </View>
     );
-  } else if (userExist === true) {
+  } else {
     //Si Oui => Message de Bienvenue
     isUserRegistered = (
       <View>
@@ -216,7 +203,6 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
           buttonStyle={{ backgroundColor: "#009788" }}
           onPress={() => {
             navigation.navigate("BottomNavigator", { screen: "Mood" });
-            setUserExist(false)
           }}
         />
       </View>
@@ -224,12 +210,9 @@ d'affichage entre un utilisateur déjà enregistré et un nouvel utilisateur
   }
 
   return (
-    <ImageBackground
-      source={require("../assets/MoodzSignUp.png")}
-      style={styles.container}
-    >
-      {isUserRegistered}
-    </ImageBackground>
+    <View style={styles.container}>
+    {isUserRegistered}
+    </View>
   );
 }
 
@@ -238,6 +221,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#CEFFEB",
   },
   paragraph: {
     fontWeight: "normal",
@@ -283,6 +267,9 @@ function mapDispatchToProps(dispatch) {
     reloadMood: (id) => {
       dispatch({ type: "store-moodId", id });
     },
+    login: () => {
+      dispatch({ type: "connexion" });
+    },
   };
 }
 
@@ -290,6 +277,7 @@ function mapStateToProps(state) {
   return {
     pseudo: state.pseudo,
     token: state.token,
+    isConnected: state.isConnected,
   };
 }
 

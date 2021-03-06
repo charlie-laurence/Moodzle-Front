@@ -10,6 +10,8 @@ export default function (activitySelection = [], action) {
     );
   } else if (action.type === "reload") {
     return action.activity;
+  } else if (action.type === "empty-selection") {
+    return [];
   } else {
     return activitySelection;
   }

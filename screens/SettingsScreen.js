@@ -1,51 +1,60 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button, Input } from "react-native-elements";
+import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 
-function SettingsScreen({navigation, onSubmitPseudo, incrementStep}) {
+function SettingsScreen({
+  navigation,
+  emptyPseudo,
+  emptyToken,
+  emptyActivities,
+  reinitializeStep,
+  logout,
+}) {
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.paragraph}>SettingsScreen</Text>
 
       <Button
-            title="Log Out"
-            type="solid"
-            buttonStyle={{ backgroundColor: "#5B63AE" }}
-            onPress={() => {
-              onSubmitPseudo('')
-              incrementStep()
-              AsyncStorage.clear();
-              navigation.navigate("Home");
-            }}
-          />
-
+        title="Log Out"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#5B63AE" }}
+        onPress={() => {
+          //Vider Local Storage
+          AsyncStorage.clear();
+          //Vider Reducers : Pseudo, Token, Activités, Step (retour @1)
+          emptyPseudo();
+          emptyToken();
+          emptyActivities();
+          reinitializeStep();
+          //Deconnexion
+          logout();
+          //Retour Page Home
+          navigation.navigate("Home");
+        }}
+      />
     </View>
   );
 }
 
-
 function mapDispatchToProps(dispatch) {
   return {
-    onSubmitPseudo: function (pseudo) {
-      dispatch({ type: "savePseudo", pseudo: pseudo });
+    emptyPseudo: (pseudo) => {
+      dispatch({ type: "empty-pseudo" });
     },
-    addToken: function (token) {
-      dispatch({ type: "addToken", token: token });
+    emptyToken: (token) => {
+      dispatch({ type: "empty-token" });
     },
-    displayHistory: function () {
-      dispatch({ type: "mood-already-entered" });
+    emptyActivities: () => {
+      dispatch({ type: "empty-selection" });
     },
-    reloadActivity: (activity) => {
-      dispatch({ type: "reload", activity });
-    },
-    reloadMood: (id) => {
-      dispatch({ type: "store-moodId", id });
-    },
-    incrementStep: () => {
+    reinitializeStep: () => {
       dispatch({ type: "update-mood" });
-    }
+    },
+    logout: () => {
+      dispatch({ type: "deconnexion" });
+    },
   };
 }
 
@@ -56,14 +65,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#CEFFEB",
   },
   paragraph: {
     fontWeight: "bold",
@@ -73,3 +80,6 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
+

@@ -6,23 +6,21 @@ import { connect } from "react-redux";
 import { proxy } from "../statics/ip";
 import { moodData } from "../statics/icon";
 
-function HistoryScreen({ navigation, updateMood, token }) {
+function HistoryScreen({ updateMood, token }) {
   const [historyFromBack, setHistoryFromBack] = useState([]);
 
   /* Interroger le backend pour récupérer l'historique de l'utilisateur au chargement de la page : */
   useEffect(() => {
     async function fetchData() {
-      var rawResponse = await fetch(`${proxy}/dashboard?token=${token}`);
+      var rawResponse = await fetch(`${proxy}/dashboard/${token}`);
       var response = await rawResponse.json();
-      var responseHistory = response.history
-      console.log(responseHistory)
+      var responseHistory = response.history;
       setHistoryFromBack(responseHistory);
     }
     fetchData();
   }, []);
 
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
-
   var moodList = historyFromBack.reverse().map((item, i) => {
     // Formatage des dates :
     var date = new Date(item.date);
@@ -70,12 +68,12 @@ function HistoryScreen({ navigation, updateMood, token }) {
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>Tableau de Bord</Text>
-      <View>
+      <View style={styles.container}>
         <Button
           title={"Modifier mon mood"}
           titleStyle={{ color: "white", fontSize: 16 }}
           buttonStyle={{
-            backgroundColor: "#54857F",
+            backgroundColor: "#5B63AE",
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 50,
@@ -88,7 +86,9 @@ function HistoryScreen({ navigation, updateMood, token }) {
             updateMood();
           }}
         />
-        <ScrollView>{moodList}</ScrollView>
+        <ScrollView>
+          {moodList}
+        </ScrollView>
       </View>
     </View>
   );
@@ -96,7 +96,7 @@ function HistoryScreen({ navigation, updateMood, token }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF9",
+    backgroundColor: "#CEFFEB",
   },
   cardWrapper0: {
     display: "flex",
@@ -159,7 +159,7 @@ const mapStateToProps = (state) => {
   return {
     activitySelection: state.activitySelection,
     mood: state.mood,
-    token: state.token
+    token: state.token,
   };
 };
 

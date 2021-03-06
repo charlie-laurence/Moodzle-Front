@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
 import { Ionicons } from "@expo/vector-icons";
 
+import isConnected from "./reducers/connexion.reducer";
 import mood from "./reducers/mood.reducer";
 import step from "./reducers/step.reducer";
 import activitySelection from "./reducers/activitySelect.reducer";
@@ -37,6 +38,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const store = createStore(
   combineReducers({
+    isConnected,
     mood,
     step,
     activitySelection,
@@ -66,10 +68,10 @@ const BottomNavigator = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: "#009788",
-        inactiveTintColor: "#FFFFFF",
+        activeTintColor: "#F0D231",
+        inactiveTintColor: "#44B79D",
         style: {
-          backgroundColor: "#111224",
+          backgroundColor: "white",
         },
       }}
     >
