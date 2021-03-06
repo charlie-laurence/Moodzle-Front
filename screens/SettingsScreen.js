@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { StyleSheet, Text, View, Switch } from "react-native";
-import { ListItem, Icon } from 'react-native-elements'
+import { ListItem, Overlay } from 'react-native-elements'
 import { FontAwesome5 } from "@expo/vector-icons";
 // import Collapsible from 'react-native-collapsible';
 // import Accordion from 'react-native-collapsible/Accordion';
@@ -12,6 +12,7 @@ export default function SettingsScreen(props) {
   const [switchTextMode, setSwitchTextMode] = useState(false);
   const [switchMascotte, setSwitchMascotte] = useState(true);
   const [open, setOpen] = React.useState(true);
+  const [overlayMentionsVisible, setOverlayMentionsVisible] = useState(false)
 
   const handleClick = () => {
     setOpen(!open);
@@ -40,13 +41,18 @@ export default function SettingsScreen(props) {
     //which will result in re-render the text
   };
 
+  const toggleOverlay = () => {
+    setOverlayMentionsVisible(!overlayMentionsVisible);
+  };
+
+  //Pop-up Mentions légales 
 
   return (
     <View>
       <Text style={styles.paragraph}>SettingsScreen</Text>
 
       
-      <ListItem >
+      <ListItem bottomDivider>
         {/* <Icon name={item.icon} /> */}
         <ListItem.Content>
           <ListItem.Title>Profil</ListItem.Title>
@@ -70,10 +76,9 @@ export default function SettingsScreen(props) {
           onValueChange={toggleSwitchDark}
           value={switchDarkMode}
         />
- <ListItem  ></ListItem>
       </ListItem>
     
-      <ListItem>
+      <ListItem bottomDivider>
       <ListItem.Title>Mode dyslexique</ListItem.Title>
       
       <Switch
@@ -84,7 +89,7 @@ export default function SettingsScreen(props) {
 
       </ListItem>
 
-      <ListItem style={{display: 'flex',}}>
+      <ListItem bottomDivider style={{display: 'flex',}}>
       <ListItem.Title>Mascotte</ListItem.Title>
       
       <Switch
@@ -96,7 +101,7 @@ export default function SettingsScreen(props) {
       </ListItem>
 
 
-      <ListItem 
+      <ListItem bottomDivider
       button onClick={handleClick}
       >
  <FontAwesome5
@@ -104,10 +109,7 @@ export default function SettingsScreen(props) {
       name={'chevron-up'}
       size={18}
     
-    />        
-
-       
-
+    />       
         <ListItem.Title>Coucou</ListItem.Title>
        {open ? <FontAwesome5
       key={124}
@@ -120,11 +122,16 @@ export default function SettingsScreen(props) {
     size={18}
   
   /> } 
-      </ListItem>
+      </ListItem  >
 
-      <ListItem.Title>Mentions Légales Overlay</ListItem.Title>
-      <ListItem.Title>A propos</ListItem.Title>
-
+<ListItem >
+      <ListItem.Title style={{color:'#44B79D'}} onPress={toggleOverlay}  >Mentions Légales</ListItem.Title>
+      <Overlay overlayStyle={{margin: 50}} isVisible={overlayMentionsVisible} onBackdropPress={toggleOverlay}>
+        <Text style={{fontWeight: 'bold', marginBottom: 10, color:'#57706D'}}>Mentions légales</Text>
+        <Text style={{color:'#57706D'}}>Appli hébergée chez Heroku et réalisée par the Best Tem 3V3R !  </Text>
+      </Overlay>
+      <ListItem.Title style={{color:'#44B79D'}}>A propos</ListItem.Title>
+  </ListItem>
 
     </View>
 
@@ -139,6 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    color: '#57706D'
   },
   paragraph: {
     fontWeight: "bold",
