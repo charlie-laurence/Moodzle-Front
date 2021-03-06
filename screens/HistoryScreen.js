@@ -68,12 +68,12 @@ function HistoryScreen({ updateMood, token }) {
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>Tableau de Bord</Text>
-      <View>
+      <View style={styles.container}>
         <Button
           title={"Modifier mon mood"}
           titleStyle={{ color: "white", fontSize: 16 }}
           buttonStyle={{
-            backgroundColor: "#54857F",
+            backgroundColor: "#5B63AE",
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 50,
@@ -86,7 +86,9 @@ function HistoryScreen({ updateMood, token }) {
             updateMood();
           }}
         />
-        <ScrollView>{moodList}</ScrollView>
+        <ScrollView>
+          {moodList}
+        </ScrollView>
       </View>
     </View>
   );
@@ -94,7 +96,7 @@ function HistoryScreen({ updateMood, token }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF9",
+    backgroundColor: "#CEFFEB",
   },
   cardWrapper0: {
     display: "flex",

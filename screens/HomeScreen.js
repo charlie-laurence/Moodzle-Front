@@ -210,12 +210,9 @@ function HomeScreen({
   }
 
   return (
-    <ImageBackground
-      source={require("../assets/MoodzSignUp.png")}
-      style={styles.container}
-    >
-      {isUserRegistered}
-    </ImageBackground>
+    <View style={styles.container}>
+    {isUserRegistered}
+    </View>
   );
 }
 
@@ -224,6 +221,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#CEFFEB",
   },
   paragraph: {
     fontWeight: "normal",
