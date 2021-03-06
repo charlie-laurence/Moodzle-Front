@@ -6,23 +6,21 @@ import { connect } from "react-redux";
 import { proxy } from "../statics/ip";
 import { moodData } from "../statics/icon";
 
-function HistoryScreen({ navigation, updateMood, token }) {
+function HistoryScreen({ updateMood, token }) {
   const [historyFromBack, setHistoryFromBack] = useState([]);
 
   /* Interroger le backend pour récupérer l'historique de l'utilisateur au chargement de la page : */
   useEffect(() => {
     async function fetchData() {
-      var rawResponse = await fetch(`${proxy}/dashboard?token=${token}`);
+      var rawResponse = await fetch(`${proxy}/dashboard/${token}`);
       var response = await rawResponse.json();
-      var responseHistory = response.history
-      console.log(responseHistory)
+      var responseHistory = response.history;
       setHistoryFromBack(responseHistory);
     }
     fetchData();
   }, []);
 
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
-
   var moodList = historyFromBack.reverse().map((item, i) => {
     // Formatage des dates :
     var date = new Date(item.date);
@@ -159,7 +157,7 @@ const mapStateToProps = (state) => {
   return {
     activitySelection: state.activitySelection,
     mood: state.mood,
-    token: state.token
+    token: state.token,
   };
 };
 
