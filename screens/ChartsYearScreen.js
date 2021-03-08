@@ -446,10 +446,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return { token: state.token };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {

@@ -67,8 +67,10 @@ const ActivityCarousel = ({ activities }) => {
         pagingEnabled
         onScroll={(event) => setCurrentSlide(defineCurrentSlide(event))}
       >
-        {activities.map((interval) => (
-          <View style={styles.activityWrapper}>{interval}</View>
+        {activities.map((interval, index) => (
+          <View key={index} style={styles.activityWrapper}>
+            {interval}
+          </View>
         ))}
       </ScrollView>
       <View style={{ ...styles.bullets, flex: 0.2 }}>{bullets}</View>

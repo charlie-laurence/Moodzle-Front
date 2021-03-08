@@ -320,10 +320,6 @@ const chartConfig = {
   },
 };
 
-const mapStateToProps = (state) => {
-  return { token: state.token };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
