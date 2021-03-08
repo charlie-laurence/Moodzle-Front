@@ -210,9 +210,9 @@ function HomeScreen({
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require('../assets/SignUpScreen.png')} style={styles.container}>
     {isUserRegistered}
-    </View>
+    </ImageBackground>
   );
 }
 
