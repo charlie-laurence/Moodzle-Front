@@ -13,7 +13,7 @@ function SettingsScreen({
   logout,
 }) {
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.paragraph}>SettingsScreen</Text>
 
       <Button
@@ -65,13 +65,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#CEFFEB",
   },
   paragraph: {
     fontWeight: "bold",
@@ -81,3 +80,6 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
+

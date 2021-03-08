@@ -106,6 +106,7 @@ function ActivityScreen({
               ? categories[activity.category].color
               : "#57706D",
           marginBottom: 15,
+          borderRadius:15
         }}
         onPress={() => handleActivityPress(activity)}
         selected={
@@ -122,7 +123,7 @@ function ActivityScreen({
     <View style={styles.container}>
       <View style={styles.topBtnContainer}>
         <Button
-          buttonStyle={{ backgroundColor: "#fff" }}
+          buttonStyle={{ backgroundColor: "#fff" , borderRadius:25 , height:50 , width:90 , marginTop:25}}
           title={"Retour"}
           titleStyle={{ color: "#5B63AE" }}
           onPress={() => decrementStep()}
@@ -148,7 +149,7 @@ function ActivityScreen({
         </View>
         <View style={styles.validateContainer}>
           <Button
-            buttonStyle={{ backgroundColor: "#fff" }}
+            buttonStyle={{ backgroundColor: "#fff" , borderRadius:25 , height:50 , width:100 }}
             title={activitySelection.length > 0 ? "Valider" : "Ignorer"}
             titleStyle={{ color: "#5B63AE" }}
             onPress={() => handleSkipOrValidatePress()}
@@ -166,7 +167,7 @@ function ActivityScreen({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF9",
+    backgroundColor: "#CEFFEB",
     alignItems: "center",
     justifyContent: "center",
     height: Dimensions.get("window").height,
