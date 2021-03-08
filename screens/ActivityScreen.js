@@ -3,7 +3,10 @@ import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { categories } from "../statics/category";
+import {
+  categories,
+  initialActivityList,
+} from "../statics/category&activities";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalNewActivity from "./Component/ModalNewActivity";
 import ActivityBar from "./Component/ActivityBar";
@@ -23,8 +26,6 @@ function ActivityScreen({
   const [activityList, setActivityList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  console.log("stored mood id:", storedMoodId);
-
   useEffect(() => {
     //1ère utilisation : Stockage en Local d'une liste initiale d'activités
     //Utilisations ultérieures : Récupération de la liste d'activités stockées en Local
@@ -34,12 +35,16 @@ function ActivityScreen({
         if (list !== null) {
           setActivityList(JSON.parse(list));
         } else {
+          //Procédure pour ne pas afficher de doublon en cas de login (si signup, uniquement la liste de base est affichée)
+          let activitiesToLoad = initialActivityList.map(
+            (activity) => activity.name
+          );
+          let filteredSelection = activitySelection.filter(
+            (activity) => !activitiesToLoad.includes(activity.name)
+          );
           const jsonInitialList = JSON.stringify([
-            { category: "sport", name: "Football" },
-            { category: "social", name: "Boire un verre" },
-            { category: "culture", name: "Cinema" },
-            { category: "culture", name: "Piano" },
-            { category: "sport", name: "Piscine" },
+            ...initialActivityList,
+            ...filteredSelection,
           ]);
           await AsyncStorage.setItem("moodzle-activities", jsonInitialList);
           setActivityList(JSON.parse(jsonInitialList));
@@ -101,6 +106,7 @@ function ActivityScreen({
               ? categories[activity.category].color
               : "#57706D",
           marginBottom: 15,
+          borderRadius:15
         }}
         onPress={() => handleActivityPress(activity)}
         selected={
@@ -117,7 +123,7 @@ function ActivityScreen({
     <View style={styles.container}>
       <View style={styles.topBtnContainer}>
         <Button
-          buttonStyle={{ backgroundColor: "#fff" }}
+          buttonStyle={{ backgroundColor: "#fff" , borderRadius:25 , height:50 , width:90 , marginTop:25}}
           title={"Retour"}
           titleStyle={{ color: "#5B63AE" }}
           onPress={() => decrementStep()}
@@ -143,7 +149,7 @@ function ActivityScreen({
         </View>
         <View style={styles.validateContainer}>
           <Button
-            buttonStyle={{ backgroundColor: "#fff" }}
+            buttonStyle={{ backgroundColor: "#fff" , borderRadius:25 , height:50 , width:100 }}
             title={activitySelection.length > 0 ? "Valider" : "Ignorer"}
             titleStyle={{ color: "#5B63AE" }}
             onPress={() => handleSkipOrValidatePress()}
@@ -161,7 +167,7 @@ function ActivityScreen({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF9",
+    backgroundColor: "#CEFFEB",
     alignItems: "center",
     justifyContent: "center",
     height: Dimensions.get("window").height,

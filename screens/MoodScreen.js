@@ -77,7 +77,7 @@ function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF9",
+    backgroundColor: "#CEFFEB",
     alignItems: "center",
     justifyContent: "center",
     alignItems: "center",

@@ -140,7 +140,7 @@ function ChartsYearScreen(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
-      body: `startdate=${startDate}&type=year&token=${props.token}`
+      body: `startdate=${startDate}&type=year`
     });
 
     var data = await rawData.json();
@@ -302,52 +302,53 @@ function ChartsYearScreen(props) {
   ];
 
   return (
-    <ScrollView>
+    <View backgroundColor="#CEFFEB" height={1000} justifyContent="center">
       <SwitchSelector
         options={[
           { label: "Semaine", value: 1 },
           { label: "Mois", value: 2 },
           { label: "Année", value: 3 },
         ]}
-        textColor="#009788" //
+        textColor="##5B63AE" //
         selectedColor="white"
-        buttonColor="#009788"
-        borderColor="#009788"
+        buttonColor="#5B63AE"
+        borderColor="#5B63AE"
         hasPadding
         initial={2}
         style={{
-          width: 200,
+          width: 300,
           alignSelf: "flex-end",
-          marginTop: 40,
+          marginTop: 63,
           marginRight: 17,
         }}
         onPress={(value) => props.changeStep(value)}
       />
+      <ScrollView>
+        <Card borderRadius={30} height={650} justifyContent="center">
+          <Table>
+            <View style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}>
+              <TableWrapper style={{ flexDirection: "row" }}>
+                <Col
+                  data={tableTitle}
+                  width={20}
+                  height={15}
+                  textStyle={{ textAlign: "center", color: "#57706D" }}
+                />
+              </TableWrapper>
 
-      <Card borderRadius={30}>
-        <Table>
-          <View style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}>
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableTitle}
-                width={20}
-                height={15}
-                textStyle={{ textAlign: "center", color: "#57706D" }}
-              />
-            </TableWrapper>
-
-            <TableWrapper style={{ flex: 1, backgroundColor: "#11ffee00" }}>
-              <Cols
-                data={dataDisplay}
-                style={{ flex: 1 }}
-                height={15}
-                textStyle={{ textAlign: "center", color: "#57706D" }}
-              />
-            </TableWrapper>
-          </View>
-        </Table>
-      </Card>
-    </ScrollView>
+              <TableWrapper style={{ flex: 1, backgroundColor: "#11ffee00" }}>
+                <Cols
+                  data={dataDisplay}
+                  style={{ flex: 1 }}
+                  height={15}
+                  textStyle={{ textAlign: "center", color: "#57706D" }}
+                />
+              </TableWrapper>
+            </View>
+          </Table>
+        </Card>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -356,6 +357,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#CEFFEB"
   },
   paragraph: {
     fontWeight: "bold",

@@ -40,7 +40,7 @@ function ChartsMonthScreen(props) {
     var dataRaw = await fetch(`${proxy}/history`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `startdate=${startDate}&type=month&token=${props.token}`,
+      body: `startdate=${startDate}&type=month`,
     });
 
     var data = await dataRaw.json();
@@ -266,28 +266,28 @@ function ChartsMonthScreen(props) {
   LocaleConfig.defaultLocale = "fr";
 
   return (
-    <ScrollView paddingBottom={100}>
+    <View backgroundColor="#CEFFEB" flex={-1}>
       <SwitchSelector
         options={[
           { label: "Semaine", value: 1 },
           { label: "Mois", value: 2 },
           { label: "Année", value: 3 },
         ]}
-        textColor="#009788" //
+        textColor="##5B63AE" //
         selectedColor="white"
-        buttonColor="#009788"
-        borderColor="#009788"
+        buttonColor="#5B63AE"
+        borderColor="#5B63AE"
         hasPadding
         initial={1}
         style={{
-          width: 200,
+          width: 300,
           alignSelf: "flex-end",
-          marginTop: 40,
+          marginTop: 63,
           marginRight: 17,
         }}
         onPress={(value) => props.changeStep(value)}
       />
-
+    <ScrollView marginBottom={100} paddingBottom={25}>
       <Card borderRadius={50} containerStyle={{ height: 300 }}>
         <Card.Title style={{ color: "#57706D" }}>
           Top des activités du mois
@@ -504,6 +504,7 @@ function ChartsMonthScreen(props) {
         />
       </Card>
     </ScrollView>
+    </View>
   );
 }
 
@@ -512,6 +513,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#CEFFEB"
   },
   paragraph: {
     fontWeight: "bold",

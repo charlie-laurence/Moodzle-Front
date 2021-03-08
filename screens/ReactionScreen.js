@@ -102,9 +102,9 @@ function ReactionScreen({ mood, incrementStep, token, pseudo }) {
         <Image style={styles.moodz} source={require("../assets/moodz.png")} />
         <View style={styles.btnContainer}>
           <Button
-            buttonStyle={{ backgroundColor: "#fff", width: 60 }}
+            buttonStyle={{ backgroundColor: "#F0D231", width: 60, height: 60, borderRadius: 50, marginTop:25}}
             title={"OK"}
-            titleStyle={{ color: "#5B63AE", fontSize: 16, padding: 10 }}
+            titleStyle={{ color: "white", fontSize: 16 }}
             onPress={() => {
               incrementStep();
             }}
@@ -118,7 +118,7 @@ function ReactionScreen({ mood, incrementStep, token, pseudo }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF9",
+    backgroundColor: "#CEFFEB",
     alignItems: "center",
     justifyContent: "center",
     height: Dimensions.get("window").height,
