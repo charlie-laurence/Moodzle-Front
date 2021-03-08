@@ -17,8 +17,11 @@ import { proxy } from "../statics/ip";
 import SwitchSelector from "react-native-switch-selector";
 
 function ChartsYearScreen(props) {
-  const [startDate, setStartDate] = useState("2020-05-20");
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
   const [dataDisplay, setDataDisplay] = useState([]);
+  const [yearDisplay, setYearDisplay] = useState(new Date().getFullYear());
 
   useEffect(() => {
     // Récupère l'année de la date actuelle
@@ -31,7 +34,17 @@ function ChartsYearScreen(props) {
 
     // Récupère les données de la BDD + génère les tables pour l'affichage du calendrier
     fetchData();
-  }, []);
+  }, [startDate]);
+
+  var yearSelect = (type) => {
+    var year = 0;
+    type === "prev" ? (year = -1) : (year = 1);
+    var startDateCopy = new Date(startDate);
+    var filterDate = new Date(startDateCopy.getFullYear() + year, 0, 1, 1);
+    var dateConvert = filterDate.toISOString().substring(0, 10);
+    setStartDate(dateConvert);
+    setYearDisplay(filterDate.getFullYear());
+  };
 
   // Initialise des tables pour chaque mois avec l'entête en élément à l'index 0
   var jan = ["J"];
@@ -330,29 +343,61 @@ function ChartsYearScreen(props) {
         }}
         onPress={(value) => props.changeStep(value)}
       />
-      <Card borderRadius={30} marginTop={80} justifyContent="center">
-        <Table>
-          <View style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}>
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableTitle}
-                width={20}
-                height={15}
-                textStyle={{ textAlign: "center", color: "#57706D" }}
-              />
-            </TableWrapper>
 
-            <TableWrapper style={{ flex: 1, backgroundColor: "#11ffee00" }}>
-              <Cols
-                data={dataDisplay}
-                style={{ flex: 1 }}
-                height={15}
-                textStyle={{ textAlign: "center", color: "#57706D" }}
-              />
-            </TableWrapper>
-          </View>
-        </Table>
-      </Card>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          marginTop: 10,
+          marginBottom: 20,
+          marginLeft: 10,
+          padding: 5,
+        }}
+      >
+        <FontAwesome
+          name="arrow-left"
+          size={24}
+          color="black"
+          onPress={() => yearSelect("prev")}
+        />
+        <Text>Année {yearDisplay}</Text>
+        <FontAwesome
+          name="arrow-right"
+          size={24}
+          color="black"
+          onPress={() => yearSelect("next")}
+        />
+      </View>
+
+      <ScrollView>
+        <Card borderRadius={30} height={650} justifyContent="center">
+          <Table>
+            <View
+              style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}
+            >
+              <TableWrapper style={{ flexDirection: "row" }}>
+                <Col
+                  data={tableTitle}
+                  width={20}
+                  height={15}
+                  textStyle={{ textAlign: "center", color: "#57706D" }}
+                />
+              </TableWrapper>
+
+              <TableWrapper style={{ flex: 1, backgroundColor: "#11ffee00" }}>
+                <Cols
+                  data={dataDisplay}
+                  style={{ flex: 1 }}
+                  height={15}
+                  textStyle={{ textAlign: "center", color: "#57706D" }}
+                />
+              </TableWrapper>
+            </View>
+          </Table>
+        </Card>
+      </ScrollView>
     </View>
   );
 }
@@ -413,4 +458,13 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ChartsYearScreen);
+const mapStateToProps = (state) => {
+  return {
+    mood: state.mood,
+    step: state.step,
+    pseudo: state.pseudo,
+    token: state.token,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChartsYearScreen);
