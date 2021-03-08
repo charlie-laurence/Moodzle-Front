@@ -140,7 +140,7 @@ function ChartsYearScreen(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
-      body: `startdate=${startDate}&type=year`
+      body: `startdate=${startDate}&type=year&token=${props.token}`,
     });
 
     var data = await rawData.json();
@@ -309,7 +309,7 @@ function ChartsYearScreen(props) {
           { label: "Mois", value: 2 },
           { label: "Année", value: 3 },
         ]}
-        textColor="##5B63AE" //
+        textColor="#5B63AE" //
         selectedColor="white"
         buttonColor="#5B63AE"
         borderColor="#5B63AE"
@@ -326,7 +326,9 @@ function ChartsYearScreen(props) {
       <ScrollView>
         <Card borderRadius={30} height={650} justifyContent="center">
           <Table>
-            <View style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}>
+            <View
+              style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}
+            >
               <TableWrapper style={{ flexDirection: "row" }}>
                 <Col
                   data={tableTitle}
@@ -357,7 +359,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#CEFFEB"
+    backgroundColor: "#CEFFEB",
   },
   paragraph: {
     fontWeight: "bold",
@@ -395,6 +397,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#c8e1ff",
   },
 });
+
+const mapStateToProps = (state) => {
+  return { token: state.token };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {

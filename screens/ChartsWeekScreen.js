@@ -28,7 +28,7 @@ function ChartsWeekScreen(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
-      body: `startdate=${startDate}&type=week`
+      body: `startdate=${startDate}&type=week&token=${props.token}`,
     });
 
     var datas = await rawDatas.json();
@@ -133,7 +133,7 @@ function ChartsWeekScreen(props) {
           { label: "Mois", value: 2 },
           { label: "Année", value: 3 },
         ]}
-        textColor="##5B63AE" //
+        textColor="#5B63AE" //
         selectedColor="white"
         buttonColor="#5B63AE"
         borderColor="#5B63AE"
@@ -147,7 +147,7 @@ function ChartsWeekScreen(props) {
         }}
         onPress={(value) => props.changeStep(value)}
       />
-      <ScrollView height={850} >
+      <ScrollView height={850}>
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
             Répartition globale des humeurs de la semaine
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#CEFFEB"
+    backgroundColor: "#CEFFEB",
   },
   paragraph: {
     fontWeight: "bold",
@@ -277,6 +277,10 @@ const chartConfig = {
   },
 };
 
+const mapStateToProps = (state) => {
+  return { token: state.token };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     changeStep: (newstep) => {
@@ -285,4 +289,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ChartsWeekScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ChartsWeekScreen);
