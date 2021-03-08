@@ -369,6 +369,7 @@ function ChartsYearScreen(props) {
             </View>
           </Table>
         </Card>
+        </ScrollView>
       </View>
   );
 }

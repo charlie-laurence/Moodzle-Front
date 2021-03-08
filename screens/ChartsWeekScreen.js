@@ -141,6 +141,7 @@ function ChartsWeekScreen(props) {
   return (
     <View backgroundColor="#CEFFEB">
 
+      <ScrollView marginBottom={0} paddingBottom={20}>
 
       <SwitchSelector
         options={[
@@ -170,7 +171,6 @@ function ChartsWeekScreen(props) {
       </View>
 
 
-      <ScrollView marginBottom={100} paddingBottom={25} >
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
             Répartition globale des humeurs de la semaine

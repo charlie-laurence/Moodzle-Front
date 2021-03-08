@@ -314,7 +314,7 @@ function ChartsMonthScreen(props) {
   };
   LocaleConfig.defaultLocale = "fr";
 
-  return (    
+  return (
   <View backgroundColor="#CEFFEB">
     <ScrollView marginBottom={0} paddingBottom={20}>
       <SwitchSelector
@@ -344,9 +344,6 @@ function ChartsMonthScreen(props) {
         <FontAwesome name="arrow-right" size={24} color="black" onPress={() => monthSelect('next')}/>
       </View>
 
-
-
-    <ScrollView marginBottom={100} paddingBottom={25}>
       <Card borderRadius={50} containerStyle={{ height: 300 }}>
         <Card.Title style={{ color: "#57706D" }}>
           Top des activités du mois
