@@ -133,7 +133,7 @@ function ChartsWeekScreen(props) {
           { label: "Mois", value: 2 },
           { label: "Année", value: 3 },
         ]}
-        textColor="##5B63AE" //
+        textColor="#5B63AE" //
         selectedColor="white"
         buttonColor="#5B63AE"
         borderColor="#5B63AE"
