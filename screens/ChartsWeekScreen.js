@@ -247,7 +247,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#CEFFEB"
+    backgroundColor: "#CEFFEB",
+    width: (Dimensions.get("window").width),
+    height: (Dimensions.get("window").height),
   },
   paragraph: {
     fontWeight: "bold",

@@ -265,8 +265,9 @@ function ChartsMonthScreen(props) {
   };
   LocaleConfig.defaultLocale = "fr";
 
-  return (
-    <View backgroundColor="#CEFFEB" flex={-1}>
+  return (    
+  <View backgroundColor="#CEFFEB">
+    <ScrollView marginBottom={0} paddingBottom={20}>
       <SwitchSelector
         options={[
           { label: "Semaine", value: 1 },
@@ -287,7 +288,6 @@ function ChartsMonthScreen(props) {
         }}
         onPress={(value) => props.changeStep(value)}
       />
-    <ScrollView marginBottom={100} paddingBottom={25}>
       <Card borderRadius={50} containerStyle={{ height: 300 }}>
         <Card.Title style={{ color: "#57706D" }}>
           Top des activités du mois
@@ -324,6 +324,7 @@ function ChartsMonthScreen(props) {
                 iconStyle={{ marginRight: 10 }}
               />
               {` ${topActivities[0]}`}
+
             </Text>
             <Text style={{ color: "#57706D" }}>
               <FontAwesome
@@ -510,10 +511,11 @@ function ChartsMonthScreen(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#CEFFEB"
+    backgroundColor: "#CEFFEB",
+    width: (Dimensions.get("window").width),
+    height: (Dimensions.get("window").height)
   },
   paragraph: {
     fontWeight: "bold",

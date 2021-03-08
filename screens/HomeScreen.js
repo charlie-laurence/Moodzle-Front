@@ -182,9 +182,9 @@ function HomeScreen({
         </View>
         <View style={styles.btnContainer}>
           <Button
-            title="C'est parti !"
+            title="Connexion"
             type="solid"
-            buttonStyle={{ backgroundColor: "#5B63AE" }}
+            buttonStyle={{ backgroundColor: "#5B63AE" , marginTop: 100, borderRadius: 20}}
             onPress={() => {
               selection === "Sign-Up" ? handleSignup() : handleSignIn();
             }}
@@ -195,12 +195,12 @@ function HomeScreen({
   } else {
     //Si Oui => Message de Bienvenue
     isUserRegistered = (
-      <View>
+      <View style={{marginTop: 50}}>
         <Text style={styles.paragraph}>Bienvenue {pseudo}</Text>
         <Button
           title="C'est parti !"
           type="solid"
-          buttonStyle={{ backgroundColor: "#009788" }}
+          buttonStyle={{ backgroundColor: "#F0D231", height:50 , borderRadius: 20 }}
           onPress={() => {
             navigation.navigate("BottomNavigator", { screen: "Mood" });
           }}
@@ -225,10 +225,10 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     fontWeight: "normal",
-    fontSize: 25,
+    fontSize: 30,
     textAlign: "center",
-    color: "black",
-    marginBottom: 20,
+    color: "#57706D",
+    marginBottom: 30,
   },
   page: {
     flex: 1,
@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
   selectionContainer: {
     flex: 1,
     justifyContent: "flex-end",
+    marginTop: 120
   },
   connexionContainer: {
     flex: 1,
@@ -247,6 +248,9 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flex: 1,
+    borderRadius: 50,
+    height: 100,
+    width : 150
   },
 });
 

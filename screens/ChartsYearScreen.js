@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Button, ScrollView, Dimensions } from "react-native";
 import { connect } from "react-redux";
 
 import { Table, TableWrapper, Col, Cols } from "react-native-table-component";
@@ -302,8 +302,8 @@ function ChartsYearScreen(props) {
   ];
 
   return (
-    <View backgroundColor="#CEFFEB" height={1000} justifyContent="center">
-      <SwitchSelector
+      <View style={styles.container}>
+        <SwitchSelector
         options={[
           { label: "Semaine", value: 1 },
           { label: "Mois", value: 2 },
@@ -318,13 +318,12 @@ function ChartsYearScreen(props) {
         style={{
           width: 300,
           alignSelf: "flex-end",
-          marginTop: 63,
           marginRight: 17,
+          marginTop: 63,
         }}
         onPress={(value) => props.changeStep(value)}
       />
-      <ScrollView>
-        <Card borderRadius={30} height={650} justifyContent="center">
+        <Card borderRadius={30} marginTop={80} justifyContent="center">
           <Table>
             <View style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}>
               <TableWrapper style={{ flexDirection: "row" }}>
@@ -347,17 +346,16 @@ function ChartsYearScreen(props) {
             </View>
           </Table>
         </Card>
-      </ScrollView>
-    </View>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#CEFFEB"
+    justifyContent: "flex-start",
+    backgroundColor: "#CEFFEB",
+    width: (Dimensions.get("window").width),
+    height: (Dimensions.get("window").height)
   },
   paragraph: {
     fontWeight: "bold",
