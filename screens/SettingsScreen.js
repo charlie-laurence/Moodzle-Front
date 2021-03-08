@@ -101,7 +101,7 @@ export default function SettingsScreen(props) {
       </ListItem>
 
 
-      <ListItem bottomDivider
+      {/* <ListItem bottomDivider
       button onClick={handleClick}
       >
  <FontAwesome5
@@ -109,8 +109,8 @@ export default function SettingsScreen(props) {
       name={'chevron-up'}
       size={18}
     
-    />       
-        <ListItem.Title>Coucou</ListItem.Title>
+    />        */}
+        {/* <ListItem.Title>Coucou</ListItem.Title>
        {open ? <FontAwesome5
       key={124}
       name={'chevron-up'}
@@ -121,8 +121,8 @@ export default function SettingsScreen(props) {
     name={'chevron-down'}
     size={18}
   
-  /> } 
-      </ListItem  >
+  /> }  */}
+      {/* </ListItem  > */}
 
 <ListItem >
       <ListItem.Title style={{color:'#44B79D'}} onPress={toggleOverlay}  >Mentions Légales</ListItem.Title>
