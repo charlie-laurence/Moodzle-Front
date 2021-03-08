@@ -266,28 +266,28 @@ function ChartsMonthScreen(props) {
   LocaleConfig.defaultLocale = "fr";
 
   return (
-    <View backgroundColor="#CEFFEB" flex={-1}>
-      <SwitchSelector
-        options={[
-          { label: "Semaine", value: 1 },
-          { label: "Mois", value: 2 },
-          { label: "Année", value: 3 },
-        ]}
-        textColor="#5B63AE" //
-        selectedColor="white"
-        buttonColor="#5B63AE"
-        borderColor="#5B63AE"
-        hasPadding
-        initial={1}
-        style={{
-          width: 300,
-          alignSelf: "flex-end",
-          marginTop: 63,
-          marginRight: 17,
-        }}
-        onPress={(value) => props.changeStep(value)}
-      />
-      <ScrollView marginBottom={100} paddingBottom={25}>
+    <View backgroundColor="#CEFFEB">
+      <ScrollView marginBottom={0} paddingBottom={20}>
+        <SwitchSelector
+          options={[
+            { label: "Semaine", value: 1 },
+            { label: "Mois", value: 2 },
+            { label: "Année", value: 3 },
+          ]}
+          textColor="#5B63AE" //
+          selectedColor="white"
+          buttonColor="#5B63AE"
+          borderColor="#5B63AE"
+          hasPadding
+          initial={1}
+          style={{
+            width: 300,
+            alignSelf: "flex-end",
+            marginTop: 63,
+            marginRight: 17,
+          }}
+          onPress={(value) => props.changeStep(value)}
+        />
         <Card borderRadius={50} containerStyle={{ height: 300 }}>
           <Card.Title style={{ color: "#57706D" }}>
             Top des activités du mois
@@ -305,13 +305,10 @@ function ChartsMonthScreen(props) {
             <Image
               source={require("../assets/podium_moodzle_moodz.png")}
               style={{
-                width: 220,
-                height: 220,
-                resizeMode: "stretch",
-                paddingRight: 0,
-                marginLeft: 20,
-                marginTop: 0,
-                paddingTop: 0,
+                flexDirection: "row",
+                paddingBottom: 0,
+                marginBottom: 0,
+                flex: 1,
               }}
             />
 
@@ -510,10 +507,11 @@ function ChartsMonthScreen(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#CEFFEB",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   paragraph: {
     fontWeight: "bold",

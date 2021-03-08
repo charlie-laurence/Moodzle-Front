@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
+import { StyleSheet, Text, View, Dimensions, ImageBackground } from "react-native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 import {
@@ -97,9 +97,7 @@ function ReactionScreen({ mood, incrementStep, token, pseudo }) {
     }
 
     return (
-      <View style={styles.container}>
-        <Image style={styles.liane} source={require("../assets/liane2.png")} />
-        <Image style={styles.moodz} source={require("../assets/moodz.png")} />
+      <ImageBackground source={require("../assets/ReactionScreen.png")} style={styles.container}>
         <View style={styles.btnContainer}>
           <Button
             buttonStyle={{ backgroundColor: "#F0D231", width: 60, height: 60, borderRadius: 50, marginTop:25}}
@@ -111,7 +109,7 @@ function ReactionScreen({ mood, incrementStep, token, pseudo }) {
           />
         </View>
         {moodzIntroduction}
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -141,22 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 30,
     marginRight: 30,
-    // alignItems: "flex-start",
-  },
-  liane: {
-    position: "absolute",
-    width: 560,
-    height: 485,
-    left: -110,
-    top: -230,
-  },
-  moodz: {
-    position: "absolute",
-    width: 340,
-    height: 565,
-    left: 125,
-    top: 475,
-    zIndex: 1,
+    marginTop: 0
   },
 });
 

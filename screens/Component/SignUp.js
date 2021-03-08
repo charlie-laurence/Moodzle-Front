@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, KeyboardAvoidingView } from "react-native";
 import { Input } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
-const SignIn = ({ handleLocalPseudo, handleLocalMail, handleLocalPwd }) => {
+const SignUp = ({ handleLocalPseudo, handleLocalMail, handleLocalPwd }) => {
   const [showPwd, setShowPwd] = useState(false);
 
   const handleEyePwdPress = () => {
@@ -63,11 +63,12 @@ const SignIn = ({ handleLocalPseudo, handleLocalMail, handleLocalPwd }) => {
 
 const styles = StyleSheet.create({
   form: {
-    flex: 1,
     width: (Dimensions.get("window").width * 70) / 100,
+    height: (Dimensions.get("window").width * 50) / 100,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 25
   },
 });
 
-export default SignIn;
+export default SignUp;

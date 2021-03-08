@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Image, ImageBackground, } from "react-native";
 import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
@@ -60,17 +60,12 @@ function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
     );
   } else {
     return (
-      <View style={styles.container}>
-        <Image
-          style={[styles.moodz, { transform: [{ rotate: "160deg" }] }]}
-          source={require("../assets/moodz.png")}
-        />
-        <Image style={styles.liane} source={require("../assets/liane2.png")} />
+        <ImageBackground source={require("../assets/MoodScreen.png")} style={styles.container}>
         <Text style={[styles.textMoodz, { transform: [{ rotate: "20deg" }] }]}>
           Quelle est ton humeur du jour {pseudo} ?
         </Text>
         <View style={styles.moodContainer}>{icons}</View>
-      </View>
+        </ImageBackground>
     );
   }
 }
@@ -92,27 +87,11 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 75,
   },
-  moodz: {
-    position: "absolute",
-    width: 236,
-    height: 396,
-    left: -90,
-    top: -200,
-    zIndex: 1,
-    // transform: "rotate(178.23deg)",
-  },
-  liane: {
-    position: "absolute",
-    width: 546,
-    height: 585,
-    left: -158,
-    top: -410,
-  },
   textMoodz: {
     position: "absolute",
-    top: 175,
-    left: 150,
-    width: 150,
+    top: 200,
+    left: 180,
+    width: 200,
     textAlign: "center",
     fontFamily: "LondrinaSolid_400Regular",
     color: "#5B63AE",

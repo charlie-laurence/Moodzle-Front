@@ -248,6 +248,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#CEFFEB",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   paragraph: {
     fontWeight: "bold",

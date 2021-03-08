@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Dimensions, } from "react-native";
 import { Card, Button } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { connect } from "react-redux";
@@ -39,7 +39,7 @@ function HistoryScreen({ updateMood, token }) {
       var containerDesign = styles.cardContainer0;
     } else {
       var wrapperDesign = styles.cardWrapper;
-      var containerDesign = styles.cardWrapper;
+      var containerDesign = styles.cardContainer;
     }
 
     return (
@@ -66,8 +66,7 @@ function HistoryScreen({ updateMood, token }) {
   });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>Tableau de Bord</Text>
+    <View >
       <View style={styles.container}>
         <Button
           title={"Modifier mon mood"}
@@ -77,10 +76,10 @@ function HistoryScreen({ updateMood, token }) {
             justifyContent: "center",
             alignItems: "center",
             borderRadius: 50,
-            width: 150,
+            width: (Dimensions.get("window").width * 40) / 100,
+            height: (Dimensions.get("window").width * 20) / 100,
             marginBottom: 10,
-            marginTop: 15,
-            marginLeft: 15,
+            marginTop: 60,
           }}
           onPress={() => {
             updateMood();
@@ -97,32 +96,39 @@ function HistoryScreen({ updateMood, token }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#CEFFEB",
+    justifyContent: "center",
+    alignItems: "center",
+    width: (Dimensions.get("window").width),
+    height: (Dimensions.get("window").height),
   },
   cardWrapper0: {
+    width: (Dimensions.get("window").width * 90) / 100,
+    height: (Dimensions.get("window").width * 70) / 100,
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-    height: 250,
   },
   cardContainer0: {
     padding: 0,
+    marginBottom: 15,
     backgroundColor: "white",
-    shadowColor: "#F0FFF9",
+    shadowColor: "white",
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 1,
     },
     shadowOpacity: 0.5,
     shadowRadius: 5,
-    elevation: 10,
+    elevation: 7,
     borderColor: "white",
     borderRadius: 25,
   },
   cardWrapper: {
+    width: (Dimensions.get("window").width * 90) / 100,
+    height: (Dimensions.get("window").width * 40) / 100,
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-    height: 150,
   },
   cardContainer: {
     padding: 0,
@@ -134,7 +140,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 5,
-    elevation: 10,
+    elevation: 5,
     borderColor: "white",
     borderRadius: 25,
   },
