@@ -11,36 +11,52 @@ import {
 } from "react-native";
 import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
-import { Calendar, LocaleConfig } from "react-native-calendars";
+import { LocaleConfig } from "react-native-calendars";
 import { Card, ListItem, Icon, Row } from "react-native-elements";
 import SwitchSelector from "react-native-switch-selector";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { proxy } from "../statics/ip";
+import CalendarObj from './Component/Calendar'
+
+
+const monthList = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+var displayMonth = (month) => {
+  for (let i = 0; i < monthList.length; i ++) {
+    if (i === month) {
+      return monthList[i]
+    }
+  }
+}
+
+
 
 function ChartsMonthScreen(props) {
   const [pieData, setPieData] = useState([]);
-  const [startDate, setStartDate] = useState("2020-12-20");
+  const [startDate, setStartDate] = useState(new Date().toISOString().substring(0, 10));
   const [lineLabel, setLineLabel] = useState([""]);
   const [lineData, setLineData] = useState([0]);
   const [firstDay, setFirstDay] = useState();
   const [lastDay, setLastDay] = useState();
   const [calendarData, setCalendarData] = useState({});
   const [topActivities, setTopActivities] = useState(["", "", ""]);
+  const [monthDisplay, setMonthDisplay] = useState(displayMonth(new Date().getMonth()))
+  const [yearDisplay, setYearDisplay] = useState(new Date().getFullYear())
+  const [randomKey, setRandomKey] = useState(Math.random() * 1000)
 
   /* Hook d'effet à l'ouverture de la page pour charger les données*/
   useEffect(() => {
     fetchData();
-
+    setRandomKey(Math.random() * 1000)
     // Enregistrer les dates de départ et de fin pour le Calendrier
-  }, []);
+  }, [startDate]);
 
   // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
     var dataRaw = await fetch(`${proxy}/history`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `startdate=${startDate}&type=month`,
+      body: `startdate=${startDate}&type=month&token=${props.token}`,
     });
 
     var data = await dataRaw.json();
@@ -74,11 +90,17 @@ function ChartsMonthScreen(props) {
       return map[b] - map[a];
     });
 
+    // Boucle qui remplace les "undefined" des top activities en vide
+    for (let i = 0; i < 3 ; i++) {
+      if (topSortActivities[i] === undefined) {
+        topSortActivities[i] = ''
+      }
+    }
     setTopActivities([
-      topSortActivities[0],
-      topSortActivities[1],
-      topSortActivities[2],
-    ]);
+        topSortActivities[0],
+        topSortActivities[1],
+        topSortActivities[2],
+      ]);
 
     // Traitement des données pour le Pie Chart
     pieDataGenerator(dataHistory);
@@ -103,9 +125,7 @@ function ChartsMonthScreen(props) {
 
     for (let i = 0; i < dataHistory.length; i++) {
       var markColor = "";
-      var dateConvertToString = new Date(dataHistory[i].date)
-        .toISOString()
-        .substring(0, 10);
+      var dateConvertToString = new Date(dataHistory[i].date).toISOString().substring(0, 10);
       switch (dataHistory[i].mood_score) {
         case 1:
           markColor = "#CD6133";
@@ -129,7 +149,7 @@ function ChartsMonthScreen(props) {
       };
     }
     // console.log(markedSetDate)
-    setCalendarData(markedSetDate);
+    setCalendarData({... markedSetDate})
   };
 
   /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
@@ -212,7 +232,7 @@ function ChartsMonthScreen(props) {
     let lineLabelsArray = [];
     let lineDataArray = [];
 
-    for (let i = 1; i < dataset.length; i++) {
+    for (let i = 0; i < dataset.length; i++) {
       i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push(""); //Modulo 5 pour avoir des labels tous les 5 jours
 
       lineDataArray.push(parseInt(dataset[i].mood_score));
@@ -220,6 +240,35 @@ function ChartsMonthScreen(props) {
     setLineLabel(lineLabelsArray);
     setLineData(lineDataArray);
   };
+
+
+  // Fonction qui gère la sélection du mois
+    var monthSelect = (type) => {
+      var year = yearDisplay
+      var startDateConvert = new Date(startDate)
+      var month = startDateConvert.getMonth()
+
+      type === 'prev' ? month = startDateConvert.getMonth() - 1 : month = startDateConvert.getMonth() + 1
+
+      if (month === -1 ) {
+        month = 11;
+        year = yearDisplay - 1
+      }
+      else if (month === 12) {
+        month = 0;
+        year = yearDisplay + 1
+      }
+
+
+      var filterDate = new Date(year, month, 1, 1);      
+      var filterDateISO = filterDate.toISOString()
+
+      setStartDate(filterDateISO.substring(0, 10))
+      setMonthDisplay(displayMonth(filterDate.getMonth()))
+      setYearDisplay(filterDate.getFullYear())
+    }
+  
+  
 
   // Calendrier
   LocaleConfig.locales["fr"] = {
@@ -274,7 +323,7 @@ function ChartsMonthScreen(props) {
           { label: "Mois", value: 2 },
           { label: "Année", value: 3 },
         ]}
-        textColor="##5B63AE" //
+        textColor="#5B63AE" //
         selectedColor="white"
         buttonColor="#5B63AE"
         borderColor="#5B63AE"
@@ -288,6 +337,16 @@ function ChartsMonthScreen(props) {
         }}
         onPress={(value) => props.changeStep(value)}
       />
+
+      <View style={{flex: 1, flexDirection: 'row', justifyContent: "space-between", alignItems: 'flex-start', marginTop: 10, marginBottom: 20, marginLeft: 10, padding: 5}}>
+        <FontAwesome name="arrow-left" size={24} color="black" onPress={() => monthSelect('prev')}/>
+        <Text>{monthDisplay} {yearDisplay}</Text>
+        <FontAwesome name="arrow-right" size={24} color="black" onPress={() => monthSelect('next')}/>
+      </View>
+
+
+
+    <ScrollView marginBottom={100} paddingBottom={25}>
       <Card borderRadius={50} containerStyle={{ height: 300 }}>
         <Card.Title style={{ color: "#57706D" }}>
           Top des activités du mois
@@ -355,74 +414,16 @@ function ChartsMonthScreen(props) {
         </View>
       </Card>
 
-      <Card borderRadius={50} style={{ marginBottom: 10 }}>
+      <Card borderRadius={50} style={{ marginBottom: 10 }} >
         <Card.Title style={{ color: "#57706D" }}>
           Calendrier des humeurs
         </Card.Title>
         <Card.Divider />
-
-        <Calendar
-          style={{
-            height: 200,
-            marginBottom: 40,
-            marginTop: 0,
-            paddingTop: 0,
-          }}
-          theme={{
-            calendarBackground: "#11ffee00",
-          }}
-          // Initially visible month. Default = Date()
-          current={startDate}
-          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          minDate={firstDay}
-          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-          maxDate={lastDay}
-          // Handler which gets executed on day press. Default = undefined
-          onDayPress={(day) => {
-            console.log("selected day", day);
-          }}
-          // Handler which gets executed on day long press. Default = undefined
-          onDayLongPress={(day) => {
-            console.log("selected day", day);
-          }}
-          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-          monthFormat={"yyyy MM"}
-          // Handler which gets executed when visible month changes in calendar. Default = undefined
-          onMonthChange={(month) => {
-            console.log("month changed", month);
-          }}
-          // Hide month navigation arrows. Default = false
-          hideArrows={true}
-          // Replace default arrows with custom ones (direction can be 'left' or 'right')
-          renderArrow={(direction) => <Arrow />}
-          // Do not show days of other months in month page. Default = false
-          hideExtraDays={true}
-          // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-          // day from another month that is visible in calendar page. Default = false
-          disableMonthChange={true}
-          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-          firstDay={1}
-          // Hide day names. Default = false
-          hideDayNames={true}
-          // Show week numbers to the left. Default = false
-          showWeekNumbers={true}
-          // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-          onPressArrowLeft={(subtractMonth) => subtractMonth()}
-          // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-          onPressArrowRight={(addMonth) => addMonth()}
-          // Disable left arrow. Default = false
-          disableArrowLeft={true}
-          // Disable right arrow. Default = false
-          disableArrowRight={true}
-          // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-          disableAllTouchEventsForDisabledDays={true}
-          // Replace default month and year title with custom one. the function receive a date as parameter.
-          renderHeader={(date) => {
-            /*Return JSX*/
-          }}
-          // Enable the option to swipe between months. Default = false
-          markedDates={calendarData}
-        />
+          <CalendarObj 
+            key = {randomKey}
+            date={startDate}
+            dataset = {calendarData}
+          />
       </Card>
 
       <Card borderRadius={50}>
@@ -552,4 +553,14 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ChartsMonthScreen);
+const mapStateToProps = (state) => {
+  return {
+    mood: state.mood,
+    step: state.step,
+    pseudo: state.pseudo,
+    token: state.token,
+  };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChartsMonthScreen);
