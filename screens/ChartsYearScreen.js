@@ -361,30 +361,31 @@ function ChartsYearScreen(props) {
           flex: 1,
           flexDirection: "row",
           justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginTop: 10,
-          marginBottom: 20,
-          marginLeft: 10,
+          alignItems: "center",
+          marginTop: 30,
+          marginBottom: 10,
           padding: 5,
         }}
       >
         <FontAwesome
-          name="arrow-left"
+          name="chevron-left"
           size={24}
-          color="black"
+          color="#57706D"
+          style={{marginLeft: 15}}
           onPress={() => yearSelect("prev")}
         />
         <Text>Année {yearDisplay}</Text>
         <FontAwesome
-          name="arrow-right"
+          name="chevron-right"
           size={24}
-          color="black"
+          color="#57706D"
+          style={{marginRight: 15}}
           onPress={() => yearSelect("next")}
         />
       </View>
 
       <ScrollView>
-        <Card borderRadius={30} height={650} justifyContent="center">
+        <Card borderRadius={30} height={600} justifyContent="center">
           <Table>
             <View
               style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}
