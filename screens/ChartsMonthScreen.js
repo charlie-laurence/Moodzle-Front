@@ -21,17 +21,17 @@ import CalendarObj from "./Component/Calendar";
 
 const monthList = [
   "Janvier",
-  "FÃ©vrier",
+  "Février",
   "Mars",
   "Avril",
   "Mai",
   "Juin",
   "Juillet",
-  "AoÃ»t",
+  "Août",
   "Septembre",
   "Octobre",
   "Novembre",
-  "DÃ©cembre",
+  "Décembre",
 ];
 var displayMonth = (month) => {
   for (let i = 0; i < monthList.length; i++) {
@@ -56,14 +56,14 @@ function ChartsMonthScreen(props) {
   const [yearDisplay, setYearDisplay] = useState(new Date().getFullYear());
   const [randomKey, setRandomKey] = useState(Math.random() * 1000);
 
-  /* Hook d'effet Ã  l'ouverture de la page pour charger les donnÃ©es*/
+  /* Hook d'effet Ã  l'ouverture de la page pour charger les données*/
   useEffect(() => {
     fetchData();
     setRandomKey(Math.random() * 1000);
-    // Enregistrer les dates de dÃ©part et de fin pour le Calendrier
+    // Enregistrer les dates de départ et de fin pour le Calendrier
   }, [startDate]);
 
-  // Fonction qui rÃ©cupÃ¨re les donnÃ©es du back + traite les donnÃ©es pour l'affichage sur les graphes
+  // Fonction qui récupÃ¨re les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
     var dataRaw = await fetch(`${proxy}/history`, {
       method: "POST",
@@ -74,9 +74,9 @@ function ChartsMonthScreen(props) {
     var data = await dataRaw.json();
     var dataHistory = data.history;
 
-    // Top activitÃ©s
+    // Top activités
 
-    // RÃ©cupÃ©ration du tableau d'activitÃ©s
+    // Récupération du tableau d'activités
     var allMonthActivities = [];
     var eachMonthActivity = [];
 
@@ -84,20 +84,20 @@ function ChartsMonthScreen(props) {
       allMonthActivities.push(dataHistory[i].activity);
     }
 
-    // Aller rÃ©cupÃ©rer les activitÃ©s de chaque jour (certains ayant plusieurs activitÃ©s)
+    // Aller récupérer les activités de chaque jour (certains ayant plusieurs activités)
     for (var j = 0; j < allMonthActivities.length; j++) {
       for (var i = 0; i < allMonthActivities[j].length; i++) {
         eachMonthActivity.push(allMonthActivities[j][i].name);
       }
     }
 
-    // Traitement pour compter le nombre d'occurences de chaque activitÃ©
+    // Traitement pour compter le nombre d'occurences de chaque activité
     var map = eachMonthActivity.reduce(function (p, c) {
       p[c] = (p[c] || 0) + 1;
       return p;
     }, {});
 
-    // Trier les activitÃ©s par ordre dÃ©croissant d'occurence
+    // Trier les activités par ordre décroissant d'occurence
     var topSortActivities = Object.keys(map).sort(function (a, b) {
       return map[b] - map[a];
     });
@@ -146,7 +146,7 @@ function ChartsMonthScreen(props) {
     // console.log(markedSetDate)
     setCalendarData({ ...markedSetDate });
 
-    // Traitement des donnÃ©es pour le Pie Chart
+    // Traitement des données pour le Pie Chart
     pieDataGenerator(dataHistory);
     lineGenerator(dataHistory);
   };
@@ -160,7 +160,7 @@ function ChartsMonthScreen(props) {
     let score4 = 0;
     let score5 = 0;
 
-    // IncrÃ©menter les scores de 1 Ã  chaque fois qu'une note des donnÃ©es correspondent
+    // Incrémenter les scores de 1 Ã  chaque fois qu'une note des données correspondent
     for (let i = 0; i < dataset.length; i++) {
       switch (dataset[i].mood_score) {
         case 1:
@@ -181,7 +181,7 @@ function ChartsMonthScreen(props) {
       }
     }
 
-    // Stocker les rÃ©sultats dans un Ã©tats qui seront exploiter par le PieChart
+    // Stocker les résultats dans un états qui seront exploiter par le PieChart
     setPieData([
       {
         name: "angry",
@@ -226,7 +226,7 @@ function ChartsMonthScreen(props) {
     ]);
   };
 
-  /* Fonction qui rÃ©cupÃ¨re les donnÃ©es pour la courbe */
+  /* Fonction qui récupÃ¨re les données pour la courbe */
   var lineGenerator = (dataset) => {
     let lineLabelsArray = [];
     let lineDataArray = [];
@@ -252,7 +252,7 @@ function ChartsMonthScreen(props) {
     setLineData(lineDataArray);
   };
 
-  // Fonction qui gÃ¨re la sÃ©lection du mois
+  // Fonction qui gÃ¨re la sélection du mois
   var monthSelect = (type) => {
     var year = yearDisplay;
     var startDateConvert = new Date(startDate);
@@ -281,31 +281,31 @@ function ChartsMonthScreen(props) {
   LocaleConfig.locales["fr"] = {
     monthNames: [
       "Janvier",
-      "FÃ©vrier",
+      "Février",
       "Mars",
       "Avril",
       "Mai",
       "Juin",
       "Juillet",
-      "AoÃ»t",
+      "Août",
       "Septembre",
       "Octobre",
       "Novembre",
-      "DÃ©cembre",
+      "Décembre",
     ],
     monthNamesShort: [
       "Janv.",
-      "FÃ©vr.",
+      "Févr.",
       "Mars",
       "Avril",
       "Mai",
       "Juin",
       "Juil.",
-      "AoÃ»t",
+      "Août",
       "Sept.",
       "Oct.",
       "Nov.",
-      "DÃ©c.",
+      "Déc.",
     ],
     dayNames: [
       "Dimanche",
@@ -328,7 +328,7 @@ function ChartsMonthScreen(props) {
           options={[
             { label: "Semaine", value: 1 },
             { label: "Mois", value: 2 },
-            { label: "AnnÃ©e", value: 3 },
+            { label: "Année", value: 3 },
           ]}
           textColor="#5B63AE" //
           selectedColor="white"
@@ -376,19 +376,15 @@ function ChartsMonthScreen(props) {
 
         <Card borderRadius={50} containerStyle={{ height: 300 }}>
           <Card.Title style={{ color: "#57706D" }}>
-            Top des activitÃ©s du mois
+            Top des activités du mois
           </Card.Title>
           <Card.Divider />
-
-          <View
-            style={{
+          <View style={{
               flexDirection: "row",
               paddingBottom: 0,
               marginBottom: 0,
-              flex: 1,
-            }}
-          >
-            <Image
+            }}>
+          <Image
               source={require("../assets/podium_moodzle_moodz.png")}
               style={{
                 width: 220,
@@ -400,8 +396,7 @@ function ChartsMonthScreen(props) {
                 paddingTop: 0,
               }}
             />
-
-            <View style={{ marginLeft: -50, width: 100, marginTop: 10 }}>
+             <View style={{ marginLeft: -10, width: 100, marginTop: 30 }}>
               <Text style={{ color: "#57706D" }}>
                 <FontAwesome
                   name="circle"
@@ -430,14 +425,7 @@ function ChartsMonthScreen(props) {
                 {` ${topActivities[2]}`}
               </Text>
             </View>
-            {/* <Card.Image
-        source={require('../assets/moodz.png')} style={{width: '50%',
-          height: '35%',
-          resizeMode: 'stretch',
-        paddingBottom:0,
-      marginBottom:0}}
-      /> */}
-          </View>
+            </View>
         </Card>
 
         <Card borderRadius={50} style={{ marginBottom: 10 }}>
@@ -454,7 +442,7 @@ function ChartsMonthScreen(props) {
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            RÃ©partition globale des humeurs du mois
+            Répartition globale des humeurs du mois
           </Card.Title>
           <Card.Divider />
           <View
@@ -508,7 +496,7 @@ function ChartsMonthScreen(props) {
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            RÃ©partition quotidienne des humeurs
+            Répartition quotidienne des humeurs
           </Card.Title>
           <Card.Divider />
           <LineChart
