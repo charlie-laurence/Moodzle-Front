@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -11,6 +11,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalNewActivity from "./Component/ModalNewActivity";
 import ActivityBar from "./Component/ActivityBar";
 import { proxy } from "../statics/ip";
+import { limitDisplayedActivities } from "../statics/helper";
+import ActivityCarousel from "./Component/ActivityCarousel";
 
 function ActivityScreen({
   incrementStep,
@@ -32,8 +34,10 @@ function ActivityScreen({
     const getActivityList = async () => {
       try {
         const list = await AsyncStorage.getItem("moodzle-activities");
-        if (list !== null) {
-          setActivityList(JSON.parse(list));
+        if (list) {
+          const parsedList = JSON.parse(list);
+          let listToDisplay = limitDisplayedActivities(parsedList, 6);
+          setActivityList(listToDisplay);
         } else {
           //Procédure pour ne pas afficher de doublon en cas de login (si signup, uniquement la liste de base est affichée)
           let activitiesToLoad = initialActivityList.map(
@@ -47,7 +51,11 @@ function ActivityScreen({
             ...filteredSelection,
           ]);
           await AsyncStorage.setItem("moodzle-activities", jsonInitialList);
-          setActivityList(JSON.parse(jsonInitialList));
+          let listToDisplay = limitDisplayedActivities(
+            JSON.parse(jsonInitialList),
+            6
+          );
+          setActivityList(listToDisplay);
         }
       } catch (err) {
         console.log(err);
@@ -56,8 +64,19 @@ function ActivityScreen({
     getActivityList();
   }, []);
 
-  const updateLocalList = (local) => {
-    setActivityList([...activityList, local]);
+  //Mise à jour liste des activités affichées (état local du composant ActivityScreen & LocalStorage)
+  const updateLocalList = async (local) => {
+    let currentActivityList = [...activityList];
+    currentActivityList[currentActivityList.length - 1].length < 6
+      ? currentActivityList[currentActivityList.length - 1].push(local)
+      : currentActivityList.push([local]);
+    //Etat local
+    setActivityList([...currentActivityList]);
+    //Local Storage
+    const listToSendToLocalStorage = JSON.stringify(
+      [...currentActivityList].reduce((a, b) => a.concat(b))
+    );
+    await AsyncStorage.setItem("moodzle-activities", listToSendToLocalStorage);
   };
 
   //Selection d'une activité (envoi dans le store)
@@ -84,6 +103,26 @@ function ActivityScreen({
     }
   };
 
+  //Suppression de l'activité à la liste affichée (état local & local storage)
+  const removeFromActivityList = async (activityToRemove) => {
+    //Si activité sélectionnée, elle est retirée de la sélection
+    activitySelection.filter((item) => item.name === activityToRemove.name)
+      .length === 0
+      ? null
+      : deselectActivity(activityToRemove);
+    let wholeList = [...activityList].reduce((a, b) => a.concat(b));
+    let updatedList = wholeList.filter(
+      (activity) => activity.name !== activityToRemove.name
+    );
+    //Etat Local
+    setActivityList(limitDisplayedActivities(updatedList, 6));
+    //Local Storage
+    await AsyncStorage.setItem(
+      "moodzle-activities",
+      JSON.stringify(updatedList)
+    );
+  };
+
   const handleNewActivityPress = () => {
     toggleOverlay();
   };
@@ -93,37 +132,47 @@ function ActivityScreen({
   };
 
   //Génération des boutons d'activité (à partir de la liste récupérée en local storage)
-  let activitiesBtn = [];
+  let activitiesBtnPages = [];
   if (activityList.length > 0) {
-    activitiesBtn = activityList.map((activity) => (
-      <Button
-        key={activity.name}
-        title={activity.name}
-        buttonStyle={{
-          backgroundColor:
+    for (let i = 0; i < activityList.length; i++) {
+      const page = activityList[i].map((activity) => (
+        <Button
+          key={activity.name}
+          title={activity.name}
+          buttonStyle={{
+            backgroundColor:
+              activitySelection.filter((item) => item.name === activity.name)
+                .length > 0
+                ? categories[activity.category].color
+                : "#57706D",
+            marginBottom: 15,
+            borderRadius: 15,
+          }}
+          onPress={() => handleActivityPress(activity)}
+          onLongPress={() => removeFromActivityList(activity)}
+          selected={
             activitySelection.filter((item) => item.name === activity.name)
               .length > 0
-              ? categories[activity.category].color
-              : "#57706D",
-          marginBottom: 15,
-          borderRadius:15
-        }}
-        onPress={() => handleActivityPress(activity)}
-        selected={
-          activitySelection.filter((item) => item.name === activity.name)
-            .length > 0
-            ? true
-            : false
-        }
-      />
-    ));
+              ? true
+              : false
+          }
+        />
+      ));
+      activitiesBtnPages.push(page);
+    }
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.topBtnContainer}>
         <Button
-          buttonStyle={{ backgroundColor: "#fff" , borderRadius:25 , height:50 , width:90 , marginTop:25}}
+          buttonStyle={{
+            backgroundColor: "#fff",
+            borderRadius: 25,
+            height: 50,
+            width: 90,
+            marginTop: 25,
+          }}
           title={"Retour"}
           titleStyle={{ color: "#5B63AE" }}
           onPress={() => decrementStep()}
@@ -132,9 +181,7 @@ function ActivityScreen({
       <View style={styles.searchBarContainer}>
         <ActivityBar updateLocalList={updateLocalList} />
       </View>
-      <View style={styles.activityContainer}>
-        <View style={styles.activityWrapper}>{activitiesBtn}</View>
-      </View>
+      <ActivityCarousel activities={activitiesBtnPages} />
       <View style={styles.lower}>
         <View style={styles.newActivityContainer}>
           <FontAwesome5
@@ -149,7 +196,12 @@ function ActivityScreen({
         </View>
         <View style={styles.validateContainer}>
           <Button
-            buttonStyle={{ backgroundColor: "#fff" , borderRadius:25 , height:50 , width:100 }}
+            buttonStyle={{
+              backgroundColor: "#fff",
+              borderRadius: 25,
+              height: 50,
+              width: 100,
+            }}
             title={activitySelection.length > 0 ? "Valider" : "Ignorer"}
             titleStyle={{ color: "#5B63AE" }}
             onPress={() => handleSkipOrValidatePress()}
@@ -192,15 +244,15 @@ const styles = StyleSheet.create({
   },
   activityContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
   },
   activityWrapper: {
     flex: 0.5,
     flexWrap: "wrap",
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    // justifyContent: "space-evenly",
+    // alignItems: "center",
     width: Dimensions.get("window").width,
     padding: 25,
   },

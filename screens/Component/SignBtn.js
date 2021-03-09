@@ -36,15 +36,21 @@ const styles = StyleSheet.create({
   btnContainer: {
     flex: 1,
     flexDirection: "row",
-    width: (Dimensions.get("window").width * 45) / 100,
+    width: (Dimensions.get("window").width * 50) / 100,
     justifyContent: "space-between",
     alignItems: "flex-end",
   },
   selected: {
     backgroundColor: "#5B63AE",
+    borderRadius: 50,
+    height: 50,
+    width : 100
   },
   unselected: {
     backgroundColor: "#fff",
+    borderRadius: 50,
+    height: 50,
+    width : 100
   },
   txtSelected: {
     color: "#fff",
