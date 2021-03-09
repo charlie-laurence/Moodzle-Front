@@ -3,7 +3,9 @@ const _IP_TSY = "172.17.1.144";
 const _IP_CHARLIE = "192.168.1.55";
 const _IP_ELO = "172.17.1.15";
 const _IP_CAPSULE = "172.17.1.158";
+const _IP_LOCAL = "192.168.42.60"
 
-const proxy = `http://${_IP_OLIV}:3000`;
+
+const proxy = `http://${_IP_LOCAL}:3000`;
 
 export { proxy };
