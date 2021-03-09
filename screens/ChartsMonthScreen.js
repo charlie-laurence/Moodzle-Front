@@ -21,32 +21,36 @@ import CalendarObj from './Component/Calendar'
 
 const monthList = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 var displayMonth = (month) => {
-  for (let i = 0; i < monthList.length; i ++) {
+  for (let i = 0; i < monthList.length; i++) {
     if (i === month) {
-      return monthList[i]
+      return monthList[i];
     }
   }
 }
 
 function ChartsMonthScreen(props) {
   const [pieData, setPieData] = useState([]);
-  const [startDate, setStartDate] = useState(new Date().toISOString().substring(0, 10));
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
   const [lineLabel, setLineLabel] = useState([""]);
   const [lineData, setLineData] = useState([0]);
   const [calendarData, setCalendarData] = useState({});
   const [topActivities, setTopActivities] = useState(["", "", ""]);
-  const [monthDisplay, setMonthDisplay] = useState(displayMonth(new Date().getMonth()))
-  const [yearDisplay, setYearDisplay] = useState(new Date().getFullYear())
-  const [randomKey, setRandomKey] = useState(Math.random() * 1000)
+  const [monthDisplay, setMonthDisplay] = useState(
+    displayMonth(new Date().getMonth())
+  );
+  const [yearDisplay, setYearDisplay] = useState(new Date().getFullYear());
+  const [randomKey, setRandomKey] = useState(Math.random() * 1000);
 
-  /* Hook d'effet à l'ouverture de la page pour charger les données*/
+  /* Hook d'effet Ã  l'ouverture de la page pour charger les donnÃ©es*/
   useEffect(() => {
     fetchData();
-    setRandomKey(Math.random() * 1000)
-    // Enregistrer les dates de départ et de fin pour le Calendrier
+    setRandomKey(Math.random() * 1000);
+    // Enregistrer les dates de dÃ©part et de fin pour le Calendrier
   }, [startDate]);
 
-  // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
+  // Fonction qui rÃ©cupÃ¨re les donnÃ©es du back + traite les donnÃ©es pour l'affichage sur les graphes
   var fetchData = async () => {
     var dataRaw = await fetch(`${proxy}/history`, {
       method: "POST",
@@ -57,9 +61,9 @@ function ChartsMonthScreen(props) {
     var data = await dataRaw.json();
     var dataHistory = data.history;
 
-    // Top activités
+    // Top activitÃ©s
 
-    // Récupération du tableau d'activités
+    // RÃ©cupÃ©ration du tableau d'activitÃ©s
     var allMonthActivities = [];
     var eachMonthActivity = [];
 
@@ -67,28 +71,28 @@ function ChartsMonthScreen(props) {
       allMonthActivities.push(dataHistory[i].activity);
     }
 
-    // Aller récupérer les activités de chaque jour (certains ayant plusieurs activités)
+    // Aller rÃ©cupÃ©rer les activitÃ©s de chaque jour (certains ayant plusieurs activitÃ©s)
     for (var j = 0; j < allMonthActivities.length; j++) {
       for (var i = 0; i < allMonthActivities[j].length; i++) {
         eachMonthActivity.push(allMonthActivities[j][i].name);
       }
     }
 
-    // Traitement pour compter le nombre d'occurences de chaque activité
+    // Traitement pour compter le nombre d'occurences de chaque activitÃ©
     var map = eachMonthActivity.reduce(function (p, c) {
       p[c] = (p[c] || 0) + 1;
       return p;
     }, {});
 
-    // Trier les activités par ordre décroissant d'occurence
+    // Trier les activitÃ©s par ordre dÃ©croissant d'occurence
     var topSortActivities = Object.keys(map).sort(function (a, b) {
       return map[b] - map[a];
     });
 
     // Boucle qui remplace les "undefined" des top activities en vide
-    for (let i = 0; i < 3 ; i++) {
+    for (let i = 0; i < 3; i++) {
       if (topSortActivities[i] === undefined) {
-        topSortActivities[i] = ''
+        topSortActivities[i] = "";
       }
     }
     setTopActivities([
@@ -101,7 +105,9 @@ function ChartsMonthScreen(props) {
 
     for (let i = 0; i < dataHistory.length; i++) {
       var markColor = "";
-      var dateConvertToString = new Date(dataHistory[i].date).toISOString().substring(0, 10);
+      var dateConvertToString = new Date(dataHistory[i].date)
+        .toISOString()
+        .substring(0, 10);
       switch (dataHistory[i].mood_score) {
         case 1:
           markColor = "#CD6133";
@@ -125,24 +131,23 @@ function ChartsMonthScreen(props) {
       };
     }
     // console.log(markedSetDate)
-    setCalendarData({... markedSetDate})
+    setCalendarData({ ...markedSetDate });
 
-    // Traitement des données pour le Pie Chart
+    // Traitement des donnÃ©es pour le Pie Chart
     pieDataGenerator(dataHistory);
     lineGenerator(dataHistory);
-    
   };
 
   /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
   var pieDataGenerator = (dataset) => {
-    // Initialisation des scores à 0
+    // Initialisation des scores Ã  0
     let score1 = 0;
     let score2 = 0;
     let score3 = 0;
     let score4 = 0;
     let score5 = 0;
 
-    // Incrémenter les scores de 1 à chaque fois qu'une note des données correspondent
+    // IncrÃ©menter les scores de 1 Ã  chaque fois qu'une note des donnÃ©es correspondent
     for (let i = 0; i < dataset.length; i++) {
       switch (dataset[i].mood_score) {
         case 1:
@@ -163,7 +168,7 @@ function ChartsMonthScreen(props) {
       }
     }
 
-    // Stocker les résultats dans un états qui seront exploiter par le PieChart
+    // Stocker les rÃ©sultats dans un Ã©tats qui seront exploiter par le PieChart
     setPieData([
       {
         name: "angry",
@@ -208,7 +213,7 @@ function ChartsMonthScreen(props) {
     ]);
   };
 
-  /* Fonction qui récupère les données pour la courbe */
+  /* Fonction qui rÃ©cupÃ¨re les donnÃ©es pour la courbe */
   var lineGenerator = (dataset) => {
     let lineLabelsArray = [];
     let lineDataArray = [];
@@ -224,8 +229,6 @@ function ChartsMonthScreen(props) {
       startDateFormat.getMonth() + 1,
       0
     ).toISOString();
-
-
 
     for (let i = 0; i < dataset.length; i++) {
       i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push(""); //Modulo 5 pour avoir des labels tous les 5 jours
@@ -260,38 +263,43 @@ function ChartsMonthScreen(props) {
       setMonthDisplay(displayMonth(filterDate.getMonth()))
       setYearDisplay(filterDate.getFullYear())
     }
-  
-  
+    var filterDate = new Date(year, month, 1, 1);
+    var filterDateISO = filterDate.toISOString();
+
+    setStartDate(filterDateISO.substring(0, 10));
+    setMonthDisplay(displayMonth(filterDate.getMonth()));
+    setYearDisplay(filterDate.getFullYear());
+  };
 
   // Calendrier
   LocaleConfig.locales["fr"] = {
     monthNames: [
       "Janvier",
-      "Février",
+      "FÃ©vrier",
       "Mars",
       "Avril",
       "Mai",
       "Juin",
       "Juillet",
-      "Août",
+      "AoÃ»t",
       "Septembre",
       "Octobre",
       "Novembre",
-      "Décembre",
+      "DÃ©cembre",
     ],
     monthNamesShort: [
       "Janv.",
-      "Févr.",
+      "FÃ©vr.",
       "Mars",
       "Avril",
       "Mai",
       "Juin",
       "Juil.",
-      "Août",
+      "AoÃ»t",
       "Sept.",
       "Oct.",
       "Nov.",
-      "Déc.",
+      "DÃ©c.",
     ],
     dayNames: [
       "Dimanche",
@@ -308,194 +316,216 @@ function ChartsMonthScreen(props) {
   LocaleConfig.defaultLocale = "fr";
 
   return (
-  <View backgroundColor="#CEFFEB">
-    <ScrollView marginBottom={0} paddingBottom={20}>
-      <SwitchSelector
-        options={[
-          { label: "Semaine", value: 1 },
-          { label: "Mois", value: 2 },
-          { label: "Année", value: 3 },
-        ]}
-        textColor="#5B63AE" //
-        selectedColor="white"
-        buttonColor="#5B63AE"
-        borderColor="#5B63AE"
-        hasPadding
-        initial={1}
-        style={{
-          width: 300,
-          alignSelf: "flex-end",
-          marginTop: 63,
-          marginRight: 17,
-        }}
-        onPress={(value) => props.changeStep(value)}
-      />
-
-      <View style={{flex: 1, flexDirection: 'row', justifyContent: "space-between", alignItems: 'flex-start', marginTop: 10, marginBottom: 20, marginLeft: 10, padding: 5}}>
-        <FontAwesome name="arrow-left" size={24} color="black" onPress={() => monthSelect('prev')}/>
-        <Text>{monthDisplay} {yearDisplay}</Text>
-        <FontAwesome name="arrow-right" size={24} color="black" onPress={() => monthSelect('next')}/>
-      </View>
-
-      <Card borderRadius={50} containerStyle={{ height: 300 }}>
-        <Card.Title style={{ color: "#57706D" }}>
-          Top des activités du mois
-        </Card.Title>
-        <Card.Divider />
+    <View backgroundColor="#CEFFEB">
+      <ScrollView marginBottom={0} paddingBottom={20}>
+        <SwitchSelector
+          options={[
+            { label: "Semaine", value: 1 },
+            { label: "Mois", value: 2 },
+            { label: "AnnÃ©e", value: 3 },
+          ]}
+          textColor="#5B63AE" //
+          selectedColor="white"
+          buttonColor="#5B63AE"
+          borderColor="#5B63AE"
+          hasPadding
+          initial={1}
+          style={{
+            width: 300,
+            alignSelf: "flex-end",
+            marginTop: 63,
+            marginRight: 17,
+          }}
+          onPress={(value) => props.changeStep(value)}
+        />
 
         <View
           style={{
-            flexDirection: "row",
-            paddingBottom: 0,
-            marginBottom: 0,
             flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            marginTop: 10,
+            marginBottom: 20,
+            marginLeft: 10,
+            padding: 5,
           }}
         >
-          <Image
-            source={require("../assets/podium_moodzle_moodz.png")}
-            style={{
-              width: 220,
-              height: 220,
-              resizeMode: "stretch",
-              paddingRight: 0,
-              marginLeft: 20,
-              marginTop: 0,
-              paddingTop: 0,
-            }}
+          <FontAwesome
+            name="arrow-left"
+            size={24}
+            color="black"
+            onPress={() => monthSelect("prev")}
           />
+          <Text>
+            {monthDisplay} {yearDisplay}
+          </Text>
+          <FontAwesome
+            name="arrow-right"
+            size={24}
+            color="black"
+            onPress={() => monthSelect("next")}
+          />
+        </View>
 
-          <View style={{ marginLeft: -50, width: 100, marginTop: 10 }}>
-            <Text style={{ color: "#57706D" }}>
-              <FontAwesome
-                name="circle"
-                size={10}
-                color="#5B63AE"
-                iconStyle={{ marginRight: 10 }}
-              />
-              {` ${topActivities[0]}`}
+        <Card borderRadius={50} containerStyle={{ height: 300 }}>
+          <Card.Title style={{ color: "#57706D" }}>
+            Top des activitÃ©s du mois
+          </Card.Title>
+          <Card.Divider />
 
-            </Text>
-            <Text style={{ color: "#57706D" }}>
-              <FontAwesome
-                name="circle"
-                size={10}
-                color="#44B79D"
-                style={{ alignSelf: "center", marginRight: 50 }}
-              />
-              {` ${topActivities[1]}`}
-            </Text>
-            <Text style={{ color: "#57706D" }}>
-              <FontAwesome
-                name="circle"
-                size={10}
-                color="#df8f4a"
-                style={{ alignSelf: "center", marginRight: 50 }}
-              />
-              {` ${topActivities[2]}`}
-            </Text>
-          </View>
-          {/* <Card.Image
+          <View
+            style={{
+              flexDirection: "row",
+              paddingBottom: 0,
+              marginBottom: 0,
+              flex: 1,
+            }}
+          >
+            <Image
+              source={require("../assets/podium_moodzle_moodz.png")}
+              style={{
+                width: 220,
+                height: 220,
+                resizeMode: "stretch",
+                paddingRight: 0,
+                marginLeft: 20,
+                marginTop: 0,
+                paddingTop: 0,
+              }}
+            />
+
+            <View style={{ marginLeft: -50, width: 100, marginTop: 10 }}>
+              <Text style={{ color: "#57706D" }}>
+                <FontAwesome
+                  name="circle"
+                  size={10}
+                  color="#5B63AE"
+                  iconStyle={{ marginRight: 10 }}
+                />
+                {` ${topActivities[0]}`}
+              </Text>
+              <Text style={{ color: "#57706D" }}>
+                <FontAwesome
+                  name="circle"
+                  size={10}
+                  color="#44B79D"
+                  style={{ alignSelf: "center", marginRight: 50 }}
+                />
+                {` ${topActivities[1]}`}
+              </Text>
+              <Text style={{ color: "#57706D" }}>
+                <FontAwesome
+                  name="circle"
+                  size={10}
+                  color="#df8f4a"
+                  style={{ alignSelf: "center", marginRight: 50 }}
+                />
+                {` ${topActivities[2]}`}
+              </Text>
+            </View>
+            {/* <Card.Image
         source={require('../assets/moodz.png')} style={{width: '50%',
           height: '35%',
           resizeMode: 'stretch',
         paddingBottom:0,
       marginBottom:0}}
       /> */}
-        </View>
-      </Card>
-
-      <Card borderRadius={50} style={{ marginBottom: 10 }} >
-        <Card.Title style={{ color: "#57706D" }}>
-          Calendrier des humeurs
-        </Card.Title>
-        <Card.Divider />
-          <CalendarObj 
-            key = {randomKey}
-            date={startDate}
-            dataset = {calendarData}
-          />
-      </Card>
-
-      <Card borderRadius={50}>
-        <Card.Title style={{ color: "#57706D" }}>
-          Répartition globale des humeurs du mois
-        </Card.Title>
-        <Card.Divider />
-        <View
-          style={{
-            flexDirection: "row",
-            paddingBottom: 0,
-            marginBottom: 0,
-            flex: 1,
-          }}
-        >
-          <PieChart
-            data={pieData}
-            width={Dimensions.get("window").width}
-            height={220}
-            chartConfig={{
-              backgroundGradientFrom: "#1E2923",
-              backgroundGradientFromOpacity: 0,
-              backgroundGradientTo: "#08130D",
-              backgroundGradientToOpacity: 0,
-              strokeWidth: 2,
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              barPercentage: 0.5,
-            }}
-            accessor={"count"}
-            backgroundColor={"transparent"}
-            center={[10, 0]}
-            absolute
-            hasLegend={false}
-            alignItems={"center"}
-          />
-          <View style={{ marginTop: 32, marginLeft: -130, width: 100 }}>
-            <Text style={{ marginBottom: 8 }}>
-              <FontAwesome5 name="angry" size={25} color="#CD6133" />
-            </Text>
-            <Text style={{ marginBottom: 8 }}>
-              <FontAwesome5 name="sad-cry" size={25} color="#F0A07E" />
-            </Text>
-            <Text style={{ marginBottom: 8 }}>
-              <FontAwesome5 name="meh" size={25} color="#F0D231" />
-            </Text>
-            <Text style={{ marginBottom: 8 }}>
-              <FontAwesome5 name="grin-squint" size={25} color="#44B79D" />
-            </Text>
-            <Text style={{ marginBottom: 8 }}>
-              <FontAwesome5 name="smile-beam" size={25} color="#54857F" />
-            </Text>
           </View>
-        </View>
-      </Card>
+        </Card>
 
-      <Card borderRadius={50}>
-        <Card.Title style={{ color: "#57706D" }}>
-          Répartition quotidienne des humeurs
-        </Card.Title>
-        <Card.Divider />
-        <LineChart
-          data={{
-            labels: lineLabel,
-            datasets: [{ data: lineData }],
-          }}
-          width={Dimensions.get("window").width - 50}
-          height={220}
-          // yAxisLabel="$"
-          // yAxisSuffix="k"
-          yAxisInterval={31} // optional, defaults to 1
-          chartConfig={chartConfig}
-          bezier
-          style={{
-            borderRadius: 16,
-            paddingRight: 25,
-            paddingLeft: 0,
-            paddingTop: 10,
-          }}
-        />
-      </Card>
-    </ScrollView>
+        <Card borderRadius={50} style={{ marginBottom: 10 }}>
+          <Card.Title style={{ color: "#57706D" }}>
+            Calendrier des humeurs
+          </Card.Title>
+          <Card.Divider />
+          <CalendarObj
+            key={randomKey}
+            date={startDate}
+            dataset={calendarData}
+          />
+        </Card>
+
+        <Card borderRadius={50}>
+          <Card.Title style={{ color: "#57706D" }}>
+            RÃ©partition globale des humeurs du mois
+          </Card.Title>
+          <Card.Divider />
+          <View
+            style={{
+              flexDirection: "row",
+              paddingBottom: 0,
+              marginBottom: 0,
+              flex: 1,
+            }}
+          >
+            <PieChart
+              data={pieData}
+              width={Dimensions.get("window").width}
+              height={220}
+              chartConfig={{
+                backgroundGradientFrom: "#1E2923",
+                backgroundGradientFromOpacity: 0,
+                backgroundGradientTo: "#08130D",
+                backgroundGradientToOpacity: 0,
+                strokeWidth: 2,
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                barPercentage: 0.5,
+              }}
+              accessor={"count"}
+              backgroundColor={"transparent"}
+              center={[10, 0]}
+              absolute
+              hasLegend={false}
+              alignItems={"center"}
+            />
+            <View style={{ marginTop: 32, marginLeft: -130, width: 100 }}>
+              <Text style={{ marginBottom: 8 }}>
+                <FontAwesome5 name="angry" size={25} color="#CD6133" />
+              </Text>
+              <Text style={{ marginBottom: 8 }}>
+                <FontAwesome5 name="sad-cry" size={25} color="#F0A07E" />
+              </Text>
+              <Text style={{ marginBottom: 8 }}>
+                <FontAwesome5 name="meh" size={25} color="#F0D231" />
+              </Text>
+              <Text style={{ marginBottom: 8 }}>
+                <FontAwesome5 name="grin-squint" size={25} color="#44B79D" />
+              </Text>
+              <Text style={{ marginBottom: 8 }}>
+                <FontAwesome5 name="smile-beam" size={25} color="#54857F" />
+              </Text>
+            </View>
+          </View>
+        </Card>
+
+        <Card borderRadius={50}>
+          <Card.Title style={{ color: "#57706D" }}>
+            RÃ©partition quotidienne des humeurs
+          </Card.Title>
+          <Card.Divider />
+          <LineChart
+            data={{
+              labels: lineLabel,
+              datasets: [{ data: lineData }],
+            }}
+            width={Dimensions.get("window").width - 50}
+            height={220}
+            // yAxisLabel="$"
+            // yAxisSuffix="k"
+            yAxisInterval={31} // optional, defaults to 1
+            chartConfig={chartConfig}
+            bezier
+            style={{
+              borderRadius: 16,
+              paddingRight: 25,
+              paddingLeft: 0,
+              paddingTop: 10,
+            }}
+          />
+        </Card>
+      </ScrollView>
     </View>
   );
 }
@@ -505,8 +535,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#CEFFEB",
-    width: (Dimensions.get("window").width),
-    height: (Dimensions.get("window").height)
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   paragraph: {
     fontWeight: "bold",
@@ -551,6 +581,5 @@ const mapStateToProps = (state) => {
     token: state.token,
   };
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChartsMonthScreen);
