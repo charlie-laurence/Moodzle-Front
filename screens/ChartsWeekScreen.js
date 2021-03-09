@@ -6,19 +6,21 @@ import {
 } from "react-native-chart-kit";
 import { connect } from "react-redux";
 import SwitchSelector from "react-native-switch-selector";
-import { Card, ListItem, Icon, Row } from "react-native-elements";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Card, ListItem, Icon, Row, Divider } from "react-native-elements";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { proxy } from "../statics/ip";
 
 function ChartsWeekScreen(props) {
   const [dataChart, setDataChart] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [startDate, setStartDate] = useState("2020-05-20");
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().substring(0, 10)
+  );
   const [pieData, setPieData] = useState([]);
 
   /* Hook d'effet à l'ouverture de la page pour charger les données*/
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [startDate]);
 
   //Récupération du résultat renvoyé par le backend
 
@@ -28,7 +30,7 @@ function ChartsWeekScreen(props) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
       },
-      body: `startdate=${startDate}&type=week`
+      body: `startdate=${startDate}&type=week&token=${props.token}`,
     });
 
     var datas = await rawDatas.json();
@@ -125,29 +127,68 @@ function ChartsWeekScreen(props) {
     ]);
   };
 
+  // Fonction qui gère la sélection de la semaine
+  var weekSelect = (type) => {
+    var days = 0;
+    type === "prev" ? (days = -7) : (days = 7);
+    var filterDate = new Date(startDate);
+    filterDate.setDate(filterDate.getDate() + days);
+    var dateConvert = filterDate.toISOString().substring(0, 10);
+    console.log(dateConvert);
+    setStartDate(dateConvert);
+  };
+
   return (
     <View backgroundColor="#CEFFEB">
-      <SwitchSelector
-        options={[
-          { label: "Semaine", value: 1 },
-          { label: "Mois", value: 2 },
-          { label: "Année", value: 3 },
-        ]}
-        textColor="##5B63AE" //
-        selectedColor="white"
-        buttonColor="#5B63AE"
-        borderColor="#5B63AE"
-        hasPadding
-        initial={0}
-        style={{
-          width: 300,
-          alignSelf: "flex-end",
-          marginTop: 63,
-          marginRight: 17,
-        }}
-        onPress={(value) => props.changeStep(value)}
-      />
-      <ScrollView height={850} >
+      <ScrollView marginBottom={0} paddingBottom={20}>
+        <SwitchSelector
+          options={[
+            { label: "Semaine", value: 1 },
+            { label: "Mois", value: 2 },
+            { label: "Année", value: 3 },
+          ]}
+          textColor="#5B63AE" //
+          selectedColor="white"
+          buttonColor="#5B63AE"
+          borderColor="#5B63AE"
+          hasPadding
+          initial={0}
+          style={{
+            width: 300,
+            alignSelf: "flex-end",
+            marginTop: 63,
+            marginRight: 17,
+          }}
+          onPress={(value) => props.changeStep(value)}
+        />
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            marginTop: 10,
+            marginBottom: 20,
+            marginLeft: 10,
+            padding: 5,
+          }}
+        >
+          <FontAwesome
+            name="arrow-left"
+            size={24}
+            color="black"
+            onPress={() => weekSelect("prev")}
+          />
+          <Text>Semaine du : {startDate}</Text>
+          <FontAwesome
+            name="arrow-right"
+            size={24}
+            color="black"
+            onPress={() => weekSelect("next")}
+          />
+        </View>
+
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
             Répartition globale des humeurs de la semaine
@@ -248,8 +289,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#CEFFEB",
-    width: (Dimensions.get("window").width),
-    height: (Dimensions.get("window").height),
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   paragraph: {
     fontWeight: "bold",
@@ -287,4 +328,13 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ChartsWeekScreen);
+const mapStateToProps = (state) => {
+  return {
+    mood: state.mood,
+    step: state.step,
+    pseudo: state.pseudo,
+    token: state.token,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChartsWeekScreen);
