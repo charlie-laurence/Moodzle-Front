@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity } from "react-native";
 import { Card, Button } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -73,16 +73,6 @@ function HistoryScreen({ updateMood, token }) {
     );
   });
 
-  /* Gérer le scroll to top */
-
-  const scrollRef = useRef(null); 
-  const onPressScroll = () => {
-        scrollRef.current?.scrollTo({
-            y: 0,
-            animated: true,
-        });
-  }
-
   return (
       <View style={styles.container}>
         <Button
@@ -101,12 +91,9 @@ function HistoryScreen({ updateMood, token }) {
             updateMood();
           }}
         />
-        <ScrollView ref={scrollRef}>
+        <ScrollView>
           {moodList}
         </ScrollView>
-        <TouchableOpacity
-        onPress= {onPressScroll()}>
-        </TouchableOpacity>
       </View>
   );
 }
