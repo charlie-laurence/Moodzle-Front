@@ -85,7 +85,7 @@ function HistoryScreen({ updateMood, token }) {
             updateMood();
           }}
         />
-        <ScrollView>
+        <ScrollView paddinBottom= {25}>
           {moodList}
         </ScrollView>
       </View>
