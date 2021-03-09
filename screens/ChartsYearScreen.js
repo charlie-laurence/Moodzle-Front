@@ -37,10 +37,21 @@ function ChartsYearScreen(props) {
   }, [startDate]);
 
   var yearSelect = (type) => {
-    var year = 0;
-    type === "prev" ? (year = -1) : (year = 1);
+    var year = yearDisplay;
+    var todayYear = new Date().getFullYear()
+
+    if (type === "prev") {
+      var addYear = -1
+    }
+    else if (type === "next" && year < todayYear) {
+      var addYear = 1
+    }
+    else if (type === "next" && year >= todayYear) {
+      return;
+    }
+
     var startDateCopy = new Date(startDate);
-    var filterDate = new Date(startDateCopy.getFullYear() + year, 0, 1, 1);
+    var filterDate = new Date(startDateCopy.getFullYear() + addYear, 0, 1, 1);
     var dateConvert = filterDate.toISOString().substring(0, 10);
     setStartDate(dateConvert);
     setYearDisplay(filterDate.getFullYear());
