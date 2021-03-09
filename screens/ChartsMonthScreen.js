@@ -243,24 +243,57 @@ function ChartsMonthScreen(props) {
       0
     ).toISOString();
 
-    for (let i = 0; i < dataset.length; i++) {
-      i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push(""); //Modulo 5 pour avoir des labels tous les 5 jours
+    // console.log(dataset[0].date.substring(8,10))
 
-      lineDataArray.push(parseInt(dataset[i].mood_score));
+    var firstSetDayNum = parseInt(firstSetDay.substring(8,10))
+    var lastSetDayNum = parseInt(lastSetDay.substring(8,10))
+
+
+    for (let i = firstSetDayNum; i <= lastSetDayNum; i++) {
+      i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push("");
     }
+
+    // console.log(lineLabelsArray)
+    var j = 0
+    for (let i = 0; i < lineLabelsArray.length; i++) {
+
+      if (j >= dataset.length) {
+        lineDataArray.push(0)
+        continue;
+      }
+      else if ((i + 1) === parseInt(dataset[j].date.substring(8,10))) {
+        lineDataArray.push(parseInt(dataset[j].mood_score))
+        j += 1
+      } 
+      else {
+        lineDataArray.push(0)
+        continue;
+
+      }
+    }
+      // Générer les labels
+      // Puis générer les data
+
     setLineLabel(lineLabelsArray);
     setLineData(lineDataArray);
   };
 
-  // Fonction qui gÃ¨re la sélection du mois
+  // Fonction qui gere la sélection du mois
   var monthSelect = (type) => {
     var year = yearDisplay;
     var startDateConvert = new Date(startDate);
     var month = startDateConvert.getMonth();
+    var todayMonth = new Date().getMonth()
 
-    type === "prev"
-      ? (month = startDateConvert.getMonth() - 1)
-      : (month = startDateConvert.getMonth() + 1);
+    if (type === "prev") {
+      month = startDateConvert.getMonth() - 1
+    }
+    else if (type === "next" && month < todayMonth) {
+      month = startDateConvert.getMonth() + 1
+    }
+    else if (type === "next" && month >= todayMonth) {
+      return;
+    }
 
     if (month === -1) {
       month = 11;

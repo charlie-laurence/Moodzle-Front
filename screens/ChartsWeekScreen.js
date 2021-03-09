@@ -130,12 +130,26 @@ function ChartsWeekScreen(props) {
   // Fonction qui gère la sélection de la semaine
   var weekSelect = (type) => {
     var days = 0;
+
+    var today = new Date()
+    var lastDayThisWeek = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - today.getDay() + 7,
+      1
+    ).toISOString();
+
     type === "prev" ? (days = -7) : (days = 7);
     var filterDate = new Date(startDate);
     filterDate.setDate(filterDate.getDate() + days);
-    var dateConvert = filterDate.toISOString().substring(0, 10);
-    console.log(dateConvert);
-    setStartDate(dateConvert);
+
+    if (new Date(filterDate) > new Date(lastDayThisWeek)) {
+      return;
+    }
+    else {
+      var dateConvert = filterDate.toISOString().substring(0, 10);
+      setStartDate(dateConvert);  
+    }
   };
 
   return (
