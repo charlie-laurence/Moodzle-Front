@@ -19,7 +19,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { proxy } from "../statics/ip";
 import CalendarObj from './Component/Calendar'
 
-
 const monthList = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 var displayMonth = (month) => {
   for (let i = 0; i < monthList.length; i ++) {
@@ -29,15 +28,11 @@ var displayMonth = (month) => {
   }
 }
 
-
-
 function ChartsMonthScreen(props) {
   const [pieData, setPieData] = useState([]);
   const [startDate, setStartDate] = useState(new Date().toISOString().substring(0, 10));
   const [lineLabel, setLineLabel] = useState([""]);
   const [lineData, setLineData] = useState([0]);
-  const [firstDay, setFirstDay] = useState();
-  const [lastDay, setLastDay] = useState();
   const [calendarData, setCalendarData] = useState({});
   const [topActivities, setTopActivities] = useState(["", "", ""]);
   const [monthDisplay, setMonthDisplay] = useState(displayMonth(new Date().getMonth()))
@@ -102,25 +97,6 @@ function ChartsMonthScreen(props) {
         topSortActivities[2],
       ]);
 
-    // Traitement des données pour le Pie Chart
-    pieDataGenerator(dataHistory);
-    lineGenerator(dataHistory);
-
-    // Traitement des données pour le Calendrier
-    var startDateFormat = new Date(startDate);
-    var firstSetDay = new Date(
-      startDateFormat.getFullYear(),
-      startDateFormat.getMonth(),
-      1
-    );
-    var lastSetDay = new Date(
-      startDateFormat.getFullYear(),
-      startDateFormat.getMonth() + 1,
-      0
-    );
-    setFirstDay(firstSetDay);
-    setLastDay(lastSetDay);
-
     var markedSetDate = {};
 
     for (let i = 0; i < dataHistory.length; i++) {
@@ -150,6 +126,11 @@ function ChartsMonthScreen(props) {
     }
     // console.log(markedSetDate)
     setCalendarData({... markedSetDate})
+
+    // Traitement des données pour le Pie Chart
+    pieDataGenerator(dataHistory);
+    lineGenerator(dataHistory);
+    
   };
 
   /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
@@ -232,6 +213,20 @@ function ChartsMonthScreen(props) {
     let lineLabelsArray = [];
     let lineDataArray = [];
 
+    var startDateFormat = new Date(startDate);
+    var firstSetDay = new Date(
+      startDateFormat.getFullYear(),
+      startDateFormat.getMonth(),
+      1
+    ).toISOString();
+    var lastSetDay = new Date(
+      startDateFormat.getFullYear(),
+      startDateFormat.getMonth() + 1,
+      0
+    ).toISOString();
+
+
+
     for (let i = 0; i < dataset.length; i++) {
       i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push(""); //Modulo 5 pour avoir des labels tous les 5 jours
 
@@ -258,8 +253,6 @@ function ChartsMonthScreen(props) {
         month = 0;
         year = yearDisplay + 1
       }
-
-
       var filterDate = new Date(year, month, 1, 1);      
       var filterDateISO = filterDate.toISOString()
 
