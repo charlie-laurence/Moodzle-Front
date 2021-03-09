@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
+import React, { useState, useEffect, useRef} from "react";
+import { StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity } from "react-native";
 import { Card, Button } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { connect } from "react-redux";
@@ -8,6 +8,7 @@ import { moodData } from "../statics/icon";
 
 function HistoryScreen({ updateMood, token }) {
   const [historyFromBack, setHistoryFromBack] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   /* Interroger le backend pour récupérer l'historique de l'utilisateur au chargement de la page : */
   useEffect(() => {
@@ -16,9 +17,16 @@ function HistoryScreen({ updateMood, token }) {
       var response = await rawResponse.json();
       var responseHistory = response.history;
       setHistoryFromBack(responseHistory);
+      setLoading(false);
     }
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+    <View style={styles.container}></View>
+    )
+  };
 
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
   var moodList = historyFromBack.reverse().map((item, i) => {
@@ -65,6 +73,16 @@ function HistoryScreen({ updateMood, token }) {
     );
   });
 
+  /* Gérer le scroll to top */
+
+  const scrollRef = useRef(null); 
+  const onPressScroll = () => {
+        scrollRef.current?.scrollTo({
+            y: 0,
+            animated: true,
+        });
+  }
+
   return (
       <View style={styles.container}>
         <Button
@@ -83,9 +101,12 @@ function HistoryScreen({ updateMood, token }) {
             updateMood();
           }}
         />
-        <ScrollView>
+        <ScrollView ref={scrollRef}>
           {moodList}
         </ScrollView>
+        <TouchableOpacity
+        onPress= {onPressScroll()}>
+        </TouchableOpacity>
       </View>
   );
 }
@@ -97,7 +118,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: (Dimensions.get("window").width),
     height: (Dimensions.get("window").height),
-    marginBottom: 35,
     paddingBottom: 14
   },
   cardWrapper0: {

@@ -145,8 +145,8 @@ function ActivityScreen({
                 .length > 0
                 ? categories[activity.category].color
                 : "#57706D",
-            marginTop: 50,
-            marginBottom: 15,
+            marginTop: 40,
+            marginBottom:0,
             borderRadius: 15,
           }}
           onPress={() => handleActivityPress(activity)}
