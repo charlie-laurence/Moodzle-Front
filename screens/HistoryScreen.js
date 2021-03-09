@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Dimensions, } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import { Card, Button } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { connect } from "react-redux";
@@ -12,7 +12,7 @@ function HistoryScreen({ updateMood, token }) {
   /* Interroger le backend pour récupérer l'historique de l'utilisateur au chargement de la page : */
   useEffect(() => {
     async function fetchData() {
-      var rawResponse = await fetch(`${proxy}/dashboard?token=${token}`);
+      var rawResponse = await fetch(`${proxy}/dashboard/${token}`);
       var response = await rawResponse.json();
       var responseHistory = response.history;
       setHistoryFromBack(responseHistory);
