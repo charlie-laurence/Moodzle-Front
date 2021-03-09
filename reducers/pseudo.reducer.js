@@ -3,7 +3,12 @@ export default function (pseudo = "", action) {
     return action.pseudo;
   } else if (action.type === "empty-pseudo") {
     return "";
-  } else {
+  } 
+  else if (action.type === "modify-pseudo") {
+    return action.newPseudo
+
+  }
+  else {
     return pseudo;
   }
 }

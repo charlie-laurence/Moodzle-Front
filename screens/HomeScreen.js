@@ -39,6 +39,7 @@ function HomeScreen({
         setLoading(false);
       } else {
         console.log("Aucun utilisateur en local storage");
+        setLoading(false);
       }
     });
   }, []);
