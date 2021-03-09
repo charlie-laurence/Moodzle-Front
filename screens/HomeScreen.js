@@ -31,14 +31,16 @@ function HomeScreen({
     AsyncStorage.getItem("user", (err, value) => {
       if (value) {
         value = JSON.parse(value);
-        //Mise à jour des états pseudo & token dans le store
-        onSubmitPseudo(value.pseudo);
+        //Mise à jour de l'état token dans le store
         addToken(value.token);
+        //Récupération du pseudo depuis la base de données & mise à jour de l'état pseudo dans le store
+        getPseudo(value.token);
         //Etat local userExist passé à true
         login();
         setLoading(false);
       } else {
         console.log("Aucun utilisateur en local storage");
+        setLoading(false);
       }
     });
   }, []);
@@ -69,6 +71,14 @@ function HomeScreen({
     }
   };
 
+  //Fonction pour récupérer le pseudo de l'utilisateur lors de l'ouverture de l'application
+  const getPseudo = async (token) => {
+    const rawUser = await fetch(`${proxy}/retrieve-user-info/${token}`);
+    const userPseudo = await rawUser.json();
+    //mise à jour de l'état du reducer pseudo dans le store
+    onSubmitPseudo(userPseudo);
+  };
+
   //Fonction de création d'un utilisateur (BDD, Store et Local Storage)
   var handleSignup = async () => {
     try {
@@ -91,9 +101,9 @@ function HomeScreen({
         AsyncStorage.setItem(
           "user",
           JSON.stringify({
-            email: localMail,
-            password: localPwd,
-            pseudo: newPseudo,
+            // email: localMail,
+            // password: localPwd,
+            // pseudo: newPseudo,
             token: newToken,
           })
         );
@@ -127,9 +137,9 @@ function HomeScreen({
         AsyncStorage.setItem(
           "user",
           JSON.stringify({
-            email: localMail,
-            password: localPwd,
-            pseudo: receivedPseudo,
+            // email: localMail,
+            // password: localPwd,
+            // pseudo: receivedPseudo,
             token: receivedToken,
           })
         );
