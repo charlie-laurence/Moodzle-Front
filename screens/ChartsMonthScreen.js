@@ -344,13 +344,7 @@ function ChartsMonthScreen(props) {
               {` ${topActivities[2]}`}
             </Text>
           </View>
-          {/* <Card.Image
-        source={require('../assets/moodz.png')} style={{width: '50%',
-          height: '35%',
-          resizeMode: 'stretch',
-        paddingBottom:0,
-      marginBottom:0}}
-      /> */}
+        
         </View>
       </Card>
 

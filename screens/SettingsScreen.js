@@ -33,16 +33,16 @@ function SettingsScreen({
   const [pseudoModified, setPseudoModified] = useState(pseudo)
   const [overlayModifyPassword, setOverlayModifyPassword] = useState(false)
 
+  const [actualPassword, setActualPassword] = useState('')
   const [passwordModified, setPasswordModified] = useState('')
   const [confirmPasswordModified, setConfirmPasswordModified] = useState('')
 
 
-  var fetchData = async() => await fetch(`${proxy}/update-username`, {
+  var fetchData = async() => await fetch(`${proxy}/modifications`, {
     method: 'PUT',
     headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: `username=${pseudoModified}&password=${passwordModified}&token=${token}`
+    body: `username=${pseudoModified}&actualPassword=${actualPassword}&newPassword=${passwordModified}&confirmedPassword=${confirmPasswordModified}&token=${token}`
    });
-
 
 
 
@@ -88,6 +88,9 @@ function SettingsScreen({
 
 
 
+
+
+
   return (
     <View >
       <Text style={styles.paragraph}>SettingsScreen</Text>
@@ -102,30 +105,32 @@ function SettingsScreen({
      
 
      {/* Pop-up pour modifier pseudo */}
-      <Overlay overlayStyle={{margin: 50}} isVisible={overlayModifyPseudo} onBackdropPress={toggleOverlayPseudo}>
+      <Overlay overlayStyle={{margin: 50}} isVisible={overlayModifyPseudo} onBackdropPress={toggleOverlayPseudo}children ={
+        <View>
+        <TextInput
+               style={styles.textInput}
+               placeholder="Nouveau pseudo"
+               onChangeText={(value) => setPseudoModified(value)}
+               value={pseudoModified}
+       
+             />
+       
+       
+       <Button
+                 title="Confirmer"
+                 type="solid"
+                 buttonStyle={{ backgroundColor: "#009788" }}
+                 onPress={() => {
+                 modifyPseudo(pseudoModified)
+                 toggleOverlayPseudo()
+                 fetchData()
+                 }}
+                 
+               />
+       </View>
+      }>
      
-<View>
- <TextInput
-        style={styles.textInput}
-        placeholder="Nouveau pseudo"
-        onChangeText={(value) => setPseudoModified(value)}
-        value={pseudoModified}
 
-      />
-
-
-<Button
-          title="Confirmer"
-          type="solid"
-          buttonStyle={{ backgroundColor: "#009788" }}
-          onPress={() => {
-          modifyPseudo(pseudoModified)
-          toggleOverlayPseudo()
-          fetchData()
-          }}
-          
-        />
-</View>
       </Overlay>
 
      
@@ -135,48 +140,50 @@ function SettingsScreen({
 
 
 
-          <ListItem.Subtitle>Mot de passe : {passwordModified}</ListItem.Subtitle>
-
+          <ListItem.Subtitle>Mot de passe : ********</ListItem.Subtitle>
           <Text style={{color:'#44B79D'}} onPress={toggleOverlayPassword}>Modifier</Text>
 
     
      
 
      {/* Pop-up pour modifier mot de passe */}
-      <Overlay overlayStyle={{margin: 50}} isVisible={overlayModifyPassword} onBackdropPress={toggleOverlayPassword}>
-   <View>
+      <Overlay overlayStyle={{margin: 50}} isVisible={overlayModifyPassword} onBackdropPress={toggleOverlayPassword} children= {
+          <View>
 
- <TextInput
-        style={styles.textInput}
-        placeholder="Ancien mot de passe"
-        onChangeText={(value) => setPasswordModified(value)}
-        value={passwordModified}
-      />
- <TextInput
-        style={styles.textInput}
-        placeholder="Nouveau mot de passe"
-        onChangeText={(value) => setPasswordModified(value)}
-        value={passwordModified}
-      />
-
-<TextInput
-        style={styles.textInput}
-        placeholder="Confirmer nouveau mot de passe"
-        onChangeText={(value) => setPasswordModified(value)}
-        value={passwordModified}
-      />
-
-<Button
-          title="Confirmer"
-          type="solid"
-          buttonStyle={{ backgroundColor: "#009788" }}
-          onPress={toggleOverlayPassword}
-
-          onPress={(value) => {
-            setOverlayModifyPassword(value)          
-          }}
-        />
-</View>  
+          <TextInput
+                 style={styles.textInput}
+                 placeholder="Actuel mot de passe"
+                 onChangeText={(value) => setActualPassword(value)}
+                 value={actualPassword}
+               />
+          <TextInput
+                 style={styles.textInput}
+                 placeholder="Nouveau mot de passe"
+                 onChangeText={(value) => setPasswordModified(value)}
+                 value={passwordModified}
+               />
+         
+         <TextInput
+                 style={styles.textInput}
+                 placeholder="Confirmer nouveau mot de passe"
+                 onChangeText={(value) => setConfirmPasswordModified(value)}
+                 value={confirmPasswordModified}
+               />
+         
+         <Button
+                   title="Confirmer"
+                   type="solid"
+                   buttonStyle={{ backgroundColor: "#009788" }}
+         
+                   onPress={(value) => {
+                    toggleOverlayPassword()                  
+                    fetchData()
+                 
+                   }}
+                 />
+         </View>  
+      }>
+ 
 
       </Overlay>
 
@@ -225,15 +232,16 @@ function SettingsScreen({
 
 <ListItem >
       <ListItem.Title style={{color:'#44B79D'}} onPress={toggleOverlay}  >Mentions Légales</ListItem.Title>
-      <Overlay overlayStyle={{margin: 50}} isVisible={overlayMentionsVisible} onBackdropPress={toggleOverlay}>
-        <Text style={{fontWeight: 'bold', marginBottom: 10, color:'#57706D'}}>Mentions légales</Text>
+      <Overlay overlayStyle={{margin: 50}} isVisible={overlayMentionsVisible} onBackdropPress={toggleOverlay} children={ <View>  <Text style={{fontWeight: 'bold', marginBottom: 10, color:'#57706D'}}>Mentions légales</Text>
         <Text style={{color:'#57706D'}}>Appli hébergée chez Heroku et réalisée par Ze Best Team 3V3R !  </Text>
-      </Overlay>
-      <ListItem.Title style={{color:'#44B79D'}}>A propos</ListItem.Title>
+        </View>}>
+       
+       </Overlay>
+      <ListItem.Title style={{color:'#44B79D'}}>Tutoriel</ListItem.Title>
   </ListItem>
 
       <Button
-        title="Log Out"
+        title="Se déconnecter"
         type="solid"
         buttonStyle={{ backgroundColor: "#5B63AE" }}
         onPress={() => {
