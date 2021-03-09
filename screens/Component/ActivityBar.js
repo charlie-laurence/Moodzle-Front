@@ -98,6 +98,10 @@ function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
 const styles = StyleSheet.create({
   textInput: {
     width: (Dimensions.get("window").width * 75) / 100,
+    height: (Dimensions.get("window").height * 6) / 100,
+    backgroundColor: "white",
+    borderRadius: 15,
+    marginTop: 30
   },
   listContainer: {
     width: (Dimensions.get("window").width * 75) / 100,

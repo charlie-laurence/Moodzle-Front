@@ -168,23 +168,24 @@ function ChartsWeekScreen(props) {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            marginTop: 10,
-            marginBottom: 20,
-            marginLeft: 10,
+            marginTop: 30,
+            marginBottom: 10,
             padding: 5,
           }}
         >
           <FontAwesome
-            name="arrow-left"
+            name="chevron-left"
             size={24}
-            color="black"
+            color="#57706D"
+            style={{marginLeft: 15}}
             onPress={() => weekSelect("prev")}
           />
           <Text>Semaine du : {startDate}</Text>
           <FontAwesome
-            name="arrow-right"
+            name="chevron-right"
             size={24}
-            color="black"
+            color="#57706D"
+            style={{marginRight: 15}}
             onPress={() => weekSelect("next")}
           />
         </View>

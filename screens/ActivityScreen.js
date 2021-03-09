@@ -145,6 +145,7 @@ function ActivityScreen({
                 .length > 0
                 ? categories[activity.category].color
                 : "#57706D",
+            marginTop: 50,
             marginBottom: 15,
             borderRadius: 15,
           }}
@@ -181,7 +182,7 @@ function ActivityScreen({
       <View style={styles.searchBarContainer}>
         <ActivityBar updateLocalList={updateLocalList} />
       </View>
-      <ActivityCarousel activities={activitiesBtnPages} />
+      <ActivityCarousel activities={activitiesBtnPages}/>
       <View style={styles.lower}>
         <View style={styles.newActivityContainer}>
           <FontAwesome5
@@ -201,6 +202,7 @@ function ActivityScreen({
               borderRadius: 25,
               height: 50,
               width: 100,
+              marginTop : 25
             }}
             title={activitySelection.length > 0 ? "Valider" : "Ignorer"}
             titleStyle={{ color: "#5B63AE" }}
@@ -269,6 +271,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // paddingLeft: 40,
     width: Dimensions.get("window").width,
+    marginTop: 25
   },
   addActivityTxt: {
     // marginLeft: 15,

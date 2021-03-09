@@ -66,7 +66,6 @@ function HistoryScreen({ updateMood, token }) {
   });
 
   return (
-    <View >
       <View style={styles.container}>
         <Button
           title={"Modifier mon mood"}
@@ -75,21 +74,19 @@ function HistoryScreen({ updateMood, token }) {
             backgroundColor: "#5B63AE",
             justifyContent: "center",
             alignItems: "center",
-            borderRadius: 50,
-            width: (Dimensions.get("window").width * 40) / 100,
-            height: (Dimensions.get("window").width * 20) / 100,
-            marginBottom: 10,
-            marginTop: 60,
+            borderRadius: 30,
+            width: (Dimensions.get("window").width * 50) / 100,
+            height: (Dimensions.get("window").width * 15) / 100,
+            marginTop: 55,
           }}
           onPress={() => {
             updateMood();
           }}
         />
-        <ScrollView paddinBottom= {25}>
+        <ScrollView>
           {moodList}
         </ScrollView>
       </View>
-    </View>
   );
 }
 
@@ -100,10 +97,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: (Dimensions.get("window").width),
     height: (Dimensions.get("window").height),
+    marginBottom: 35,
+    paddingBottom: 14
   },
   cardWrapper0: {
     width: (Dimensions.get("window").width * 90) / 100,
-    height: (Dimensions.get("window").width * 70) / 100,
+    height: (Dimensions.get("window").width * 60) / 100,
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
@@ -143,6 +142,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderColor: "white",
     borderRadius: 25,
+    marginBottom: 10
   },
   paragraph: {
     fontWeight: "bold",
