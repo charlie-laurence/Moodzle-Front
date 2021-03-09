@@ -24,6 +24,7 @@ function HomeScreen({
   const [localMail, setLocalMail] = useState("");
   const [localPwd, setLocalPwd] = useState("");
   const [selection, setSelection] = useState("Sign-Up");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     //Récupération des données utilisateurs (pseudo, token) dans local storage et affectation au store à l'initialisation du composant
@@ -35,6 +36,7 @@ function HomeScreen({
         addToken(value.token);
         //Etat local userExist passé à true
         login();
+        setLoading(false);
       } else {
         console.log("Aucun utilisateur en local storage");
       }
@@ -184,7 +186,11 @@ function HomeScreen({
           <Button
             title="Connexion"
             type="solid"
-            buttonStyle={{ backgroundColor: "#5B63AE" , marginTop: 100, borderRadius: 20}}
+            buttonStyle={{
+              backgroundColor: "#5B63AE",
+              marginTop: 100,
+              borderRadius: 20,
+            }}
             onPress={() => {
               selection === "Sign-Up" ? handleSignup() : handleSignIn();
             }}
@@ -195,12 +201,16 @@ function HomeScreen({
   } else {
     //Si Oui => Message de Bienvenue
     isUserRegistered = (
-      <View style={{marginTop: 50}}>
+      <View style={{ marginTop: 50 }}>
         <Text style={styles.paragraph}>Bienvenue {pseudo}</Text>
         <Button
           title="C'est parti !"
           type="solid"
-          buttonStyle={{ backgroundColor: "#F0D231", height:50 , borderRadius: 20 }}
+          buttonStyle={{
+            backgroundColor: "#F0D231",
+            height: 50,
+            borderRadius: 20,
+          }}
           onPress={() => {
             navigation.navigate("BottomNavigator", { screen: "Mood" });
           }}
@@ -209,9 +219,16 @@ function HomeScreen({
     );
   }
 
+  if (loading) {
+    return <View style={styles.container}></View>;
+  }
+
   return (
-    <ImageBackground source={require('../assets/SignUpScreen.png')} style={styles.container}>
-    {isUserRegistered}
+    <ImageBackground
+      source={require("../assets/SignUpScreen.png")}
+      style={styles.container}
+    >
+      {isUserRegistered}
     </ImageBackground>
   );
 }
@@ -238,7 +255,7 @@ const styles = StyleSheet.create({
   selectionContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    marginTop: 120
+    marginTop: 120,
   },
   connexionContainer: {
     flex: 1,
@@ -250,7 +267,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 50,
     height: 100,
-    width : 150
+    width: 150,
   },
 });
 
