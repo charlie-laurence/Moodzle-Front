@@ -124,12 +124,18 @@ function SettingsScreen({
         title="À propos"
         type="solid"
         buttonStyle={{backgroundColor: "#5B63AE", marginBottom:25, borderRadius:15, width:200, height:55}}
+        onPress={() => {
+          navigation.navigate("About");
+        }}
       >
       </Button>
       <Button
         title="Mentions Légales"
         type="solid"
         buttonStyle={{backgroundColor: "#5B63AE", marginBottom:25, borderRadius:15, width:200, height:55}}
+        onPress={() => {
+          navigation.navigate("LegalNotice");
+        }}
       >
       </Button>
       {/* Bouton déconnexion */}
