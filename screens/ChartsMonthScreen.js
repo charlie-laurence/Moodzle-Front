@@ -327,6 +327,7 @@ function ChartsMonthScreen(props) {
     var todayMonth = new Date().getMonth()
     var todayYear = new Date().getFullYear()
     var dateDay = startDateConvert.getDate()
+    var bissextile = isLeapYear(year)
 
     if (type === "prev") {
       month = startDateConvert.getMonth() - 1
@@ -346,7 +347,8 @@ function ChartsMonthScreen(props) {
       year = yearDisplay + 1;
     }
 
-    startDateConvert.setDate(startDateConvert.getDate() - dateDay)
+    startDateConvert.setMonth(month)
+    startDateConvert.setFullYear(year)
 
     var filterDate = startDateConvert;
     var filterDateISO = filterDate.toISOString();
