@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, ScrollView, View, Dimensions } from "react-native";
+import { StyleSheet, Text, ScrollView, View, Dimensions, TouchableOpacity, } from "react-native";
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
@@ -187,26 +187,32 @@ function ChartsWeekScreen(props) {
             padding: 5,
           }}
         >
-          <FontAwesome
-            name="chevron-left"
-            size={24}
-            color="#57706D"
-            style={{marginLeft: 15}}
-            onPress={() => weekSelect("prev")}
-          />
-          <Text>Semaine du : {startDate}</Text>
+        <TouchableOpacity
+          onPress={() => weekSelect("prev")}
+        >
+            <FontAwesome
+              name="chevron-left"
+              size={24}
+              color="#57706D"
+              style={{marginLeft: 15}}
+            />
+        </TouchableOpacity>
+        <Text>Semaine du : {startDate}</Text>
+        <TouchableOpacity
+          onPress={() => weekSelect("next")}
+        >
           <FontAwesome
             name="chevron-right"
             size={24}
             color="#57706D"
             style={{marginRight: 15}}
-            onPress={() => weekSelect("next")}
           />
+        </TouchableOpacity>
         </View>
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition globale des humeurs de la semaine
+            Répartition des humeurs de la semaine
           </Card.Title>
           <Card.Divider />
           <View
@@ -266,7 +272,7 @@ function ChartsWeekScreen(props) {
 
         <Card borderRadius={50} flex={0}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition quotidienne des humeurs
+            Variation des humeurs de la semaine
           </Card.Title>
           <Card.Divider />
           <LineChart

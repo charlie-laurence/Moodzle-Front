@@ -149,6 +149,9 @@ function SettingsScreen({
           width: 200,
           height: 55,
         }}
+        onPress={() => {
+          navigation.navigate("About");
+        }}
       ></Button>
       <Button
         title="Mentions Légales"
@@ -160,6 +163,9 @@ function SettingsScreen({
           width: 200,
           height: 55,
         }}
+        onPress={() => {
+          navigation.navigate("LegalNotice");
+        }}
       ></Button>
       {/* Bouton déconnexion */}
       <Button
@@ -167,10 +173,10 @@ function SettingsScreen({
         type="solid"
         buttonStyle={{
           backgroundColor: "#CD6133",
-          marginTop: 25,
+          marginTop: 80,
           marginBottom: 25,
           borderRadius: 15,
-          width: Dimensions.get("window").width * 0.9,
+          width: (Dimensions.get("window").width * 70) / 100,
           height: 55,
         }}
         onPress={() => {
@@ -224,8 +230,8 @@ function mapStateToProps(state) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
     paddingTop: 80,
     color: "#57706D",
@@ -245,6 +251,10 @@ const styles = StyleSheet.create({
   textInput: {
     justifyContent: "center",
     marginBottom: 25,
+  },
+  logout: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

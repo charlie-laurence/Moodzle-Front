@@ -176,7 +176,7 @@ function HomeScreen({
     isUserRegistered = (
       <View style={styles.page}>
         <View style={styles.selectionContainer}>
-          <SignBtn selection={selection} changeSelection={changeSelection} />
+          <SignBtn selection={selection} changeSelection={changeSelection}/>
         </View>
         <View style={styles.connexionContainer}>
           {selection === "S'inscrire" ? (

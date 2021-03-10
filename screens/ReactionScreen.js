@@ -81,7 +81,7 @@ function ReactionScreen({ mood, incrementStep, token, pseudo }) {
               color: "#DF8F4A",
             }}
           >
-            {pseudo}, le savais-tu :
+            {pseudo}, le savais-tu ?
           </Text>
           <Text
             style={{
