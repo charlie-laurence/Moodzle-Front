@@ -327,18 +327,19 @@ function ChartsMonthScreen(props) {
     var month = startDateConvert.getMonth();
     var todayMonth = new Date().getMonth()
     var todayYear = new Date().getFullYear()
+    var dateDay = startDateConvert.getDate()
+
+    console.log(year)
+    console.log(todayYear)
 
     if (type === "prev") {
       month = startDateConvert.getMonth() - 1
     }
-    else if (type === "next" && month < todayMonth && year === todayYear) {
-      month = startDateConvert.getMonth() + 1
-    }
-    else if (type === "next" && year < todayYear) {
-      month = startDateConvert.getMonth() + 1
-    }
-    else if (type === "next" && month >= todayMonth) {
+    else if (type === "next" && month >= todayMonth && year === todayYear) {
       return;
+    }
+    else if (type === "next") {
+      month = startDateConvert.getMonth() + 1
     }
 
     if (month === -1) {
@@ -348,7 +349,10 @@ function ChartsMonthScreen(props) {
       month = 0;
       year = yearDisplay + 1;
     }
-    var filterDate = new Date(year, month, 1, 1);
+
+    startDateConvert.setDate(startDateConvert.getDate() - dateDay)
+
+    var filterDate = startDateConvert;
     var filterDateISO = filterDate.toISOString();
 
     setStartDate(filterDateISO.substring(0, 10));
