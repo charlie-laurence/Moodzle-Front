@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import { Card, Button } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -8,6 +8,8 @@ import { moodData } from "../statics/icon";
 
 function HistoryScreen({ updateMood, token }) {
   const [historyFromBack, setHistoryFromBack] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [scrollRef, setScrollRef] = useState(React.createRef());
 
   /* Interroger le backend pour récupérer l'historique de l'utilisateur au chargement de la page : */
   useEffect(() => {
@@ -16,9 +18,14 @@ function HistoryScreen({ updateMood, token }) {
       var response = await rawResponse.json();
       var responseHistory = response.history;
       setHistoryFromBack(responseHistory);
+      setLoading(false);
     }
     fetchData();
   }, []);
+
+  if (loading) {
+    return <View style={styles.container}></View>;
+  }
 
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
   var moodList = historyFromBack.reverse().map((item, i) => {
@@ -66,7 +73,8 @@ function HistoryScreen({ updateMood, token }) {
   });
 
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Button
           title={"Modifier mon mood"}
           titleStyle={{ color: "white", fontSize: 16 }}
@@ -83,10 +91,36 @@ function HistoryScreen({ updateMood, token }) {
             updateMood();
           }}
         />
-        <ScrollView>
-          {moodList}
-        </ScrollView>
+        {
+          <Button
+            icon={
+              <FontAwesome5
+                name="arrow-alt-circle-up"
+                size={26}
+                color="#57706D"
+              />
+            }
+            buttonStyle={{
+              backgroundColor: "transparent",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              borderRadius: 30,
+              width: (Dimensions.get("window").width * 33) / 100,
+              height: (Dimensions.get("window").width * 15) / 100,
+              marginTop: 55,
+            }}
+            onPress={() => scrollRef.scrollTo({ y: 0, animated: true })}
+          />
+        }
       </View>
+      <ScrollView
+        decelerationRate="fast"
+        scrollEventThrottle={200}
+        ref={(ref) => setScrollRef(ref)}
+      >
+        {moodList}
+      </ScrollView>
+    </View>
   );
 }
 
@@ -95,10 +129,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#CEFFEB",
     justifyContent: "center",
     alignItems: "center",
-    width: (Dimensions.get("window").width),
-    height: (Dimensions.get("window").height),
-    marginBottom: 35,
-    paddingBottom: 14
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    paddingBottom: 14,
   },
   cardWrapper0: {
     width: (Dimensions.get("window").width * 90) / 100,
@@ -142,7 +175,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderColor: "white",
     borderRadius: 25,
-    marginBottom: 10
+    marginBottom: 10,
   },
   paragraph: {
     fontWeight: "bold",
