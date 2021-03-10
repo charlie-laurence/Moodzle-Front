@@ -6,7 +6,7 @@ import {
 } from "react-native-chart-kit";
 import { connect } from "react-redux";
 import SwitchSelector from "react-native-switch-selector";
-import { Card, ListItem, Icon, Row, Divider } from "react-native-elements";
+import { Card } from "react-native-elements";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { proxy } from "../statics/ip";
 

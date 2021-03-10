@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import { Card, Button } from "react-native-elements";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { connect } from "react-redux";

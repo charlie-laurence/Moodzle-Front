@@ -9,23 +9,23 @@ const SignBtn = ({ selection, changeSelection }) => {
   return (
     <View style={styles.btnContainer}>
       <Button
-        title="Sign-Up"
+        title="S'inscrire"
         titleStyle={
-          selection === "Sign-Up" ? styles.txtSelected : styles.txtUnselected
+          selection === "S'inscrire" ? styles.txtSelected : styles.txtUnselected
         }
-        onPress={() => handleOptionPress("Sign-Up")}
+        onPress={() => handleOptionPress("S'inscrire")}
         buttonStyle={
-          selection === "Sign-Up" ? styles.selected : styles.unselected
+          selection === "S'inscrire" ? styles.selected : styles.unselected
         }
       />
       <Button
-        title="Log-In"
+        title="Se connecter"
         titleStyle={
-          selection === "Log-In" ? styles.txtSelected : styles.txtUnselected
+          selection === "Se connecter" ? styles.txtSelected : styles.txtUnselected
         }
-        onPress={() => handleOptionPress("Log-In")}
+        onPress={() => handleOptionPress("Se connecter")}
         buttonStyle={
-          selection === "Log-In" ? styles.selected : styles.unselected
+          selection === "Se connecter" ? styles.selected : styles.unselected
         }
       />
     </View>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   btnContainer: {
     flex: 1,
     flexDirection: "row",
-    width: (Dimensions.get("window").width * 50) / 100,
+    width: (Dimensions.get("window").width * 70) / 100,
     justifyContent: "space-between",
     alignItems: "flex-end",
   },
@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#5B63AE",
     borderRadius: 50,
     height: 50,
-    width : 100
+    width : 140
   },
   unselected: {
     backgroundColor: "#fff",
     borderRadius: 50,
     height: 50,
-    width : 100
+    width : 140
   },
   txtSelected: {
     color: "#fff",
