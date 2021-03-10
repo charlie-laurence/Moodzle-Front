@@ -258,6 +258,16 @@ function SettingsScreen({
           navigation.navigate("Home");
         }}
       />
+
+<Button
+        title="À propos"
+        type="solid"
+        buttonStyle={{ backgroundColor: "#5B63AE" }}
+        onPress={() => {
+          
+          navigation.navigate("About");
+        }}
+      />
     </View>
 
   );

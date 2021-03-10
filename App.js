@@ -31,6 +31,7 @@ import ChartsMonthScreen from "./screens/ChartsMonthScreen";
 import ChartsYearScreen from "./screens/ChartsYearScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import ReactionScreen from "./screens/ReactionScreen";
+import AboutScreen from "./screens/AboutScreen";
 
 // Comment add
 
@@ -97,6 +98,7 @@ export default function App() {
           <Stack.Screen name="ChartsMonth" component={ChartsMonthScreen} />
           <Stack.Screen name="ChartsYear" component={ChartsYearScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name ="About" component={AboutScreen}/>
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
