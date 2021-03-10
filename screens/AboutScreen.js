@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, ImageBackground, Text, View } from "react-native";
 import { Button } from "react-native-elements";
-import { connect } from "react-redux";
 
 
 export default function AboutScreen(props) 
@@ -17,10 +16,14 @@ export default function AboutScreen(props)
         type="solid"
         buttonStyle={{ 
             backgroundColor: "#5B63AE",
-            marginTop: 720 }}
+            marginTop: 720,
+            borderRadius:15, 
+            width:150, 
+            height:50
+        }}
         onPress={() => {
           
-          props.navigation.navigate("Settings");
+          props.navigation.navigate("BottomNavigator", { screen: "Settings" });
         }}
       />
     </ImageBackground>
@@ -33,12 +36,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#CEFFEB",
-  },
-  btnContainer: {
-    flex: 1,
-    borderRadius: 50,
-    height: 100,
-    width: 150,
   },
 });
 
