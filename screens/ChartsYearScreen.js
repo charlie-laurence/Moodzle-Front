@@ -95,9 +95,9 @@ function ChartsYearScreen(props) {
           }
           break;
         case 1:
-          // Vérifier si années bissextile (28j si oui, 29j sinon)
+          // Vérifier si années bissextile (29j si oui, 28j sinon)
           var febDay = 29;
-          bissextile ? (febDay = 28) : (febDay = 29);
+          bissextile ? (febDay = 29) : (febDay = 28);
           for (let j = 0; j < febDay; j++) {
             feb.push(emptyIcon);
           }

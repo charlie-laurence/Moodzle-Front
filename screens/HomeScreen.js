@@ -23,7 +23,7 @@ function HomeScreen({
   const [localPseudo, setLocalPseudo] = useState("");
   const [localMail, setLocalMail] = useState("");
   const [localPwd, setLocalPwd] = useState("");
-  const [selection, setSelection] = useState("Sign-Up");
+  const [selection, setSelection] = useState("S'inscrire");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -201,7 +201,7 @@ function HomeScreen({
               marginTop: 100,
               borderRadius: 20,
               height: 50,
-              width : 140
+              width: 140,
             }}
             onPress={() => {
               selection === "S'inscrire" ? handleSignup() : handleSignIn();

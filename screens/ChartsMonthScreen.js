@@ -39,6 +39,11 @@ var displayMonth = (month) => {
   }
 };
 
+// Fonction qui vérifie si une année est bissextille
+function isLeapYear(year) {
+  return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
+}
+
 function ChartsMonthScreen(props) {
   const [pieData, setPieData] = useState([]);
   const [startDate, setStartDate] = useState(
@@ -226,25 +231,55 @@ function ChartsMonthScreen(props) {
 
   /* Fonction qui récupÃ¨re les données pour la courbe */
   var lineGenerator = (dataset) => {
+    // console.log(dataset)
     let lineLabelsArray = [];
     let lineDataArray = [];
 
     var startDateFormat = new Date(startDate);
-    var firstSetDay = new Date(
-      startDateFormat.getFullYear(),
-      startDateFormat.getMonth(),
-      1
-    ).toLocaleString();
-    var lastSetDay = new Date(
-      startDateFormat.getFullYear(),
-      startDateFormat.getMonth() + 1,
-      0
-    ).toLocaleString();
-
-    // console.log(dataset[0].date.substring(8,10))
-
-    var firstSetDayNum = parseInt(firstSetDay.substring(8, 10));
-    var lastSetDayNum = parseInt(lastSetDay.substring(8, 10));
+    var yearDate = startDateFormat.getFullYear();
+    var monthDate = startDateFormat.getMonth();
+    var bissextile = isLeapYear(yearDate);
+    var firstSetDayNum = 1;
+    var lastSetDayNum = 1;
+    switch (monthDate) {
+      case 0:
+        lastSetDayNum = 31;
+        break;
+      case 1:
+        // Vérifier si années bissextile (28j si oui, 29j sinon)
+        bissextile ? (lastSetDayNum = 29) : (lastSetDayNum = 28);
+        break;
+      case 2:
+        lastSetDayNum = 31;
+        break;
+      case 3:
+        lastSetDayNum = 30;
+        break;
+      case 4:
+        lastSetDayNum = 31;
+        break;
+      case 5:
+        lastSetDayNum = 30;
+        break;
+      case 6:
+        lastSetDayNum = 31;
+        break;
+      case 7:
+        lastSetDayNum = 31;
+        break;
+      case 8:
+        lastSetDayNum = 30;
+        break;
+      case 9:
+        lastSetDayNum = 31;
+        break;
+      case 10:
+        lastSetDayNum = 30;
+        break;
+      case 11:
+        lastSetDayNum = 31;
+        break;
+    }
 
     for (let i = firstSetDayNum; i <= lastSetDayNum; i++) {
       i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push("");
@@ -254,23 +289,20 @@ function ChartsMonthScreen(props) {
 
     let unique = [];
     let uniqueDataset = [];
-
-    // dataset.forEach(element => {
-    //   console.log(element)
-    // })
     dataset.forEach((element) => {
-      if (!unique.includes(parseInt(element.date.substring(8, 10)))) {
+      if (
+        !unique.includes(parseInt(element.date.substring(8, 10))) &&
+        monthDate + 1 === parseInt(element.date.substring(5, 7))
+      ) {
         unique.push(parseInt(element.date.substring(8, 10)));
         uniqueDataset.push(element);
       }
     });
-    // console.log(unique)
-    // console.log(uniqueDataset)
 
-    // console.log(lineLabelsArray)
+    var uniqueDataSetLength = uniqueDataset.length;
     var j = 0;
     for (let i = 0; i < lineLabelsArray.length; i++) {
-      if (j >= uniqueDataset.length) {
+      if (j >= uniqueDataSetLength) {
         lineDataArray.push(0);
         continue;
       } else if (i + 1 === parseInt(uniqueDataset[j].date.substring(8, 10))) {
@@ -294,14 +326,17 @@ function ChartsMonthScreen(props) {
     var startDateConvert = new Date(startDate);
     var month = startDateConvert.getMonth();
     var todayMonth = new Date().getMonth();
+    var todayYear = new Date().getFullYear();
 
     if (type === "prev") {
       month = startDateConvert.getMonth() - 1;
-    } else if (type === "next" && month < todayMonth) {
+      // } else if (type === "next" && month >= todayMonth && year === todayYear) {
+      //   return;
+    } else if (type === "next") {
       month = startDateConvert.getMonth() + 1;
-    } else if (type === "next" && month >= todayMonth) {
-      return;
     }
+
+    console.log(month, year, startDateConvert);
 
     if (month === -1) {
       month = 11;
@@ -412,7 +447,10 @@ function ChartsMonthScreen(props) {
             size={24}
             color="#57706D"
             style={{ marginRight: 15 }}
-            onPress={() => monthSelect("next")}
+            onPress={() => {
+              console.log("next go");
+              monthSelect("next");
+            }}
           />
         </View>
 
