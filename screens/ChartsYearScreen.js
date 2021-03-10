@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
   ScrollView,
   Dimensions,
 } from "react-native";
@@ -366,21 +367,27 @@ function ChartsYearScreen(props) {
           padding: 5,
         }}
       >
-        <FontAwesome
-          name="chevron-left"
-          size={24}
-          color="#57706D"
-          style={{marginLeft: 15}}
-          onPress={() => yearSelect("prev")}
-        />
+        <TouchableOpacity
+        onPress={() => yearSelect("prev")}
+        >
+          <FontAwesome
+            name="chevron-left"
+            size={24}
+            color="#57706D"
+            style={{marginLeft: 15}}
+          />
+        </TouchableOpacity>
         <Text>Année {yearDisplay}</Text>
-        <FontAwesome
-          name="chevron-right"
-          size={24}
-          color="#57706D"
-          style={{marginRight: 15}}
-          onPress={() => yearSelect("next")}
-        />
+        <TouchableOpacity
+        onPress={() => yearSelect("next")}
+        >
+          <FontAwesome
+            name="chevron-right"
+            size={24}
+            color="#57706D"
+            style={{marginRight: 15}}
+          />
+        </TouchableOpacity>
       </View>
 
       <ScrollView>
