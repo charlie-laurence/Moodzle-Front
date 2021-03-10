@@ -3,7 +3,7 @@ import ChartsWeekScreen from "./ChartsWeekScreen";
 import ChartsMonthScreen from "./ChartsMonthScreen";
 import ChartsYearScreen from "./ChartsYearScreen";
 import { connect } from "react-redux";
-import { Button, View, Text, Stylesheet } from "react-native";
+import { View, Text } from "react-native";
 
 function ChartScreen({ chartstep }) {
   switch (chartstep) {

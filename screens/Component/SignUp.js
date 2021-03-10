@@ -30,7 +30,7 @@ const SignUp = ({ handleLocalPseudo, handleLocalMail, handleLocalPwd }) => {
         onChangeText={(value) => updatePseudo(value)}
       />
       <Input
-        placeholder="Courriel"
+        placeholder="Email"
         leftIcon={<Ionicons name="mail-outline" size={24} color="black" />}
         onChangeText={(value) => updateMail(value)}
       />

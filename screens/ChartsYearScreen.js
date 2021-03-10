@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   ScrollView,
   Dimensions,
 } from "react-native";
@@ -38,15 +37,13 @@ function ChartsYearScreen(props) {
 
   var yearSelect = (type) => {
     var year = yearDisplay;
-    var todayYear = new Date().getFullYear()
+    var todayYear = new Date().getFullYear();
 
     if (type === "prev") {
-      var addYear = -1
-    }
-    else if (type === "next" && year < todayYear) {
-      var addYear = 1
-    }
-    else if (type === "next" && year >= todayYear) {
+      var addYear = -1;
+    } else if (type === "next" && year < todayYear) {
+      var addYear = 1;
+    } else if (type === "next" && year >= todayYear) {
       return;
     }
 
@@ -166,7 +163,6 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-    
     var rawData = await fetch(`${proxy}/history`, {
       method: "POST",
       headers: {
@@ -358,7 +354,7 @@ function ChartsYearScreen(props) {
 
       <View
         style={{
-          flex: 1,
+          // flex: 1,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
@@ -371,7 +367,7 @@ function ChartsYearScreen(props) {
           name="chevron-left"
           size={24}
           color="#57706D"
-          style={{marginLeft: 15}}
+          style={{ marginLeft: 15 }}
           onPress={() => yearSelect("prev")}
         />
         <Text>Année {yearDisplay}</Text>
@@ -379,13 +375,13 @@ function ChartsYearScreen(props) {
           name="chevron-right"
           size={24}
           color="#57706D"
-          style={{marginRight: 15}}
+          style={{ marginRight: 15 }}
           onPress={() => yearSelect("next")}
         />
       </View>
 
       <ScrollView>
-        <Card borderRadius={30} height={600} justifyContent="center">
+        <Card borderRadius={30} height={550} justifyContent="center">
           <Table>
             <View
               style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}

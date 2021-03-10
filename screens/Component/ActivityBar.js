@@ -86,7 +86,7 @@ function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
     <View>
       <TextInput
         style={styles.textInput}
-        placeholder="  Rechercher une activité..."
+        placeholder="Rechercher une activité..."
         onChangeText={(value) => setSearchActivity(value)}
         value={searchActivity}
       />
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
     height: (Dimensions.get("window").height * 6) / 100,
     backgroundColor: "white",
     borderRadius: 15,
-    marginTop: 30
+    marginTop: 30,
+    paddingLeft: 15,
   },
   listContainer: {
     width: (Dimensions.get("window").width * 75) / 100,
