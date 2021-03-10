@@ -179,7 +179,7 @@ function HomeScreen({
           <SignBtn selection={selection} changeSelection={changeSelection} />
         </View>
         <View style={styles.connexionContainer}>
-          {selection === "Sign-Up" ? (
+          {selection === "S'inscrire" ? (
             <SignUp
               handleLocalMail={handleLocalMail}
               handleLocalPseudo={handleLocalPseudo}
@@ -200,9 +200,11 @@ function HomeScreen({
               backgroundColor: "#5B63AE",
               marginTop: 100,
               borderRadius: 20,
+              height: 50,
+              width : 140
             }}
             onPress={() => {
-              selection === "Sign-Up" ? handleSignup() : handleSignIn();
+              selection === "S'inscrire" ? handleSignup() : handleSignIn();
             }}
           />
         </View>

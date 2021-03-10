@@ -3,16 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Dimensions,
   ScrollView,
   Image,
-  FlatList,
 } from "react-native";
 import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
 import { LocaleConfig } from "react-native-calendars";
-import { Card, ListItem, Icon, Row } from "react-native-elements";
+import { Card } from "react-native-elements";
 import SwitchSelector from "react-native-switch-selector";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";

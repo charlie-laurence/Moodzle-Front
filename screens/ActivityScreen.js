@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -145,8 +145,7 @@ function ActivityScreen({
                 .length > 0
                 ? categories[activity.category].color
                 : "#57706D",
-            marginTop: 40,
-            marginBottom:0,
+            marginTop: 20,
             borderRadius: 15,
           }}
           onPress={() => handleActivityPress(activity)}

@@ -2,7 +2,7 @@ import React from "react";
 import { LogBox } from "react-native";
 LogBox.ignoreLogs(["Warning: ..."]);
 
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet} from "react-native";
 import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -57,11 +57,11 @@ const BottomNavigator = () => {
         tabBarIcon: ({ color }) => {
           let iconName;
 
-          if (route.name == "Charts") {
+          if (route.name == "Stats") {
             iconName = "ios-pie-chart";
           } else if (route.name == "Mood") {
             iconName = "ios-happy";
-          } else if (route.name == "Settings") {
+          } else if (route.name == "Options") {
             iconName = "ios-settings-sharp";
           }
 
@@ -76,9 +76,9 @@ const BottomNavigator = () => {
         },
       }}
     >
-      <Tab.Screen name="Charts" component={ChartNavigation} />
+      <Tab.Screen name="Stats" component={ChartNavigation} />
       <Tab.Screen name="Mood" component={MoodNavigation} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Options" component={SettingsScreen} />
     </Tab.Navigator>
   );
 };
