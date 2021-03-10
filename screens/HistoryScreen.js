@@ -24,6 +24,8 @@ function HistoryScreen({ updateMood, token }) {
   }, []);
 
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
+  var historyLength = historyFromBack.length;
+  
   var moodList = historyFromBack.map((item, i) => {
     // Formatage des dates :
     var date = new Date(item.date);
@@ -37,7 +39,7 @@ function HistoryScreen({ updateMood, token }) {
     }
 
     // Style particulier pour Key = 0 :
-    if (i === 0) {
+    if (i === (historyLength - 1)) {
       var wrapperDesign = styles.cardWrapper0;
       var containerDesign = styles.cardContainer0;
     } else {

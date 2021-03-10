@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   Image,
+  TouchableOpacity
 } from "react-native";
 import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
@@ -230,7 +231,7 @@ function ChartsMonthScreen(props) {
     ]);
   };
 
-  /* Fonction qui récupÃ¨re les données pour la courbe */
+  /* Fonction qui récupère les données pour la courbe */
   var lineGenerator = (dataset) => {
     // console.log(dataset)
     let lineLabelsArray = [];
@@ -309,13 +310,11 @@ function ChartsMonthScreen(props) {
         j += 1
       } 
       else {
-        lineDataArray.push(0)
-        continue;
+        lineDataArray.push(0);
       }
     }
       // Générer les labels
       // Puis générer les data
-
     setLineLabel(lineLabelsArray);
     setLineData(lineDataArray);
   };
@@ -328,9 +327,6 @@ function ChartsMonthScreen(props) {
     var todayMonth = new Date().getMonth()
     var todayYear = new Date().getFullYear()
     var dateDay = startDateConvert.getDate()
-
-    console.log(year)
-    console.log(todayYear)
 
     if (type === "prev") {
       month = startDateConvert.getMonth() - 1
@@ -439,23 +435,29 @@ function ChartsMonthScreen(props) {
             padding: 5,
           }}
         >
-          <FontAwesome
-            name="chevron-left"
-            size={24}
-            color="#57706D"
-            style={{marginLeft: 15}}
-            onPress={() => monthSelect("prev")}
-          />
+          <TouchableOpacity
+          onPress={() => monthSelect("prev")}
+          >
+            <FontAwesome
+              name="chevron-left"
+              size={24}
+              color="#57706D"
+              style={{marginLeft: 15}}
+            />
+          </TouchableOpacity>
           <Text>
             {monthDisplay} {yearDisplay}
           </Text>
-          <FontAwesome
-            name="chevron-right"
-            size={24}
-            color="#57706D"
-            style={{marginRight: 15}}
-            onPress={() => monthSelect("next")}
-          />
+          <TouchableOpacity
+          onPress={() => monthSelect("next")}
+          >
+            <FontAwesome
+              name="chevron-right"
+              size={24}
+              color="#57706D"
+              style={{marginRight: 15}}
+            />
+          </TouchableOpacity>
         </View>
 
         <Card borderRadius={50} containerStyle={{ height: 300 }}>
@@ -480,7 +482,7 @@ function ChartsMonthScreen(props) {
                 paddingTop: 0,
               }}
             />
-             <View style={{ marginLeft: -10, width: 100, marginTop: 30 }}>
+            <View style={{ marginLeft: -10, width: 100, marginTop: 30 }}>
               <Text style={{ color: "#57706D" }}>
                 <FontAwesome
                   name="circle"
@@ -526,7 +528,7 @@ function ChartsMonthScreen(props) {
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition globale des humeurs du mois
+            Répartition des humeurs du mois
           </Card.Title>
           <Card.Divider />
           <View
@@ -580,7 +582,7 @@ function ChartsMonthScreen(props) {
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition quotidienne des humeurs
+            Variation des humeurs du mois
           </Card.Title>
           <Card.Divider />
           <LineChart

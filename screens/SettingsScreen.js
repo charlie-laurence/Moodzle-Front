@@ -124,19 +124,25 @@ function SettingsScreen({
         title="À propos"
         type="solid"
         buttonStyle={{backgroundColor: "#5B63AE", marginBottom:25, borderRadius:15, width:200, height:55}}
+        onPress={() => {
+          navigation.navigate("About");
+        }}
       >
       </Button>
       <Button
         title="Mentions Légales"
         type="solid"
         buttonStyle={{backgroundColor: "#5B63AE", marginBottom:25, borderRadius:15, width:200, height:55}}
+        onPress={() => {
+          navigation.navigate("LegalNotice");
+        }}
       >
       </Button>
       {/* Bouton déconnexion */}
       <Button
         title="Se déconnecter"
         type="solid"
-        buttonStyle={{ backgroundColor: "#CD6133", marginTop: 100, marginBottom:25, borderRadius:15, width:380, height:55 }}
+        buttonStyle={{ backgroundColor: "#CD6133", marginTop: 80, marginBottom:25, borderRadius:15, width: (Dimensions.get("window").width * 70) / 100, height:55 }}
         onPress={() => {
           //Vider Local Storage
           AsyncStorage.clear();
@@ -189,8 +195,8 @@ function mapStateToProps(state) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
     paddingTop: 80,
     color: '#57706D',
@@ -210,7 +216,11 @@ const styles = StyleSheet.create({
   textInput: {
     justifyContent: "center",
     marginBottom:25
-  }
+  },
+  logout: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

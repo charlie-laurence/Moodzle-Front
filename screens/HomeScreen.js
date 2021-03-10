@@ -23,7 +23,7 @@ function HomeScreen({
   const [localPseudo, setLocalPseudo] = useState("");
   const [localMail, setLocalMail] = useState("");
   const [localPwd, setLocalPwd] = useState("");
-  const [selection, setSelection] = useState("Sign-Up");
+  const [selection, setSelection] = useState("S'inscrire");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -176,7 +176,7 @@ function HomeScreen({
     isUserRegistered = (
       <View style={styles.page}>
         <View style={styles.selectionContainer}>
-          <SignBtn selection={selection} changeSelection={changeSelection} />
+          <SignBtn selection={selection} changeSelection={changeSelection}/>
         </View>
         <View style={styles.connexionContainer}>
           {selection === "S'inscrire" ? (
