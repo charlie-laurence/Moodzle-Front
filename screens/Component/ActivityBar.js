@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 15,
     marginTop: 30,
-    paddingLeft: 15
+    paddingLeft: 15,
   },
   listContainer: {
     width: (Dimensions.get("window").width * 75) / 100,

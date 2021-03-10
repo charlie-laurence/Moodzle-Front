@@ -38,15 +38,13 @@ function ChartsYearScreen(props) {
 
   var yearSelect = (type) => {
     var year = yearDisplay;
-    var todayYear = new Date().getFullYear()
+    var todayYear = new Date().getFullYear();
 
     if (type === "prev") {
-      var addYear = -1
-    }
-    else if (type === "next" && year < todayYear) {
-      var addYear = 1
-    }
-    else if (type === "next" && year >= todayYear) {
+      var addYear = -1;
+    } else if (type === "next" && year < todayYear) {
+      var addYear = 1;
+    } else if (type === "next" && year >= todayYear) {
       return;
     }
 
@@ -98,9 +96,9 @@ function ChartsYearScreen(props) {
           }
           break;
         case 1:
-          // Vérifier si années bissextile (28j si oui, 29j sinon)
+          // Vérifier si années bissextile (29j si oui, 28j sinon)
           var febDay = 29;
-          bissextile ? (febDay = 28) : (febDay = 29);
+          bissextile ? (febDay = 29) : (febDay = 28);
           for (let j = 0; j < febDay; j++) {
             feb.push(emptyIcon);
           }
@@ -166,7 +164,6 @@ function ChartsYearScreen(props) {
 
   //Fonction qui récupère du résultat renvoyé par le backend et les exploite pour obtenir les bonnes données finales
   var fetchData = async () => {
-    
     var rawData = await fetch(`${proxy}/history`, {
       method: "POST",
       headers: {
@@ -358,7 +355,7 @@ function ChartsYearScreen(props) {
 
       <View
         style={{
-          flex: 1,
+          // flex: 1,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
@@ -391,7 +388,7 @@ function ChartsYearScreen(props) {
       </View>
 
       <ScrollView>
-        <Card borderRadius={30} height={600} justifyContent="center">
+        <Card borderRadius={30} height={550} justifyContent="center">
           <Table>
             <View
               style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}

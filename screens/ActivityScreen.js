@@ -181,7 +181,9 @@ function ActivityScreen({
       <View style={styles.searchBarContainer}>
         <ActivityBar updateLocalList={updateLocalList} />
       </View>
-      <ActivityCarousel activities={activitiesBtnPages}/>
+      <View style={styles.carouselContainer}>
+        <ActivityCarousel activities={activitiesBtnPages} />
+      </View>
       <View style={styles.lower}>
         <View style={styles.newActivityContainer}>
           <FontAwesome5
@@ -201,7 +203,7 @@ function ActivityScreen({
               borderRadius: 25,
               height: 50,
               width: 100,
-              marginTop : 25
+              marginTop: 25,
             }}
             title={activitySelection.length > 0 ? "Valider" : "Ignorer"}
             titleStyle={{ color: "#5B63AE" }}
@@ -235,7 +237,7 @@ const styles = StyleSheet.create({
   },
   searchBarContainer: {
     position: "absolute",
-    top: 150,
+    top: 120,
     justifyContent: "center",
     alignItems: "center",
     width: Dimensions.get("window").width,
@@ -243,25 +245,15 @@ const styles = StyleSheet.create({
     zIndex: 1,
     maxHeight: (Dimensions.get("window").height * 70) / 100,
   },
-  activityContainer: {
+  carouselContainer: {
     flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
-  },
-  activityWrapper: {
-    flex: 0.5,
-    flexWrap: "wrap",
-    flexDirection: "row",
-    // justifyContent: "space-evenly",
-    // alignItems: "center",
-    width: Dimensions.get("window").width,
-    padding: 25,
+    marginTop: 20,
   },
   lower: {
     flex: 1,
     justifyContent: "flex-start",
     width: Dimensions.get("window").width,
-    paddingBottom: 20,
+    paddingBottom: 25,
   },
   newActivityContainer: {
     flex: 1,
@@ -270,7 +262,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // paddingLeft: 40,
     width: Dimensions.get("window").width,
-    marginTop: 25
+    marginTop: 5,
   },
   addActivityTxt: {
     // marginLeft: 15,
