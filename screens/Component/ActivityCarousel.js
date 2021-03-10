@@ -36,7 +36,8 @@ const ActivityCarousel = ({ activities }) => {
   const defineCurrentSlide = (event) => {
     const { contentOffset } = event.nativeEvent;
     const { x } = contentOffset;
-    let quotient = Math.floor(x / Dimensions.get("window").width) + 1;
+    // Passage du x & largeur de l'écran pour gérer les bulles :
+    let quotient = Math.floor(Math.floor(x) / Math.floor(Dimensions.get("window").width)) + 1;
     return quotient < 1 ? 1 : quotient;
   };
 

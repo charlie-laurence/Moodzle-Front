@@ -86,7 +86,7 @@ function ActivityBar({ updateLocalList, selectActivity, activitySelection }) {
     <View>
       <TextInput
         style={styles.textInput}
-        placeholder="Recherche une activité..."
+        placeholder="  Rechercher une activité..."
         onChangeText={(value) => setSearchActivity(value)}
         value={searchActivity}
       />
