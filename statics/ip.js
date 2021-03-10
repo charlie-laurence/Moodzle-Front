@@ -4,7 +4,8 @@ const _IP_RACH = "192.168.0.16";
 const _IP_TSY = "172.17.1.144";
 const _IP_CHARLIE = "192.168.1.55";
 const _IP_ELO = "172.17.1.15";
+const _IP_ELO2 = "192.168.1.62";
 
-const proxy = `http://${_IP_OLIV}:3000`;
+const proxy = `http://${_IP_ELO2}:3000`;
 
 export { proxy };
