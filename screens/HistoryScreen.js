@@ -9,7 +9,7 @@ import { moodData } from "../statics/icon";
 function HistoryScreen({ updateMood, token }) {
   const [historyFromBack, setHistoryFromBack] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [scrollRef, setScrollRef] = useState(React.createRef());
+  let refScroll = useRef(null);
 
   /* Interroger le backend pour récupérer l'historique de l'utilisateur au chargement de la page : */
   useEffect(() => {
@@ -23,12 +23,8 @@ function HistoryScreen({ updateMood, token }) {
     fetchData();
   }, []);
 
-  if (loading) {
-    return <View style={styles.container}></View>;
-  }
-
   /* Exploiter l'historique de l'utilisateur pour afficher ses infos : */
-  var moodList = historyFromBack.reverse().map((item, i) => {
+  var moodList = historyFromBack.map((item, i) => {
     // Formatage des dates :
     var date = new Date(item.date);
     var format =
@@ -72,6 +68,10 @@ function HistoryScreen({ updateMood, token }) {
     );
   });
 
+  if (loading) {
+    return <View style={styles.container}></View>;
+  }
+
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -109,16 +109,18 @@ function HistoryScreen({ updateMood, token }) {
               height: (Dimensions.get("window").width * 15) / 100,
               marginTop: 55,
             }}
-            onPress={() => scrollRef.scrollTo({ y: 0, animated: true })}
+            onPress={() => {
+              refScroll.current?.scrollTo({ y: 0, animated: true });
+            }}
           />
         }
       </View>
       <ScrollView
         decelerationRate="fast"
         scrollEventThrottle={200}
-        ref={(ref) => setScrollRef(ref)}
+        ref={refScroll}
       >
-        {moodList}
+        {moodList.reverse()}
       </ScrollView>
     </View>
   );
