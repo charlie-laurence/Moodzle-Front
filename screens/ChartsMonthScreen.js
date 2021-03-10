@@ -60,8 +60,6 @@ function ChartsMonthScreen(props) {
   const [yearDisplay, setYearDisplay] = useState(new Date().getFullYear());
   const [randomKey, setRandomKey] = useState(Math.random() * 1000);
 
-  console.log(`start date : ${startDate}, month to display: ${monthDisplay}`);
-
   /* Hook d'effet Ã  l'ouverture de la page pour charger les données*/
   useEffect(() => {
     fetchData();
@@ -326,11 +324,10 @@ function ChartsMonthScreen(props) {
     var startDateConvert = new Date(startDate);
     console.log("start date converti", startDateConvert);
     var month = startDateConvert.getMonth();
-    console.log("mois de start converti", month);
     var todayMonth = new Date().getMonth();
-    console.log("mois du jour", todayMonth);
     var todayYear = new Date().getFullYear();
     var dateDay = startDateConvert.getDate();
+    var bissextile = isLeapYear(year);
 
     if (type === "prev") {
       month = startDateConvert.getMonth() - 1;
@@ -348,9 +345,8 @@ function ChartsMonthScreen(props) {
       year = yearDisplay + 1;
     }
 
-    type === "prev"
-      ? startDateConvert.setDate(startDateConvert.getDate() - dateDay)
-      : startDateConvert.setDate(startDateConvert.getDate() + dateDay);
+    startDateConvert.setMonth(month);
+    startDateConvert.setFullYear(year);
 
     var filterDate = startDateConvert;
     var filterDateISO = filterDate.toISOString();
