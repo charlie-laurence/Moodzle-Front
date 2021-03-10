@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { View, ScrollView, Dimensions, StyleSheet, Text } from "react-native";
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   bullets: {
     display: "flex",
     justifyContent: "center",
@@ -20,7 +23,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     width: Dimensions.get("window").width,
-    padding: 25,
+    padding: 20,
   },
   textPagination: {
     textAlign: "center",
@@ -37,7 +40,9 @@ const ActivityCarousel = ({ activities }) => {
     const { contentOffset } = event.nativeEvent;
     const { x } = contentOffset;
     // Passage du x & largeur de l'écran pour gérer les bulles :
-    let quotient = Math.floor(Math.floor(x) / Math.floor(Dimensions.get("window").width)) + 1;
+    let quotient =
+      Math.floor(Math.floor(x) / Math.floor(Dimensions.get("window").width)) +
+      1;
     return quotient < 1 ? 1 : quotient;
   };
 

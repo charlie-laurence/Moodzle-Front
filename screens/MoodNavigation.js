@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-import ActivityScreen from "./ActivityScreen";
-import MoodScreen from "./MoodScreen";
-// import ReactionScreen from "./ReactionScreen";
-import HistoryScreen from "./HistoryScreen";
-import { connect } from "react-redux";
+import React from "react";
 import { View } from "react-native";
+import { connect } from "react-redux";
+import MoodScreen from "./MoodScreen";
+import ActivityScreen from "./ActivityScreen";
 import ReactionScreen from "./ReactionScreen";
+import HistoryScreen from "./HistoryScreen";
 
 function MoodNavigation({ step, login }) {
   switch (step) {
