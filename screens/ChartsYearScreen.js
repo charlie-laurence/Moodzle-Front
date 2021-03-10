@@ -374,7 +374,7 @@ function ChartsYearScreen(props) {
             style={{marginLeft: 15}}
           />
         </TouchableOpacity>
-        <Text>Année {yearDisplay}</Text>
+        <Text>{yearDisplay}</Text>
         <TouchableOpacity
         onPress={() => yearSelect("next")}
         >
@@ -389,6 +389,9 @@ function ChartsYearScreen(props) {
 
       <ScrollView>
         <Card borderRadius={30} height={550} justifyContent="center">
+          <Card.Title style={{ color: "#57706D" }}>
+            Moodzle de l'Année
+          </Card.Title>
           <Table>
             <View
               style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}

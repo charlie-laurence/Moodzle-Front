@@ -193,23 +193,26 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 20,
+    color:"#57706D"
   },
   paragraph: {
       marginBottom: 10,
+      color:"#57706D"
   }, 
   subtitle: {
     marginBottom: 10,
     fontWeight: "500",
-    fontSize: 16
+    fontSize: 16,
+    color:"#57706D"
 }, 
 beforetitle:{
-    marginBottom: 20,  
+    marginBottom: 20, 
 }, 
 scrollview: {
     marginLeft: 20, 
     marginRight: 20, 
     marginTop: 70, 
-    marginBottom: 15,
+    marginBottom: 0,
 }
 });
 

@@ -212,7 +212,7 @@ function ChartsWeekScreen(props) {
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition globale des humeurs de la semaine
+            Répartition des humeurs de la semaine
           </Card.Title>
           <Card.Divider />
           <View
@@ -272,7 +272,7 @@ function ChartsWeekScreen(props) {
 
         <Card borderRadius={50} flex={0}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition quotidienne des humeurs
+            Variation des humeurs de la semaine
           </Card.Title>
           <Card.Divider />
           <LineChart

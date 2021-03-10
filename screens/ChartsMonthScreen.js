@@ -527,7 +527,7 @@ function ChartsMonthScreen(props) {
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition globale des humeurs du mois
+            Répartition des humeurs du mois
           </Card.Title>
           <Card.Divider />
           <View
@@ -581,7 +581,7 @@ function ChartsMonthScreen(props) {
 
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
-            Répartition quotidienne des humeurs
+            Variation des humeurs du mois
           </Card.Title>
           <Card.Divider />
           <LineChart
