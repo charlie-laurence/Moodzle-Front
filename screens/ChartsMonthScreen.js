@@ -37,7 +37,7 @@ var displayMonth = (month) => {
       return monthList[i];
     }
   }
-}
+};
 
 function ChartsMonthScreen(props) {
   const [pieData, setPieData] = useState([]);
@@ -107,10 +107,10 @@ function ChartsMonthScreen(props) {
       }
     }
     setTopActivities([
-        topSortActivities[0],
-        topSortActivities[1],
-        topSortActivities[2],
-      ]);
+      topSortActivities[0],
+      topSortActivities[1],
+      topSortActivities[2],
+    ]);
 
     var markedSetDate = {};
 
@@ -234,18 +234,17 @@ function ChartsMonthScreen(props) {
       startDateFormat.getFullYear(),
       startDateFormat.getMonth(),
       1
-    ).toISOString();
+    ).toLocaleString();
     var lastSetDay = new Date(
       startDateFormat.getFullYear(),
       startDateFormat.getMonth() + 1,
       0
-    ).toISOString();
+    ).toLocaleString();
 
     // console.log(dataset[0].date.substring(8,10))
 
-    var firstSetDayNum = parseInt(firstSetDay.substring(8,10))
-    var lastSetDayNum = parseInt(lastSetDay.substring(8,10))
-
+    var firstSetDayNum = parseInt(firstSetDay.substring(8, 10));
+    var lastSetDayNum = parseInt(lastSetDay.substring(8, 10));
 
     for (let i = firstSetDayNum; i <= lastSetDayNum; i++) {
       i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push("");
@@ -253,41 +252,37 @@ function ChartsMonthScreen(props) {
 
     // Filtrer les dates doublons
 
-    let unique = []
-    let uniqueDataset = []
+    let unique = [];
+    let uniqueDataset = [];
 
     // dataset.forEach(element => {
     //   console.log(element)
     // })
-    dataset.forEach(element => {
-      if (! unique.includes(parseInt(element.date.substring(8,10)))) {
-        unique.push(parseInt(element.date.substring(8,10)))
-        uniqueDataset.push(element)
+    dataset.forEach((element) => {
+      if (!unique.includes(parseInt(element.date.substring(8, 10)))) {
+        unique.push(parseInt(element.date.substring(8, 10)));
+        uniqueDataset.push(element);
       }
-    })
+    });
     // console.log(unique)
     // console.log(uniqueDataset)
 
     // console.log(lineLabelsArray)
-    var j = 0
+    var j = 0;
     for (let i = 0; i < lineLabelsArray.length; i++) {
-
-
       if (j >= uniqueDataset.length) {
-        lineDataArray.push(0)
+        lineDataArray.push(0);
         continue;
-      }
-      else if ((i + 1) === parseInt(uniqueDataset[j].date.substring(8,10))) {
-        lineDataArray.push(parseInt(uniqueDataset[j].mood_score))
-        j += 1
-      } 
-      else {
-        lineDataArray.push(0)
+      } else if (i + 1 === parseInt(uniqueDataset[j].date.substring(8, 10))) {
+        lineDataArray.push(parseInt(uniqueDataset[j].mood_score));
+        j += 1;
+      } else {
+        lineDataArray.push(0);
         continue;
       }
     }
-      // Générer les labels
-      // Puis générer les data
+    // Générer les labels
+    // Puis générer les data
 
     setLineLabel(lineLabelsArray);
     setLineData(lineDataArray);
@@ -298,15 +293,13 @@ function ChartsMonthScreen(props) {
     var year = yearDisplay;
     var startDateConvert = new Date(startDate);
     var month = startDateConvert.getMonth();
-    var todayMonth = new Date().getMonth()
+    var todayMonth = new Date().getMonth();
 
     if (type === "prev") {
-      month = startDateConvert.getMonth() - 1
-    }
-    else if (type === "next" && month < todayMonth) {
-      month = startDateConvert.getMonth() + 1
-    }
-    else if (type === "next" && month >= todayMonth) {
+      month = startDateConvert.getMonth() - 1;
+    } else if (type === "next" && month < todayMonth) {
+      month = startDateConvert.getMonth() + 1;
+    } else if (type === "next" && month >= todayMonth) {
       return;
     }
 
@@ -408,7 +401,7 @@ function ChartsMonthScreen(props) {
             name="chevron-left"
             size={24}
             color="#57706D"
-            style={{marginLeft: 15}}
+            style={{ marginLeft: 15 }}
             onPress={() => monthSelect("prev")}
           />
           <Text>
@@ -418,7 +411,7 @@ function ChartsMonthScreen(props) {
             name="chevron-right"
             size={24}
             color="#57706D"
-            style={{marginRight: 15}}
+            style={{ marginRight: 15 }}
             onPress={() => monthSelect("next")}
           />
         </View>
@@ -428,12 +421,14 @@ function ChartsMonthScreen(props) {
             Top des activités du mois
           </Card.Title>
           <Card.Divider />
-          <View style={{
+          <View
+            style={{
               flexDirection: "row",
               paddingBottom: 0,
               marginBottom: 0,
-            }}>
-          <Image
+            }}
+          >
+            <Image
               source={require("../assets/podium_moodzle_moodz.png")}
               style={{
                 width: 220,
@@ -445,7 +440,7 @@ function ChartsMonthScreen(props) {
                 paddingTop: 0,
               }}
             />
-             <View style={{ marginLeft: -10, width: 100, marginTop: 30 }}>
+            <View style={{ marginLeft: -10, width: 100, marginTop: 30 }}>
               <Text style={{ color: "#57706D" }}>
                 <FontAwesome
                   name="circle"
@@ -474,7 +469,7 @@ function ChartsMonthScreen(props) {
                 {` ${topActivities[2]}`}
               </Text>
             </View>
-            </View>
+          </View>
         </Card>
 
         <Card borderRadius={50} style={{ marginBottom: 10 }}>
