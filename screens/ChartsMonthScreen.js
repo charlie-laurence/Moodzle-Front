@@ -3,16 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Dimensions,
   ScrollView,
   Image,
-  FlatList,
 } from "react-native";
 import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
 import { LocaleConfig } from "react-native-calendars";
-import { Card, ListItem, Icon, Row } from "react-native-elements";
+import { Card } from "react-native-elements";
 import SwitchSelector from "react-native-switch-selector";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -253,22 +251,39 @@ function ChartsMonthScreen(props) {
       i % 5 === 0 ? lineLabelsArray.push(`${i}`) : lineLabelsArray.push("");
     }
 
+    // Filtrer les dates doublons
+
+    let unique = []
+    let uniqueDataset = []
+
+    // dataset.forEach(element => {
+    //   console.log(element)
+    // })
+    dataset.forEach(element => {
+      if (! unique.includes(parseInt(element.date.substring(8,10)))) {
+        unique.push(parseInt(element.date.substring(8,10)))
+        uniqueDataset.push(element)
+      }
+    })
+    // console.log(unique)
+    // console.log(uniqueDataset)
+
     // console.log(lineLabelsArray)
     var j = 0
     for (let i = 0; i < lineLabelsArray.length; i++) {
 
-      if (j >= dataset.length) {
+
+      if (j >= uniqueDataset.length) {
         lineDataArray.push(0)
         continue;
       }
-      else if ((i + 1) === parseInt(dataset[j].date.substring(8,10))) {
-        lineDataArray.push(parseInt(dataset[j].mood_score))
+      else if ((i + 1) === parseInt(uniqueDataset[j].date.substring(8,10))) {
+        lineDataArray.push(parseInt(uniqueDataset[j].mood_score))
         j += 1
       } 
       else {
         lineDataArray.push(0)
         continue;
-
       }
     }
       // Générer les labels

@@ -20,7 +20,7 @@ const SignIn = ({ handleLocalMail, handleLocalPwd }) => {
   return (
     <View style={styles.form}>
       <Input
-        placeholder="Courriel"
+        placeholder="Email"
         leftIcon={<Ionicons name="mail-outline" size={24} color="black" />}
         onChangeText={(value) => updateMail(value)}
       />
