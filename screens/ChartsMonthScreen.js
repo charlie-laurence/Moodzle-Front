@@ -61,14 +61,14 @@ function ChartsMonthScreen(props) {
   const [yearDisplay, setYearDisplay] = useState(new Date().getFullYear());
   const [randomKey, setRandomKey] = useState(Math.random() * 1000);
 
-  /* Hook d'effet Ã  l'ouverture de la page pour charger les données*/
+  /* Hook d'effet à l'ouverture de la page pour charger les données*/
   useEffect(() => {
     fetchData();
     setRandomKey(Math.random() * 1000);
     // Enregistrer les dates de départ et de fin pour le Calendrier
   }, [startDate]);
 
-  // Fonction qui récupÃ¨re les données du back + traite les données pour l'affichage sur les graphes
+  // Fonction qui récupère les données du back + traite les données pour l'affichage sur les graphes
   var fetchData = async () => {
     var dataRaw = await fetch(`${proxy}/history`, {
       method: "POST",
@@ -158,14 +158,14 @@ function ChartsMonthScreen(props) {
 
   /* Fonction qui calcule le nombre d'occurence pour chaque score de mood */
   var pieDataGenerator = (dataset) => {
-    // Initialisation des scores Ã  0
+    // Initialisation des scores à 0
     let score1 = 0;
     let score2 = 0;
     let score3 = 0;
     let score4 = 0;
     let score5 = 0;
 
-    // Incrémenter les scores de 1 Ã  chaque fois qu'une note des données correspondent
+    // Incrémenter les scores de 1 à chaque fois qu'une note des données correspondent
     for (let i = 0; i < dataset.length; i++) {
       switch (dataset[i].mood_score) {
         case 1:
@@ -324,10 +324,8 @@ function ChartsMonthScreen(props) {
     var year = yearDisplay;
     var startDateConvert = new Date(startDate);
     var month = startDateConvert.getMonth();
-    var todayMonth = new Date().getMonth()
-    var todayYear = new Date().getFullYear()
-    var dateDay = startDateConvert.getDate()
-    var bissextile = isLeapYear(year)
+    var todayMonth = new Date().getMonth();
+    var todayYear = new Date().getFullYear();
 
     if (type === "prev") {
       month = startDateConvert.getMonth() - 1
@@ -432,7 +430,7 @@ function ChartsMonthScreen(props) {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            marginTop: 30,
+            marginTop: 20,
             marginBottom: 10,
             padding: 5,
           }}
@@ -469,8 +467,6 @@ function ChartsMonthScreen(props) {
           <Card.Divider />
           <View style={{
               flexDirection: "row",
-              paddingBottom: 0,
-              marginBottom: 0,
             }}>
           <Image
               source={require("../assets/podium_moodzle_moodz.png")}
@@ -478,10 +474,7 @@ function ChartsMonthScreen(props) {
                 width: 220,
                 height: 220,
                 resizeMode: "stretch",
-                paddingRight: 0,
                 marginLeft: 20,
-                marginTop: 0,
-                paddingTop: 0,
               }}
             />
             <View style={{ marginLeft: -10, width: 100, marginTop: 30 }}>
@@ -536,8 +529,6 @@ function ChartsMonthScreen(props) {
           <View
             style={{
               flexDirection: "row",
-              paddingBottom: 0,
-              marginBottom: 0,
               flex: 1,
             }}
           >
@@ -547,9 +538,7 @@ function ChartsMonthScreen(props) {
               height={220}
               chartConfig={{
                 backgroundGradientFrom: "#1E2923",
-                backgroundGradientFromOpacity: 0,
                 backgroundGradientTo: "#08130D",
-                backgroundGradientToOpacity: 0,
                 strokeWidth: 2,
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -594,15 +583,12 @@ function ChartsMonthScreen(props) {
             }}
             width={Dimensions.get("window").width - 50}
             height={220}
-            // yAxisLabel="$"
-            // yAxisSuffix="k"
             yAxisInterval={31} // optional, defaults to 1
             chartConfig={chartConfig}
             bezier
             style={{
               borderRadius: 16,
               paddingRight: 25,
-              paddingLeft: 0,
               paddingTop: 10,
             }}
           />
