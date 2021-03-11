@@ -38,7 +38,7 @@ function HistoryScreen({ updateMood, token }) {
       activityList.push(item.activity[j].name);
     }
 
-    // Style particulier pour Key = 0 :
+    // Style particulier pour la 1ère Card :
     if (i === historyLength - 1) {
       var wrapperDesign = styles.cardWrapper0;
       var containerDesign = styles.cardContainer0;
@@ -70,6 +70,7 @@ function HistoryScreen({ updateMood, token }) {
     );
   });
 
+  // Page de chargement :
   if (loading) {
     return <View style={styles.container}></View>;
   }
@@ -180,13 +181,6 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 25,
     marginBottom: 10,
-  },
-  paragraph: {
-    fontWeight: "bold",
-    fontSize: 30,
-    textAlign: "center",
-    color: "#009788",
-    marginTop: 50,
   },
 });
 

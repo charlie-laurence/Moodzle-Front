@@ -1,6 +1,5 @@
 import React from "react";
-import {StyleSheet} from "react-native";
-import { Calendar, LocaleConfig } from "react-native-calendars";
+import { Calendar } from "react-native-calendars";
 
 export default function CalendarObj(props) {
     return (

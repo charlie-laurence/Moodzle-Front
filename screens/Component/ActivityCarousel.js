@@ -1,36 +1,7 @@
 import React, { useState } from "react";
 import { View, ScrollView, Dimensions, StyleSheet, Text } from "react-native";
 
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  bullets: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    paddingHorizontal: 10,
-    paddingTop: 5,
-  },
-  bullet: {
-    paddingHorizontal: 5,
-    fontSize: 20,
-  },
-  activityWrapper: {
-    flexWrap: "wrap",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: Dimensions.get("window").width,
-    padding: 20,
-  },
-  textPagination: {
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-});
-
+//Scrollview horizontale :
 const ActivityCarousel = ({ activities }) => {
   const [currentSlide, setCurrentSlide] = useState(1);
   let slides = activities.length;
@@ -83,5 +54,35 @@ const ActivityCarousel = ({ activities }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bullets: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    paddingTop: 5,
+  },
+  bullet: {
+    paddingHorizontal: 5,
+    fontSize: 20,
+  },
+  activityWrapper: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: Dimensions.get("window").width,
+    padding: 20,
+  },
+  textPagination: {
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+});
 
 export default ActivityCarousel;

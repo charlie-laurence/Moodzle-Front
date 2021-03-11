@@ -1,3 +1,4 @@
+// Reducer qui correspond aux steps entre les différents écrans mood :
 export default function (step = 1, action) {
   if (action.type === "next-step" && step < 4) {
     const nextstep = step + 1;

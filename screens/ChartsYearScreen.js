@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from "react-native";
 import { connect } from "react-redux";
-
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from "react-native";
+import { Card } from "react-native-elements";
+import SwitchSelector from "react-native-switch-selector";
 import { Table, TableWrapper, Col, Cols } from "react-native-table-component";
 import { FontAwesome } from "@expo/vector-icons";
-import { Card } from "react-native-elements";
 import { proxy } from "../statics/ip";
 
-import SwitchSelector from "react-native-switch-selector";
 
 function ChartsYearScreen(props) {
   const [startDate, setStartDate] = useState(
@@ -69,7 +61,7 @@ function ChartsYearScreen(props) {
   var nov = ["N"];
   var dec = ["D"];
 
-  /*  initiateArray : initialise des 12 Tables (une par mois) avec un cercle gris par jour 
+  /*initiateArray : initialise des 12 Tables (une par mois) avec un cercle gris par jour 
       Prend en variable un Boolean qui est True si l'année en cours est bissextile*/
   const initiateArray = (bissextile) => {
     // Boucle for sur les 12 mois de l'année
@@ -87,7 +79,6 @@ function ChartsYearScreen(props) {
           style={{ alignSelf: "center" }}
         />
       );
-      // var emptyIcon = ''
 
       switch (i) {
         case 0:
@@ -352,14 +343,13 @@ function ChartsYearScreen(props) {
         }}
         onPress={(value) => props.changeStep(value)}
       />
-
       <View
         style={{
           // flex: 1,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: 30,
+          marginTop: 20,
           marginBottom: 10,
           padding: 5,
         }}
@@ -382,12 +372,8 @@ function ChartsYearScreen(props) {
           />
         </TouchableOpacity>
       </View>
-
-      <ScrollView>
-        <Card borderRadius={30} height={550} justifyContent="center">
-          <Card.Title style={{ color: "#57706D" }}>
-            Moodzle de l'Année
-          </Card.Title>
+      <Card borderRadius={30} height={(Dimensions.get("window").height*65)/100} justifyContent="center">
+        <ScrollView>
           <Table>
             <View
               style={{ flexDirection: "row", backgroundColor: "#11ffee00" }}
@@ -399,20 +385,19 @@ function ChartsYearScreen(props) {
                   height={15}
                   textStyle={{ textAlign: "center", color: "#57706D" }}
                 />
-              </TableWrapper>
-
-              <TableWrapper style={{ flex: 1, backgroundColor: "#11ffee00" }}>
-                <Cols
-                  data={dataDisplay}
-                  style={{ flex: 1 }}
-                  height={15}
-                  textStyle={{ textAlign: "center", color: "#57706D" }}
-                />
-              </TableWrapper>
-            </View>
-          </Table>
+                </TableWrapper>
+                <TableWrapper style={{ flex: 1, backgroundColor: "#11ffee00" }}>
+                  <Cols
+                    data={dataDisplay}
+                    style={{ flex: 1 }}
+                    height={15}
+                    textStyle={{ textAlign: "center", color: "#57706D" }}
+                  />
+                </TableWrapper>
+              </View>
+            </Table>
+          </ScrollView>
         </Card>
-      </ScrollView>
     </View>
   );
 }

@@ -2,13 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, Dimensions, ImageBackground, } from "react-native";
 import { connect } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
-import {
-  useFonts,
-  LondrinaSolid_400Regular,
-} from "@expo-google-fonts/londrina-solid";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFonts, LondrinaSolid_400Regular } from "@expo-google-fonts/londrina-solid";
 
-function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
+function MoodScreen({ selectMood, incrementStep, pseudo }) {
   const moodData = [
     {
       icon: "angry",
@@ -49,7 +45,6 @@ function MoodScreen({ selectMood, mood, incrementStep, step, pseudo }) {
   const handleMoodPress = (score) => {
     selectMood(score);
     incrementStep();
-    // AsyncStorage.clear();
   };
 
   if (!fontsLoaded) {
@@ -96,7 +91,6 @@ const styles = StyleSheet.create({
     fontFamily: "LondrinaSolid_400Regular",
     color: "#5B63AE",
     fontSize: 25,
-    // marginTop: 200,
   },
 });
 

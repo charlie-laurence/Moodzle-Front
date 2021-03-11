@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions, ImageBackground } from "react-native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
-import {
-  useFonts,
-  LondrinaSolid_400Regular,
-} from "@expo-google-fonts/londrina-solid";
+import { useFonts, LondrinaSolid_400Regular } from "@expo-google-fonts/londrina-solid";
 import { proxy } from "../statics/ip";
 
-function ReactionScreen({ mood, incrementStep, token, pseudo }) {
+function ReactionScreen({ mood, incrementStep, pseudo }) {
   let [fontsLoaded] = useFonts({
     LondrinaSolid_400Regular,
   });

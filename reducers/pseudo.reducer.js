@@ -1,3 +1,4 @@
+// Reducer qui correspond aux modifications etc du pseudo de l'utilisateur :
 export default function (pseudo = "", action) {
   if (action.type === "savePseudo") {
     return action.pseudo;

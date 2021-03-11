@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, ScrollView, View, Dimensions, TouchableOpacity, } from "react-native";
+import { connect } from "react-redux";
+import { Text, ScrollView, View, Dimensions, TouchableOpacity } from "react-native";
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
 } from "react-native-chart-kit";
-import { connect } from "react-redux";
 import SwitchSelector from "react-native-switch-selector";
 import { Card } from "react-native-elements";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
@@ -23,7 +23,6 @@ function ChartsWeekScreen(props) {
   }, [startDate]);
 
   //Récupération du résultat renvoyé par le backend
-
   var fetchData = async () => {
     var rawDatas = await fetch(`${proxy}/history`, {
       method: "POST",
@@ -32,7 +31,6 @@ function ChartsWeekScreen(props) {
       },
       body: `startdate=${startDate}&type=week&token=${props.token}`,
     });
-
     var datas = await rawDatas.json();
     var dataHistory = datas.history;
     var setterdataChart = [];
@@ -130,7 +128,6 @@ function ChartsWeekScreen(props) {
   // Fonction qui gère la sélection de la semaine
   var weekSelect = (type) => {
     var days = 0;
-
     var today = new Date()
     var lastDayThisWeek = new Date(
       today.getFullYear(),
@@ -145,8 +142,7 @@ function ChartsWeekScreen(props) {
 
     if (new Date(filterDate) > new Date(lastDayThisWeek)) {
       return;
-    }
-    else {
+    } else {
       var dateConvert = filterDate.toISOString().substring(0, 10);
       setStartDate(dateConvert);  
     }
@@ -175,75 +171,69 @@ function ChartsWeekScreen(props) {
           }}
           onPress={(value) => props.changeStep(value)}
         />
-
         <View
           style={{
             flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            marginTop: 30,
+            marginTop: 20,
             marginBottom: 10,
             padding: 5,
           }}
         >
-        <TouchableOpacity
-          onPress={() => weekSelect("prev")}
-        >
-            <FontAwesome
-              name="chevron-left"
-              size={24}
-              color="#57706D"
-              style={{marginLeft: 15}}
-            />
-        </TouchableOpacity>
-        <Text>Semaine du : {startDate}</Text>
-        <TouchableOpacity
-          onPress={() => weekSelect("next")}
-        >
+          <TouchableOpacity
+            onPress={() => weekSelect("prev")}
+          >
+          <FontAwesome
+            name="chevron-left"
+            size={24}
+            color="#57706D"
+            style={{marginLeft: 15}}
+          />
+          </TouchableOpacity>
+          <Text>Semaine du : {startDate}</Text>
+          <TouchableOpacity
+            onPress={() => weekSelect("next")}
+          >
           <FontAwesome
             name="chevron-right"
             size={24}
             color="#57706D"
             style={{marginRight: 15}}
           />
-        </TouchableOpacity>
+          </TouchableOpacity>
         </View>
-
         <Card borderRadius={50}>
           <Card.Title style={{ color: "#57706D" }}>
             Répartition des humeurs de la semaine
           </Card.Title>
-          <Card.Divider />
-          <View
-            style={{
-              flexDirection: "row",
-              paddingBottom: 0,
-              marginBottom: 0,
-              flex: 1,
-            }}
-          >
-            <PieChart
-              data={pieData}
-              width={Dimensions.get("window").width}
-              height={220}
-              chartConfig={{
-                backgroundGradientFrom: "#1E2923",
-                backgroundGradientFromOpacity: 0,
-                backgroundGradientTo: "#08130D",
-                backgroundGradientToOpacity: 0,
-                strokeWidth: 2,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                barPercentage: 0.5,
+          <Card.Divider/>
+            <View
+              style={{
+                flexDirection: "row",
+                flex: 1,
               }}
-              accessor={"count"}
-              backgroundColor={"transparent"}
-              center={[10, 0]}
-              // absolute
-              hasLegend={false}
-              alignItems={"center"}
-            />
+            >
+              <PieChart
+                data={pieData}
+                width={Dimensions.get("window").width}
+                height={220}
+                chartConfig={{
+                  backgroundGradientFrom: "#1E2923",
+                  backgroundGradientTo: "#08130D",
+                  strokeWidth: 2,
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  barPercentage: 0.5,
+                }}
+                accessor={"count"}
+                backgroundColor={"transparent"}
+                center={[10, 0]}
+                // absolute
+                hasLegend={false}
+                alignItems={"center"}
+              />
             <View style={{ marginTop: 32, marginLeft: -130, width: 100 }}>
               <Text style={{ marginBottom: 8 }}>
                 <FontAwesome5 name="angry" size={25} color="#CD6133" />
@@ -260,16 +250,9 @@ function ChartsWeekScreen(props) {
               <Text style={{ marginBottom: 8 }}>
                 <FontAwesome5 name="smile-beam" size={25} color="#54857F" />
               </Text>
-
-              {/* <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[0].name} size={25} color={pieData[0].color} /></Text>
-  <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[1].name} size={25} color={pieData[0].color} /></Text> */}
-              {/* <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[2].name} size={25} color={pieData[2].color} /></Text>
-  <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[3].name} size={25} color={pieData[3].color} /></Text>
-  <Text style={{marginBottom:8}}><FontAwesome5 name={pieData[4].name} size={25} color={pieData[4].color} /></Text> */}
             </View>
           </View>
         </Card>
-
         <Card borderRadius={50} flex={0}>
           <Card.Title style={{ color: "#57706D" }}>
             Variation des humeurs de la semaine
@@ -286,15 +269,12 @@ function ChartsWeekScreen(props) {
             }}
             width={Dimensions.get("window").width - 50}
             height={220}
-            // yAxisLabel="$"
-            // yAxisSuffix="k"
             yAxisInterval={7} // optional, defaults to 1
             chartConfig={chartConfig}
             bezier
             style={{
               borderRadius: 16,
               paddingRight: 25,
-              paddingLeft: 0,
               paddingTop: 10,
             }}
           />
@@ -303,24 +283,6 @@ function ChartsWeekScreen(props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#CEFFEB",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-  },
-  paragraph: {
-    fontWeight: "bold",
-    fontSize: 30,
-    textAlign: "center",
-    color: "#009788",
-    marginTop: 70,
-  },
-});
 
 const chartConfig = {
   backgroundGradientFrom: "#F0D231",
