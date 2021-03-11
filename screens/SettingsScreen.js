@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import { StyleSheet, Text, View, Dimensions, TextInput } from "react-native";
 import { ListItem, Overlay } from 'react-native-elements'
-import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
@@ -110,7 +109,7 @@ function SettingsScreen({
                   title="Confirmer"
                   type="solid"
                   buttonStyle={{ backgroundColor: "#009788" }}
-                  onPress={(value) => {
+                  onPress={() => {
                     toggleOverlayPassword()                  
               }}/>
             </View>  
@@ -163,10 +162,10 @@ function SettingsScreen({
 
 function mapDispatchToProps(dispatch) {
   return {
-    emptyPseudo: (pseudo) => {
+    emptyPseudo: () => {
       dispatch({ type: "empty-pseudo" });
     },
-    emptyToken: (token) => {
+    emptyToken: () => {
       dispatch({ type: "empty-token" });
     },
     emptyActivities: () => {
@@ -224,4 +223,3 @@ const styles = StyleSheet.create({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
-

@@ -1,3 +1,4 @@
+// Reducer qui correspond aux activités sélectionnées par l'utilisateur :
 export default function (activitySelection = [], action) {
   if (action.type === "select") {
     const filteredState = activitySelection.filter(

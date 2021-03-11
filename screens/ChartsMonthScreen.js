@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  ScrollView,
-  Image,
-  TouchableOpacity
-} from "react-native";
+import { Text, View, Dimensions, ScrollView, Image, TouchableOpacity } from "react-native";
 import { PieChart, LineChart } from "react-native-chart-kit";
 import { connect } from "react-redux";
 import { LocaleConfig } from "react-native-calendars";
@@ -597,23 +589,6 @@ function ChartsMonthScreen(props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#CEFFEB",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-  },
-  paragraph: {
-    fontWeight: "bold",
-    fontSize: 30,
-    textAlign: "center",
-    color: "#009788",
-    marginTop: 70,
-  },
-});
 
 const chartConfig = {
   backgroundGradientFrom: "#F0D231",

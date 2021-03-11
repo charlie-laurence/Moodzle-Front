@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { StyleSheet, Text, ScrollView, View, Dimensions, TouchableOpacity, } from "react-native";
+import { Text, ScrollView, View, Dimensions, TouchableOpacity } from "react-native";
 import {
   LineChart, // Bezier Line Chart / Variation Mood (courbe)
   PieChart, // répartition mood (demi donut)
@@ -283,24 +283,6 @@ function ChartsWeekScreen(props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#CEFFEB",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-  },
-  paragraph: {
-    fontWeight: "bold",
-    fontSize: 30,
-    textAlign: "center",
-    color: "#009788",
-    marginTop: 70,
-  },
-});
 
 const chartConfig = {
   backgroundGradientFrom: "#F0D231",

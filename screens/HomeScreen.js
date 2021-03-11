@@ -101,9 +101,6 @@ function HomeScreen({
         AsyncStorage.setItem(
           "user",
           JSON.stringify({
-            // email: localMail,
-            // password: localPwd,
-            // pseudo: newPseudo,
             token: newToken,
           })
         );
@@ -137,9 +134,6 @@ function HomeScreen({
         AsyncStorage.setItem(
           "user",
           JSON.stringify({
-            // email: localMail,
-            // password: localPwd,
-            // pseudo: receivedPseudo,
             token: receivedToken,
           })
         );
@@ -231,6 +225,7 @@ function HomeScreen({
     );
   }
 
+  //Page de chargement :
   if (loading) {
     return <View style={styles.container}></View>;
   }
